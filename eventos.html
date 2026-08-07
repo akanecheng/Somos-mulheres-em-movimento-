@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eventos - Somos Mulheres em Movimento</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="eventos.css">
+
+<style>
+  /* Estilo adicional para os controles de navegação do calendário */
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 900px;
+    margin: 0 auto 20px auto;
+  }
+  .calendar-header h2 {
+    font-family: var(--fonte-titulo);
+    margin: 0;
+  }
+  .calendar-nav-btn {
+    background: var(--rosa-suave);
+    border: 1px solid var(--rosa-claro);
+    color: var(--texto-escuro);
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: var(--fonte-corpo);
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  .calendar-nav-btn:hover {
+    background: var(--rosa-escuro);
+    color: var(--branco);
+  }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        SOMOS MULHERES<br>
+        <span>EM MOVIMENTO</span>
+    </div>
+
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <nav class="nav-links">
+        <a href="index.html">Início</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="comunidade.html">Comunidade</a>
+        <a href="eventos.html" style="color: var(--rosa-escuro);">Eventos</a>
+        <a href="contatos.html">Contato</a>
+        <a href="configuracoes.html">Configurações</a>
+    </nav>
+</header>
+
+<section class="page-header">
+    <div class="header-container">
+        <span class="subtitle">Agenda</span>
+        <h1>Eventos e Encontros</h1>
+        <p>Acompanhe palestras, lançamentos, encontros e oportunidades para fazer parte do movimento.</p>
+    </div>
+</section>
+
+<section class="calendar-section">
+    <div class="calendar-header">
+        <button class="calendar-nav-btn" id="btn-prev-month"><i class="fa-solid fa-chevron-left"></i> Anterior</button>
+        <h2 id="calendar-month-title">Mês Ano</h2>
+        <button class="calendar-nav-btn" id="btn-next-month">Próximo <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+
+    <div class="calendar" id="calendar-grid">
+        <!-- O cabeçalho dos dias e os dias do mês serão injetados via JS -->
+    </div>
+</section>
+
+<section class="events-board" id="public-events-board">
+    <!-- Os cards serão carregados dinamicamente via JavaScript -->
+</section>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-brand">
+            <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+            <p>Uma comunidade que inspira, conecta e transforma histórias em movimento.</p>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <p>&copy; 2026 Somos Mulheres em Movimento. Todos os direitos reservados.</p>
+    </div>
+</footer>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+  import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "SUA_API_KEY",
+    authDomain: "SEU_PROJECT_ID.firebaseapp.com",
+    projectId: "SEU_PROJECT_ID",
+    storageBucket: "SEU_PROJECT_ID.appspot.com",
+    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+    appId: "SEU_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let dataAtual = new Date();
+  let eventosGerais = [];
+
+  const mesesNomes = [
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+  ];
+
+  function obterEmojiParaEvento(titulo, desc) {
+    const texto = (titulo + " " + desc).toLowerCase();
+    if (texto.includes("palestra") || texto.includes("conversa") || texto.includes("reunião")) return "🎤";
+    if (texto.includes("lançamento") || texto.includes("livro") || texto.includes("leitura")) return "📖";
+    if (texto.includes("inscrição") || texto.includes("abertura") || texto.includes("vaga")) return "✨";
+    return "📅";
+  }
+
+  async function buscarEventos() {
+    try {
+      const q = query(collection(db, "eventos"), orderBy("dataIso", "asc"));
+      const snapshot = await getDocs(q);
+      eventosGerais = [];
+      snapshot.forEach(doc => {
+        eventosGerais.push({ id: doc.id, ...doc.data() });
+      });
+    } catch (e) {
+      console.warn("Utilizando armazenamento local como fallback:", e);
+      eventosGerais = JSON.parse(localStorage.getItem("eventos_data") || "[]");
+    }
+    renderizarTudo();
+  }
+
+  function renderizarTudo() {
+    renderizarCalendario();
+    renderizarCards();
+  }
+
+  function renderizarCalendario() {
+    const calendarGrid = document.getElementById("calendar-grid");
+    const monthTitle = document.getElementById("calendar-month-title");
+    
+    const ano = dataAtual.getFullYear();
+    const mes = dataAtual.getMonth();
+
+    monthTitle.textContent = `${mesesNomes[mes]} ${ano}`;
+    calendarGrid.innerHTML = `
+      <div class="day-name">Dom</div>
+      <div class="day-name">Seg</div>
+      <div class="day-name">Ter</div>
+      <div class="day-name">Qua</div>
+      <div class="day-name">Qui</div>
+      <div class="day-name">Sex</div>
+      <div class="day-name">Sáb</div>
+    `;
+
+    const primeiroDiaSemana = new Date(ano, mes, 1).getDay();
+    const totalDiasMes = new Date(ano, mes + 1, 0).getDate();
+
+    // Espaços em branco antes do primeiro dia
+    for (let i = 0; i < primeiroDiaSemana; i++) {
+      const emptyDiv = document.createElement("div");
+      calendarGrid.appendChild(emptyDiv);
+    }
+
+    // Dias do mês
+    for (let dia = 1; dia <= totalDiasMes; dia++) {
+      const dayDiv = document.createElement("div");
+      dayDiv.className = "day";
+      dayDiv.textContent = dia;
+
+      // Verifica se existe evento cadastrado neste dia e mês
+      const eventoDoDia = eventosGerais.find(ev => {
+        if (!ev.dataIso) return false;
+        const d = new Date(ev.dataIso + "T00:00:00");
+        return d.getDate() === dia && d.getMonth() === mes && d.getFullYear() === ano;
+      });
+
+      if (eventoDoDia) {
+        dayDiv.classList.add("event-day");
+        const emojiSpan = document.createElement("span");
+        emojiSpan.textContent = obterEmojiParaEvento(eventoDoDia.titulo, eventoDoDia.descricao);
+        dayDiv.appendChild(emojiSpan);
+      }
+
+      calendarGrid.appendChild(dayDiv);
+    }
+  }
+
+  function renderizarCards() {
+    const board = document.getElementById("public-events-board");
+    board.innerHTML = "";
+
+    if (eventosGerais.length === 0) {
+      board.innerHTML = "<p style='grid-column: 1/-1; text-align: center; color: var(--texto-suave);'>Nenhum evento agendado no momento.</p>";
+      return;
+    }
+
+    eventosGerais.forEach(evento => {
+      const card = document.createElement("div");
+      card.className = "event-card";
+      card.innerHTML = `
+        <span class="event-date">${evento.dataExibicao || evento.data}</span>
+        <h3>${evento.titulo}</h3>
+        <p>${evento.descricao}</p>
+        <div class="event-info">
+          <span>${evento.local}</span>
+          <span>${evento.horario}</span>
+        </div>
+      `;
+      board.appendChild(card);
+    });
+  }
+
+  // Eventos de Navegação dos Meses
+  document.getElementById("btn-prev-month").addEventListener("click", () => {
+    dataAtual.setMonth(dataAtual.getMonth() - 1);
+    renderizarTudo();
+  });
+
+  document.getElementById("btn-next-month").addEventListener("click", () => {
+    dataAtual.setMonth(dataAtual.getMonth() + 1);
+    renderizarTudo();
+  });
+
+  document.addEventListener("DOMContentLoaded", buscarEventos);
+</script>
+</body>
+</html>

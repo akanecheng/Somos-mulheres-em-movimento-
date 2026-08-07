@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - Somos Mulheres em Movimento</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* Estilos específicos da página de Configurações */
+    .page-header {
+      margin-top: 80px;
+      padding: 50px 7% 20px;
+      text-align: center;
+      background: linear-gradient(to bottom, var(--rosa-suave), transparent);
+    }
+
+    .header-container {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .subtitle {
+      display: inline-block;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--rosa-escuro);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .header-container h1 {
+      font-family: var(--fonte-titulo);
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+    }
+
+    .config-container {
+      max-width: 1000px;
+      margin: 10px auto 60px;
+      padding: 0 7%;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      width: 100%;
+    }
+
+    .panel-box {
+      background: var(--branco);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(217, 154, 140, 0.06);
+      border: 1px solid rgba(212, 138, 133, 0.12);
+    }
+
+    .panel-box h2 {
+      font-family: var(--fonte-titulo);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--texto-escuro);
+      border-bottom: 2px solid var(--rosa-suave);
+      padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--texto-suave);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-size: 0.95rem;
+      outline: none;
+      background: var(--bg-creme);
+      transition: 0.2s;
+      color: var(--texto-escuro);
+    }
+
+    .form-control:focus {
+      border-color: var(--rosa-escuro);
+      background: var(--branco);
+    }
+
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn-submit {
+      padding: 12px 24px;
+      background: var(--rosa-escuro);
+      color: var(--branco);
+      border: none;
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-submit:hover {
+      background: #c27d78;
+    }
+
+    .btn-clear {
+      padding: 12px 20px;
+      background: transparent;
+      color: var(--texto-suave);
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-clear:hover {
+      background: #f1f1f1;
+      color: #c94e4e;
+    }
+  </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+        
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <nav class="nav-links">
+            <a href="index.html">Início</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="comunidade.html">Comunidade</a>
+            <a href="eventos.html">Eventos</a>
+            <a href="contatos.html">Contato</a>
+            <a href="configuracoes.html" class="active">Configurações</a>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="header-container">
+            <span class="subtitle">PAINEL ADMINISTRATIVO</span>
+            <h1>Editar página inicial</h1>
+            <p style="color: var(--texto-suave); font-size: 0.95rem;">Atualize os textos principais exibidos na página inicial do site.</p>
+        </div>
+    </section>
+
+    <main class="config-container">
+
+        <section class="panel-box">
+            <h2><i class="fa-solid fa-heading" style="color: var(--dourado);"></i> Título e subtítulo</h2>
+            <form id="form-hero">
+                <div class="form-group">
+                    <label for="hero-title-input">Título </label>
+                    <input type="text" id="hero-title-input" class="form-control" placeholder="Ex: Somos mulheres em movimento.">
+                </div>
+                <div class="form-group">
+                    <label for="hero-desc-input">Subtítulo / Descrição Inicial</label>
+                    <textarea id="hero-desc-input" class="form-control" placeholder="Ex: Somos uma comunidade literária que dá voz a mulheres reais..."></textarea>
+                </div>
+                <div class="action-row">
+                    <button type="button" class="btn-submit" onclick="salvarHero()"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+                    <button type="button" class="btn-clear" onclick="limparHero()"><i class="fa-solid fa-eraser"></i> Limpar</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel-box">
+            <h2><i class="fa-solid fa-address-card" style="color: var(--dourado);"></i> Editar Sobre Nós</h2>
+            <form id="form-about">
+                <div class="form-group">
+                    <label for="about-title-input">Título </label>
+                    <input type="text" id="about-title-input" class="form-control" placeholder="Ex: Histórias que viram pontes para o futuro">
+                </div>
+                <div class="form-group">
+                    <label for="about-p1-input">Primeiro Parágrafo </label>
+                    <textarea id="about-p1-input" class="form-control" placeholder="Insira o texto do primeiro parágrafo..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="about-p2-input">Segundo Parágrafo </label>
+                    <textarea id="about-p2-input" class="form-control" placeholder="Insira o texto do segundo parágrafo..."></textarea>
+                </div>
+                <div class="action-row">
+                    <button type="button" class="btn-submit" onclick="salvarSobre()"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
+                    <button type="button" class="btn-clear" onclick="limparSobre()"><i class="fa-solid fa-eraser"></i> Limpar</button>
+                </div>
+            </form>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+                <p>Uma comunidade que inspira, conecta e transforma histórias em movimento.</p>
+            </div>
+            
+            <div class="footer-links">
+                <div>
+                    <h4>Navegação</h4>
+                    <a href="index.html">Início</a>
+                    <a href="sobre.html">Sobre</a>
+                </div>
+                <div>
+                    <h4>Eventos</h4>
+                    <a href="eventos.html">Próximos Eventos</a>
+                </div>
+                <div>
+                    <h4>Recursos</h4>
+                    <a href="index.html#newsletter">Materiais Gratuitos</a>
+                </div>
+                <div>
+                    <h4>Suporte</h4>
+                    <a href="contatos.html">Contato</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-copyright">
+            <p>&copy; 2026 Somos Mulheres em Movimento. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSy...",
+  authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
+  projectId: "somos-mulheres-em-movimento",
+  storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
+  messagingSenderId: "427525655209",
+  appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const configDocRef = doc(db, "livros", "livroPrincipal");
+
+        async function carregarDados() {
+            try {
+                const docSnap = await getDoc(configDocRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    if(data.hero) {
+                        document.getElementById("hero-title-input").value = data.hero.titulo || "";
+                        document.getElementById("hero-desc-input").value = data.hero.descricao || "";
+                    }
+
+                    if(data.sobre) {
+                        document.getElementById("about-title-input").value = data.sobre.titulo || "";
+                        document.getElementById("about-p1-input").value = data.sobre.p1 || "";
+                        document.getElementById("about-p2-input").value = data.sobre.p2 || "";
+                    }
+                } else {
+                    const localData = JSON.parse(localStorage.getItem("index_config") || "{}");
+                    if (localData.hero) {
+                        document.getElementById("hero-title-input").value = localData.hero.titulo || "";
+                        document.getElementById("hero-desc-input").value = localData.hero.descricao || "";
+                    }
+                    if (localData.sobre) {
+                        document.getElementById("about-title-input").value = localData.sobre.titulo || "";
+                        document.getElementById("about-p1-input").value = localData.sobre.p1 || "";
+                        document.getElementById("about-p2-input").value = localData.sobre.p2 || "";
+                    }
+                }
+            } catch (error) {
+                console.error("Erro ao carregar do Firebase, usando LocalStorage fallback:", error);
+            }
+        }
+
+        window.salvarHero = async function () {
+
+    const titulo = document.getElementById("hero-title-input").value;
+    const descricao = document.getElementById("hero-desc-input").value;
+
+    try {
+
+        await setDoc(configDocRef, {
+            titulo: titulo,
+            descricao: descricao,
+            hero: {
+                titulo: titulo,
+                descricao: descricao
+            }
+        }, { merge: true });
+
+        alert("Seção Hero salva com sucesso!");
+
+    } catch (e) {
+        console.error(e);
+        alert("Erro ao salvar.");
+    }
+
+};
+
+
+
+        window.limparHero = function() {
+            if (confirm("Deseja realmente apagar o conteúdo dos campos do Hero?")) {
+                document.getElementById("hero-title-input").value = "";
+                document.getElementById("hero-desc-input").value = "";
+            }
+        };
+
+        window.salvarSobre = async function() {
+            const sobreData = {
+                titulo: document.getElementById("about-title-input").value,
+                p1: document.getElementById("about-p1-input").value,
+                p2: document.getElementById("about-p2-input").value
+            };
+
+            try {
+                await setDoc(configDocRef, { sobre: sobreData }, { merge: true });
+                let localData = JSON.parse(localStorage.getItem("index_config") || "{}");
+                localData.sobre = sobreData;
+                localStorage.setItem("index_config", JSON.stringify(localData));
+                alert("Seção Sobre Nós salva com sucesso!");
+            } catch (e) {
+                console.error("Erro ao salvar Sobre Nós:", e);
+                alert("Erro ao salvar no Firebase. Verifique suas credenciais.");
+            }
+        };
+
+        window.limparSobre = function() {
+            if (confirm("Deseja realmente apagar o conteúdo dos campos do Sobre Nós?")) {
+                document.getElementById("about-title-input").value = "";
+                document.getElementById("about-p1-input").value = "";
+                document.getElementById("about-p2-input").value = "";
+            }
+        };
+
+        window.onload = carregarDados;
+    </script>
+</body>
+</html>

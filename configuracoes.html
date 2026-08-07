@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Somos Mulheres em Movimento - Painel Administrativo</title>
+  
+  <!-- Fontes Oficiais do Index -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Ícones Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ==========================================
+       1. VARIÁVEIS E REGRA GERAL
+       ========================================== */
+    :root {
+      --bg-creme: #fdfaf7;
+      --rosa-escuro: #d48a85;
+      --rosa-claro: #e2b2ae;
+      --rosa-suave: #f4eae6;
+      --dourado: #c9934e;
+      --texto-escuro: #4a3b32;
+      --texto-suave: #705f55;
+      --branco: #ffffff;
+      --fonte-titulo: 'DM Serif Display', serif;
+      --fonte-corpo: 'Manrope', sans-serif;
+      --shadow-soft: 0 10px 30px rgba(212, 138, 133, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden; 
+    }
+
+    body {
+      font-family: var(--fonte-corpo);
+      background-color: var(--bg-creme);
+      color: var(--texto-escuro);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* ==========================================
+       2. CONTEÚDO PRINCIPAL (PAINEL)
+       ========================================== */
+    main {
+      max-width: 1200px;
+      margin: 140px auto 60px auto; /* Compensa a navbar fixa */
+      padding: 0 24px;
+      text-align: center;
+      flex-grow: 1;
+      width: 100%;
+    }
+
+    .panel-header {
+      margin-bottom: 50px;
+    }
+
+    .panel-header h1 {
+      font-family: var(--fonte-titulo);
+      font-size: 2.8rem;
+      font-weight: 400;
+      color: var(--texto-escuro);
+      margin-bottom: 12px;
+    }
+
+    .panel-header p {
+      font-size: 1rem;
+      color: var(--texto-suave);
+      font-weight: 400;
+    }
+
+    /* GRIDS E CARDS */
+    .grid-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+      width: 100%;
+    }
+
+    .row-top {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      width: 100%;
+    }
+
+    .row-bottom {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      width: 100%;
+      max-width: 780px; 
+    }
+
+    .card {
+      background-color: var(--branco);
+      border-radius: 12px;
+      padding: 35px 25px;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid rgba(212, 138, 133, 0.15);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(212, 138, 133, 0.2);
+    }
+
+    .card-icon-container {
+      background-color: var(--rosa-suave);
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .card-icon-container i {
+      font-size: 1.6rem;
+      color: var(--rosa-escuro);
+    }
+
+    .card h3 {
+      font-family: var(--fonte-corpo);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--texto-escuro);
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: var(--texto-suave);
+      line-height: 1.5;
+      margin-bottom: 25px;
+      min-height: 45px;
+    }
+
+    .btn-access {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border: 1px solid var(--rosa-escuro);
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--rosa-escuro);
+      font-size: 0.88rem;
+      font-weight: 600;
+      background-color: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .btn-access:hover {
+      background-color: var(--rosa-escuro);
+      color: var(--branco);
+    }
+
+    .btn-access i {
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-access:hover i {
+      transform: translateX(4px);
+    }
+
+    /* ==========================================
+       3. MEDIA QUERIES (RESPONSIVIDADE)
+       ========================================== */
+    @media (max-width: 992px) {
+      .row-top { grid-template-columns: repeat(2, 1fr); }
+      .row-bottom { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      main {
+        margin-top: 110px;
+        padding: 0 16px;
+      }
+
+      .panel-header h1 { font-size: 2.1rem; }
+      .row-top, .row-bottom { grid-template-columns: 1fr; }
+
+      .card p {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR IDENTICA AO INDEX -->
+  <header class="navbar">
+      <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+      
+      <input type="checkbox" id="menu-toggle" class="menu-toggle">
+      <label for="menu-toggle" class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+      </label>
+
+      <nav class="nav-links">
+          <a href="index.html">Início</a>
+          <a href="sobre.html">Sobre</a>
+          <a href="comunidade.html">Comunidade</a>
+          <a href="eventos.html">Eventos</a>
+          <a href="contatos.html">Contato</a>
+          <a href="configuracoes.html" style="color: var(--rosa-escuro);">Configurações</a>
+          
+          <div class="nav-buttons-mobile"></div>
+      </nav>
+  </header>
+
+  <!-- PAINEL DE CONFIGURAÇÕES -->
+  <main>
+    <section class="panel-header">
+      <span class="subtitle">Administração</span>
+      <h1>Painel Geral</h1>
+      <p>Gerencie o conteúdo e informações da plataforma Somos Mulheres em Movimento.</p>
+    </section>
+
+    <div class="grid-container">
+      <div class="row-top">
+        <div class="card">
+          <div class="card-icon-container">
+            <i class="fa-regular fa-file-lines"></i>
+          </div>
+          <h3>Textos</h3>
+          <p>Edite os textos das seções, como títulos, hero e frases institucionais.</p>
+          <a href="addtextos.html" class="btn-access">
+            Acessar <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-book"></i>
+          </div>
+          <h3>Biblioteca</h3>
+          <p>Gerencie os livros publicados, novos lançamentos e edições.</p>
+          <a href="addLivro.html" class="btn-access">
+            Acessar <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+
+        <div class="card">
+          <div class="card-icon-container">
+            <i class="fa-solid fa-users"></i>
+          </div>
+          <h3>Comunidade</h3>
+          <p>Adicione, remova e edite os perfis das integrantes e autoras.</p>
+          <a href="addEdt.html" class="btn-access">
+            Acessar <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="row-bottom">
+        <div class="card">
+          <div class="card-icon-container">
+            <i class="fa-regular fa-calendar-check"></i>
+          </div>
+          <h3>Eventos</h3>
+          <p>Crie, edite e organize a agenda de encontros e eventos.</p>
+          <a href="addEventos.html" class="btn-access">
+            Acessar <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER OFICIAL PADRONIZADO -->
+  <footer class="footer">
+      <div class="footer-container">
+          <div class="footer-brand">
+              <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+              <p>Uma comunidade que inspira, conecta e transforma histórias em movimento.</p>
+          </div>
+          
+          <div class="footer-links">
+              <div>
+                  <h4>Navegação</h4>
+                  <a href="index.html">Início</a>
+                  <a href="sobre.html">Sobre</a>
+              </div>
+              <div>
+                  <h4>Eventos</h4>
+                  <a href="eventos.html">Próximos Eventos</a>
+              </div>
+              <div>
+                  <h4>Recursos</h4>
+                  <a href="index.html#newsletter">Materiais Gratuitos</a>
+              </div>
+              <div>
+                  <h4>Suporte</h4>
+                  <a href="contatos.html">Contato</a>
+              </div>
+          </div>
+      </div>
+      
+      <div class="footer-copyright">
+          <p>&copy; 2026 Somos Mulheres em Movimento. Todos os direitos reservados.</p>
+      </div>
+  </footer>
+
+</body>
+</html>

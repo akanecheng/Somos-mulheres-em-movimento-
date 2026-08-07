@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Somos Mulheres em Movimento - Contato</title>
+  
+  <!-- Fontes padrão do Index -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="contatos.css">
+</head>
+<body>
+    
+  <!-- NAVBAR IDÊNTICA AO INDEX -->
+  <header class="navbar">
+      <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+      
+      <!-- Botão Hambúrguer para Celular -->
+      <input type="checkbox" id="menu-toggle" class="menu-toggle">
+      <label for="menu-toggle" class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+      </label>
+
+      <nav class="nav-links">
+          <a href="index.html">Início</a>
+          <a href="sobre.html">Sobre</a>
+          <a href="comunidade.html">Comunidade</a>
+          <a href="eventos.html">Eventos</a>
+          <a href="contatos.html">Contato</a>
+          <a href="configuracoes.html">Configurações</a>
+          
+          <div class="nav-buttons-mobile"></div>
+      </nav>
+  </header>
+    
+  <section class="contact-page">
+
+      <div class="contact-header">
+          <h1>Redes sociais</h1>
+          <p>
+              Entre em contato com a comunidade Somos Mulheres em Movimento.
+              Tire dúvidas, envie sugestões ou conheça nossas redes.
+          </p>
+      </div>
+
+      <div class="contact-container">
+
+          <div class="contact-info">
+
+              <div class="contact-card">
+                  <h3>Instagram</h3>
+                  <p>Acompanhe novidades, conteúdos e eventos da comunidade.</p>
+                  <a href="https://www.instagram.com/somosmulheresemmovimento?igsh=YnJ5N2hqcnowNGRm"
+                     target="_blank"
+                     class="contact-link">
+                     @somosmulheresemmovimento
+                  </a>
+              </div>
+
+              <div class="contact-card">
+                  <h3>WhatsApp</h3>
+                  <p>Você poderá participar diretamente do nosso grupo oficial.</p>
+                  <a href="#" class="contact-link">Link em breve</a>
+              </div>
+
+              <div class="contact-card">
+                  <h3>Atendimento</h3>
+                  <p>Responderemos sua mensagem o mais breve possível.</p>
+              </div>
+
+          </div>
+
+          <form class="contact-form" id="form-contato">
+
+              <div class="form-group">
+                  <label for="nome">Nome</label>
+                  <input type="text" id="nome" placeholder="Seu nome" required>
+              </div>
+
+              <div class="form-group">
+                  <label for="email">E-mail</label>
+                  <input type="email" id="email" placeholder="Seu e-mail" required>
+              </div>
+
+              <div class="form-group">
+                  <label for="canal">Enviar mensagem por onde?</label>
+                  <select id="canal">
+                      <option value="email">E-mail / Firebase</option>
+                      <option value="whatsapp">WhatsApp Directo</option>
+                  </select>
+              </div>
+
+              <div class="form-group">
+                  <label for="assunto">Assunto</label>
+                  <input type="text" id="assunto" placeholder="Assunto da mensagem" required>
+              </div>
+
+              <div class="form-group">
+                  <label for="mensagem">Mensagem</label>
+                  <textarea id="mensagem" rows="5" placeholder="Escreva sua mensagem" required></textarea>
+              </div>
+
+              <button type="submit" class="btn-contact-submit">
+                  Enviar Mensagem
+              </button>
+
+          </form>
+
+      </div>
+
+  </section>
+
+  <script>
+    document.getElementById('form-contato').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const canal = document.getElementById('canal').value;
+        const assunto = document.getElementById('assunto').value;
+        const mensagem = document.getElementById('mensagem').value;
+
+        // Estrutura do objeto pronta para salvar no Firestore / Realtime DB no futuro
+        const dadosMensagem = {
+            nome,
+            email,
+            assunto,
+            mensagem,
+            dataEnvio: new Date().toISOString()
+        };
+
+        // Exemplo visual / Teste
+        console.log("Dados prontos para salvar no Firebase:", dadosMensagem);
+
+        if (canal === 'whatsapp') {
+            // Número padrão ou alterável no futuro
+            const numeroTel = "5500000000000"; 
+            const textoWhatsApp = `Olá! Meu nome é ${nome} (${email}).%0A*Assunto:* ${assunto}%0A*Mensagem:* ${mensagem}`;
+            window.open(`https://api.whatsapp.com/send?phone=${numeroTel}&text=${textoWhatsApp}`, '_blank');
+        } else {
+            // Redireciona pro e-mail local enquanto não tiver o SDK do Firebase configurado
+            const mailtoUri = `mailto:contato@somosmulheresemmovimento.com.br?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent("Nome: " + nome + "\nEmail: " + email + "\n\nMensagem:\n" + mensagem)}`;
+            window.location.href = mailtoUri;
+        }
+    });
+  </script>
+
+</body>
+</html>

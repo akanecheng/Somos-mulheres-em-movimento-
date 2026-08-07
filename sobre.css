@@ -1,0 +1,147 @@
+/* --- ESTILOS DA PÁGINA SOBRE --- */
+
+/* Hero */
+.about-hero {
+    margin-top: 80px;
+    padding: 100px 7% 60px 7%;
+    background-color: var(--rosa-suave);
+    text-align: center;
+}
+
+.container-small {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.about-hero h1 {
+    font-family: var(--fonte-titulo);
+    font-size: 3.2rem;
+    color: var(--texto-escuro);
+    line-height: 1.1;
+    margin-bottom: 20px;
+}
+
+.lead {
+    font-size: 1.2rem;
+    color: var(--texto-suave);
+}
+
+/* Manifesto */
+.manifesto-section {
+    padding: 100px 7%;
+}
+
+.manifesto-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+.manifesto-image {
+    position: relative;
+}
+
+.manifesto-image img {
+    width: 100%;
+    border-radius: 15px;
+    box-shadow: 20px 20px 0px var(--rosa-claro);
+}
+
+
+
+
+.manifesto-content h2 {
+    font-family: var(--fonte-titulo);
+    font-size: 2.5rem;
+    margin-bottom: 25px;
+}
+
+.pillars {
+    display: flex;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.pillar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--rosa-escuro);
+}
+
+/* Valores */
+.values-section {
+    background-color: var(--branco);
+    padding: 100px 7%;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.value-card {
+    padding: 40px;
+    background-color: var(--bg-creme);
+    border-radius: 12px;
+    transition: transform 0.3s;
+}
+
+.value-card:hover { transform: translateY(-10px); }
+
+.value-icon {
+    font-family: var(--fonte-titulo);
+    font-size: 2rem;
+    color: var(--rosa-claro);
+    margin-bottom: 20px;
+}
+
+/* Fundadora */
+.founder-section {
+    padding: 100px 7%;
+    background-color: var(--rosa-suave);
+}
+
+.founder-container {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.founder-text blockquote {
+    margin-top: 30px;
+    font-size: 1.5rem;
+    color: var(--rosa-escuro);
+    border-left: 4px solid var(--dourado);
+    padding-left: 20px;
+}
+
+.photo-frame {
+    position: relative;
+    padding: 15px;
+    border: 2px solid var(--dourado);
+    border-radius: 50% 50% 0 0; /* Formato de arco editorial */
+}
+
+.photo-frame img {
+    width: 100%;
+    border-radius: 50% 50% 0 0;
+    display: block;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .manifesto-grid, .founder-container, .values-grid {
+        grid-template-columns: 1fr;
+    }
+    .about-hero h1 { 
+        font-size: 2.2rem;
+        }
+    .manifesto-image img { 
+        box-shadow: 10px 10px 0px var(--rosa-claro); }
+}

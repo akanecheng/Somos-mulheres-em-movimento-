@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador - Biblioteca</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="addLivro.css">
+</head>
+<body>
+    <input type="file" id="file-input-device" accept="image/*" style="display: none;">
+
+
+    <header class="navbar">
+        <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+        
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <nav class="nav-links">
+            <a href="index.html">Início</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="comunidade.html">Comunidade</a>
+            <a href="eventos.html">Eventos</a>
+            <a href="contatos.html">Contato</a>
+            <a href="configuracoes.html">Configurações</a>
+        </nav>
+    </header>
+
+    <main class="manager-container">
+        <section class="manager-card">
+            <div class="card-header-action">
+                <div>
+                    <h2>Livro atual</h2>
+                    <p>Este é o livro que aparece em destaque na página inicial.</p>
+                </div>
+                <button class="btn-action-outline" id="btn-change-featured-cover">
+                    <i data-lucide="refresh-cw"></i> Alterar capa
+                </button>
+            </div>
+
+            <div class="featured-book-preview">
+                <div class="preview-box">
+                    <div class="book-thumbnail">
+                        <img src="smm.jpg" alt="Capa" id="featured-img">
+                    </div>
+                    
+                    <div class="action-row-center">
+                        <button class="btn-action-outline" id="btn-edit-featured"><i data-lucide="pen-tool"></i> Editar</button>
+                        <a href="index.html" class="btn-action-outline"><i data-lucide="eye"></i> Ver no site</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="manager-card">
+            <div class="card-header-action">
+                <div>
+                    <h2>Livros disponíveis</h2>
+                    <p>Gerencie os livros que aparecem na grade da seção biblioteca.</p>
+                </div>
+                <button class="btn-action-filled btn-add-book-trigger"><i data-lucide="plus"></i> Adicionar novo livro</button>
+            </div>
+
+            <div class="books-list-rows" id="books-list-container">
+                </div>
+
+            <button class="btn-dashed-add btn-add-book-trigger">
+                <i data-lucide="plus"></i> Adicionar novo livro
+            </button>
+        </section>
+
+        <section class="manager-card">
+            <h2>Ordem dos livros</h2>
+            <p>Arraste os itens para definir a ordem de exibição.</p>
+
+            <div class="sortable-list" id="sortable-list-container">
+                </div>
+
+            <div class="info-alert-box">
+                <i data-lucide="info"></i>
+                <p>A ordem definida aqui será refletida automaticamente no site.</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal-overlay" id="edit-book-modal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modal-form-title">Editar Informações</h3>
+                <button class="close-modal" id="close-edit">&times;</button>
+            </div>
+            <div class="modal-form-body">
+                <input type="hidden" id="input-book-id">
+                
+                <div class="form-group-item">
+                    <label>Capa do Livro</label>
+                    <div style="display: flex; gap: 12px; align-items: center; background: #faf8f6; padding: 10px; border-radius: 8px; border: 1px solid #e5dbd5;">
+                        <img src="smm.jpg" alt="Preview" id="modal-preview-img" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px;">
+                        <button type="button" class="btn-action-outline" id="btn-open-gallery-inside-modal" style="padding: 6px 12px; font-size: 0.8rem;">
+                            <i data-lucide="image"></i> Escolher da Galeria
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group-item">
+                    <label>Título do Livro</label>
+                    <input type="text" id="input-book-title">
+                </div>
+                <div class="form-group-item">
+                    <label>Volume / Subtítulo</label>
+                    <input type="text" id="input-book-volume" placeholder="Ex: VOL. 1 ou EM BREVE">
+                </div>
+                <div class="form-group-item">
+                    <label>Tags (Separadas por ponto ou vírgula)</label>
+                    <input type="text" id="input-book-tags" placeholder="Ex: PROPÓSITO · CORAGEM">
+                </div>
+                <div class="form-group-item">
+                    <label>Descrição Curta</label>
+                    <input type="text" id="input-book-desc">
+                </div>
+                <button class="btn-action-filled w-100" id="save-book-data">Salvar Alterações</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="gallery-modal" style="z-index: 3000;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Selecionar Capa da Galeria</h3>
+                <button class="close-modal" id="close-gallery">&times;</button>
+            </div>
+            <div class="gallery-grid-options">
+                <div class="gallery-option-card" data-img-src="smm.jpg">
+                    <img src="smm.jpg" alt="Opção 1">
+                    <p>Capa Oficial Vol 1</p>
+                </div>
+                <div class="gallery-option-card" data-img-src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300">
+                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300" alt="Opção 2">
+                    <p>Minimalista Preta</p>
+                </div>
+                <div class="gallery-option-card" data-img-src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300">
+                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300" alt="Opção 3">
+                    <p>Capa Clássica</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        const defaultBooks = [
+            {
+                id: 1,
+                title: "Mulheres em Movimento – Vol. 1",
+                volume: "VOL. 1",
+                isComingSoon: false,
+                tags: "PROPÓSITO · CORAGEM · TRANSFORMAÇÃO",
+                desc: "Um devocional para mulheres que desejam sair do lugar e viver tudo o que Deus sonhou para elas.",
+                img: "smm.jpg",
+                isFeatured: true
+            },
+            {
+                id: 2,
+                title: "Mulheres em Movimento – Vol. 2",
+                volume: "VOL. 2",
+                isComingSoon: true,
+                tags: "CRESCIMENTO · FÉ · PERSEVERANÇA",
+                desc: "Em breve mais um volume para fortalecer ainda mais sua jornada.",
+                img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300",
+                isFeatured: false
+            }
+        ];
+
+        let targetContext = 'featured'; 
+
+        if (!localStorage.getItem('biblioteca_db')) {
+            localStorage.setItem('biblioteca_db', JSON.stringify(defaultBooks));
+        }
+
+        function getDB() {
+            return JSON.parse(localStorage.getItem('biblioteca_db')) || [];
+        }
+
+        function saveDB(data) {
+            localStorage.setItem('biblioteca_db', JSON.stringify(data));
+            render();
+        }
+
+        const galleryModal = document.getElementById('gallery-modal');
+        const editBookModal = document.getElementById('edit-book-modal');
+
+        function render() {
+            const books = getDB();
+            
+            const featured = books.find(b => b.isFeatured) || books[0];
+            if (featured) {
+                document.getElementById('featured-img').src = featured.img;
+                document.getElementById('btn-edit-featured').onclick = () => openEditModal(featured.id);
+            }
+
+            const listContainer = document.getElementById('books-list-container');
+            listContainer.innerHTML = '';
+
+            books.forEach(book => {
+                const row = document.createElement('div');
+                row.className = 'book-row-item';
+                
+                let badgesHTML = `<span class="badge-brown">${book.volume}</span>`;
+                if (book.isComingSoon) {
+                    badgesHTML += ` <span class="badge-gray">EM BREVE</span>`;
+                }
+
+                row.innerHTML = `
+                    <div class="row-thumbnail">
+                        <img src="${book.img}" alt="Capa">
+                    </div>
+                    <div class="row-info">
+                        <div class="badge-row-container">
+                            ${badgesHTML}
+                        </div>
+                        <h3>${book.title}</h3>
+                        <p>${book.desc}</p>
+                        <div class="row-actions">
+                            <button class="btn-action-outline" onclick="openEditModal(${book.id})"><i data-lucide="pen-tool"></i> Editar</button>
+                            <button class="btn-icon-action" onclick="deleteBook(${book.id})"><i data-lucide="trash-2"></i></button>
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(row);
+            });
+
+            const sortContainer = document.getElementById('sortable-list-container');
+            sortContainer.innerHTML = '';
+            books.forEach((book, index) => {
+                const item = document.createElement('div');
+                item.className = 'sortable-item';
+                item.innerHTML = `
+                    <div class="sort-number">${index + 1}</div>
+                    <div class="sort-label">${book.title} ${book.isComingSoon ? '(Em breve)' : ''}</div>
+                    <i data-lucide="grip-vertical" class="grip-icon"></i>
+                `;
+                sortContainer.appendChild(item);
+            });
+
+            lucide.createIcons();
+        }
+
+        function openEditModal(id) {
+            const books = getDB();
+            const book = books.find(b => b.id === id);
+            
+            if (!book) return;
+
+            document.getElementById('modal-form-title').textContent = "Editar Informações";
+            document.getElementById('input-book-id').value = book.id;
+            document.getElementById('input-book-title').value = book.title;
+            document.getElementById('input-book-volume').value = book.volume;
+            document.getElementById('input-book-tags').value = book.tags;
+            document.getElementById('input-book-desc').value = book.desc;
+            document.getElementById('modal-preview-img').src = book.img;
+            
+            editBookModal.classList.add('active');
+        }
+
+        document.querySelectorAll('.btn-add-book-trigger').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('modal-form-title').textContent = "Adicionar Novo Livro";
+                document.getElementById('input-book-id').value = 'new';
+                document.getElementById('input-book-title').value = '';
+                document.getElementById('input-book-volume').value = '';
+                document.getElementById('input-book-tags').value = '';
+                document.getElementById('input-book-desc').value = '';
+                document.getElementById('modal-preview-img').src = 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300';
+                editBookModal.classList.add('active');
+            });
+        });
+
+        document.getElementById('btn-change-featured-cover').addEventListener('click', () => {
+            targetContext = 'featured';
+            galleryModal.classList.add('active');
+        });
+
+        document.getElementById('btn-open-gallery-inside-modal').addEventListener('click', (e) => {
+            e.preventDefault();
+            targetContext = 'modal';
+            galleryModal.classList.add('active');
+        });
+
+        document.querySelectorAll('.gallery-option-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const newSrc = card.getAttribute('data-img-src');
+                
+                if (targetContext === 'featured') {
+                    let books = getDB();
+                    books = books.map(b => {
+                        if (b.isFeatured) b.img = newSrc;
+                        return b;
+                    });
+                    saveDB(books);
+                } else if (targetContext === 'modal') {
+                    document.getElementById('modal-preview-img').src = newSrc;
+                }
+                
+                galleryModal.classList.remove('active');
+            });
+        });
+
+        document.getElementById('save-book-data').addEventListener('click', () => {
+            const id = document.getElementById('input-book-id').value;
+            const currentImg = document.getElementById('modal-preview-img').src;
+            let books = getDB();
+
+            if (id === 'new') {
+                const newBook = {
+                    id: Date.now(),
+                    title: document.getElementById('input-book-title').value || 'Novo Livro',
+                    volume: document.getElementById('input-book-volume').value || 'VOL. X',
+                    isComingSoon: document.getElementById('input-book-volume').value.toUpperCase().includes('BREVE'),
+                    tags: document.getElementById('input-book-tags').value || 'TAGS',
+                    desc: document.getElementById('input-book-desc').value || 'Descrição do livro.',
+                    img: currentImg,
+                    isFeatured: false
+                };
+                books.push(newBook);
+            } else {
+                books = books.map(b => {
+                    if (b.id === parseInt(id)) {
+                        return {
+                            ...b,
+                            title: document.getElementById('input-book-title').value,
+                            volume: document.getElementById('input-book-volume').value,
+                            isComingSoon: document.getElementById('input-book-volume').value.toUpperCase().includes('BREVE'),
+                            tags: document.getElementById('input-book-tags').value,
+                            desc: document.getElementById('input-book-desc').value,
+                            img: currentImg
+                        };
+                    }
+                    return b;
+                });
+            }
+
+            saveDB(books);
+            editBookModal.classList.remove('active');
+        });
+
+        function deleteBook(id) {
+            let books = getDB();
+            books = books.filter(b => b.id !== id);
+            if (books.length > 0 && !books.some(b => b.isFeatured)) {
+                books[0].isFeatured = true;
+            }
+            saveDB(books);
+        }
+
+        document.getElementById('close-gallery').addEventListener('click', () => {
+            galleryModal.classList.remove('active');
+        });
+
+        document.getElementById('close-edit').addEventListener('click', () => {
+            editBookModal.classList.remove('active');
+        });
+
+        window.addEventListener('DOMContentLoaded', render);
+        
+        const deviceFileInput = document.getElementById('file-input-device');
+let targetImageElement = null; // Guarda qual imagem será alterada
+
+// 1. Ao clicar em "Alterar capa" (do Livro Atual)
+document.getElementById('btn-change-featured-cover').addEventListener('click', () => {
+    targetImageElement = 'featured';
+    deviceFileInput.click(); // Abre a galeria do celular/computador
+});
+
+// 2. Ao clicar em "Escolher da Galeria" (dentro do Modal de Edição)
+document.getElementById('btn-open-gallery-inside-modal').addEventListener('click', (e) => {
+    e.preventDefault();
+    targetImageElement = 'modal';
+    deviceFileInput.click(); // Abre a galeria do celular/computador
+});
+
+// 3. Quando o usuário seleciona uma foto do dispositivo
+deviceFileInput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const imageBase64 = e.target.result; // Foto convertida em base64
+
+        if (targetImageElement === 'featured') {
+            // Atualiza a capa do livro em destaque
+            document.getElementById('featured-img').src = imageBase64;
+            
+            // Salva no banco de dados local
+            let books = getDB();
+            books = books.map(b => {
+                if (b.isFeatured) b.img = imageBase64;
+                return b;
+            });
+            saveDB(books);
+        } else if (targetImageElement === 'modal') {
+            // Atualiza o preview dentro do modal de edição
+            document.getElementById('modal-preview-img').src = imageBase64;
+        }
+    };
+
+    reader.readAsDataURL(file); // Lê a imagem selecionada
+    
+    // Reseta o valor do input para permitir selecionar a mesma foto novamente se desejar
+    this.value = '';
+});
+
+        
+        
+        
+    </script>
+</body>
+</html>

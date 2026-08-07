@@ -1,0 +1,142 @@
+.page-header{
+    margin-top:80px;
+    padding:90px 7% 50px;
+    text-align:center;
+    background:linear-gradient(
+        to bottom,
+        var(--rosa-suave),
+        transparent
+    );
+}
+
+.header-container{
+    max-width:700px;
+    margin:auto;
+}
+
+.header-container h1{
+    font-family:var(--fonte-titulo);
+    font-size:3rem;
+    margin-bottom:15px;
+}
+
+.header-container p{
+    color:var(--texto-suave);
+}
+
+.calendar-section{
+    padding:60px 7%;
+}
+
+.calendar-section h2{
+    text-align:center;
+    margin-bottom:30px;
+    font-family:var(--fonte-titulo);
+}
+
+.calendar{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:10px;
+    max-width:900px;
+    margin:auto;
+}
+
+.day-name{
+    text-align:center;
+    font-weight:700;
+    color:var(--dourado);
+}
+
+.day{
+    background:white;
+    height:80px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+    border:1px solid rgba(0,0,0,.05);
+}
+
+.event-day{
+    background:var(--rosa-suave);
+    font-weight:bold;
+}
+
+.event-day span{
+    position:absolute;
+    bottom:8px;
+    right:8px;
+}
+
+.events-board{
+    padding:80px 7%;
+    display:grid;
+    grid-template-columns:repeat(
+        auto-fit,
+        minmax(280px,1fr)
+    );
+    gap:30px;
+}
+
+.event-card{
+    background:#fff8cf;
+    padding:25px;
+    border-radius:8px;
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+    transform:rotate(-1deg);
+    transition:.3s;
+}
+
+.event-card:nth-child(even){
+    transform:rotate(1deg);
+}
+
+.event-card:hover{
+    transform:translateY(-6px);
+}
+
+.event-date{
+    display:inline-block;
+    background:var(--dourado);
+    color:white;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:.8rem;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.event-card h3{
+    font-family:var(--fonte-titulo);
+    margin-bottom:12px;
+}
+
+.event-card p{
+    color:var(--texto-suave);
+    margin-bottom:20px;
+}
+
+.event-info{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    font-size:.9rem;
+}
+
+@media(max-width:768px){
+
+    .calendar{
+        gap:5px;
+    }
+
+    .day{
+        height:60px;
+        font-size:.9rem;
+    }
+
+    .header-container h1{
+        font-size:2.2rem;
+    }
+}

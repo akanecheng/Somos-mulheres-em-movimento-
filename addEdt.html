@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Somos Mulheres em Movimento - Gerenciar Comunidade</title>
+  
+  <!-- Fontes Uniformes da Comunidade -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+  <!-- Font Awesome para os ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ==========================================
+       VARIÁVEIS DE CORES E FONTES (IGUAL À COMUNIDADE)
+       ========================================== */
+    :root {
+      --fonte-titulo: 'DM Serif Display', serif;
+      --fonte-corpo: 'Manrope', sans-serif;
+
+      --bg-creme: #FDFBF7;
+      --branco: #FFFFFF;
+      --texto-escuro: #2C2523;
+      --texto-suave: #6E5D5A;
+      --rosa-suave: #FADCD9;
+      --rosa-claro: #F8B1A6;
+      --rosa-escuro: #D48A85;
+      --dourado: #c9934e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--fonte-corpo);
+      background-color: var(--bg-creme);
+      color: var(--texto-escuro);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    /* ==========================================
+       NAVBAR (Exatamente igual ao Index/Comunidade)
+       ========================================== */
+    .navbar {
+        position: fixed; 
+        top: 0;
+        left: 0;
+        width: 100%; 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 7%;
+        background-color: var(--branco);
+        border-bottom: 1px solid rgba(212, 138, 133, 0.1);
+        z-index: 1000; 
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
+    }
+
+    .logo {
+        font-family: var(--fonte-titulo);
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: var(--dourado);
+        line-height: 1.1;
+        letter-spacing: 1px;
+    }
+    
+    .logo span {
+        font-size: 0.8rem;
+        font-family: var(--fonte-corpo);
+        color: var(--texto-suave);
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+    }
+
+    .nav-links a {
+        font-family: var(--fonte-corpo);
+        color: var(--texto-escuro);
+        margin: 0 15px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-links a:hover, .nav-links a.active { 
+        color: var(--rosa-escuro); 
+    }
+
+    .menu-toggle, .hamburger, .nav-buttons-mobile {
+        display: none;
+    }
+
+    /* ==========================================
+       CONTEÚDO PRINCIPAL (LAYOUT DO GERENCIADOR)
+       ========================================== */
+    main {
+      max-width: 1300px;
+      margin: 110px auto 40px auto;
+      padding: 20px 4%;
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--rosa-escuro);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: var(--dourado);
+    }
+
+    .page-title-area {
+      margin-bottom: 35px;
+    }
+    .page-title-area h1 {
+      font-family: var(--fonte-titulo);
+      font-size: 2.4rem;
+      color: var(--texto-escuro);
+      font-weight: 400;
+      margin-bottom: 5px;
+    }
+    .page-title-area p {
+      color: var(--texto-suave);
+      font-size: 0.95rem;
+    }
+
+    /* Container de Grid Dois Lados (Formulário + Preview) */
+    .manager-layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .form-side {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .setup-card {
+      background-color: var(--branco);
+      border-radius: 12px;
+      border: 1px solid rgba(212, 138, 133, 0.15);
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+    }
+
+    .setup-card h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--texto-escuro);
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(110, 93, 90, 0.1);
+      padding-bottom: 10px;
+    }
+    .setup-card h2 span {
+      color: var(--rosa-escuro);
+      margin-right: 5px;
+    }
+
+    .setup-card .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      margin-bottom: 20px;
+    }
+
+    /* Componente de Upload de Foto e Zoom */
+    .upload-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .upload-btn-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+    .btn-upload {
+      border: 1px solid var(--rosa-claro);
+      color: var(--texto-escuro);
+      background-color: var(--branco);
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-upload:hover {
+      background-color: var(--rosa-suave);
+      border-color: var(--rosa-escuro);
+    }
+    .upload-btn-wrapper input[type=file] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .crop-box {
+      width: 100%;
+      height: 280px;
+      background-color: #f0eae4;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 1px dashed rgba(112, 95, 85, 0.2);
+    }
+    .crop-preview-img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      transition: transform 0.1s ease;
+      transform: scale(1);
+    }
+    .crop-overlay {
+      position: absolute;
+      border: 2px dashed var(--branco);
+      box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+      width: 200px;
+      height: 200px;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .crop-overlay::after {
+      content: "↕ ↔";
+      color: var(--branco);
+      font-size: 1.2rem;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+      opacity: 0.7;
+    }
+
+    .crop-controls {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      justify-content: center;
+      margin-top: 5px;
+    }
+    .btn-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(112, 95, 85, 0.2);
+      background: var(--branco);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--texto-escuro);
+      transition: all 0.2s;
+    }
+    .btn-circle:hover {
+      background-color: var(--bg-creme);
+      border-color: var(--rosa-escuro);
+      color: var(--rosa-escuro);
+    }
+    .zoom-slider {
+      flex-grow: 1;
+      max-width: 250px;
+      accent-color: var(--rosa-escuro);
+    }
+
+    .tip-box {
+      background-color: var(--bg-creme);
+      border-left: 3px solid var(--dourado);
+      padding: 12px 15px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      color: var(--texto-suave);
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 5px;
+      width: 100%;
+    }
+    .tip-box i {
+      color: var(--dourado);
+      margin-top: 2px;
+    }
+
+    /* Inputs e Campos do Formulário */
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--texto-escuro);
+      margin-bottom: 6px;
+    }
+    .input-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid rgba(212, 138, 133, 0.3);
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-size: 0.9rem;
+      color: var(--texto-escuro);
+      background-color: var(--branco);
+      transition: all 0.2s;
+    }
+    .input-control:focus {
+      outline: none;
+      border-color: var(--rosa-escuro);
+      box-shadow: 0 0 0 3px rgba(212, 138, 133, 0.15);
+    }
+    .char-count {
+      position: absolute;
+      right: 10px;
+      bottom: -18px;
+      font-size: 0.75rem;
+      color: var(--texto-suave);
+    }
+    textarea.input-control {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    /* Tags Input Area */
+    .tags-input-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid rgba(212, 138, 133, 0.3);
+      border-radius: 6px;
+      background-color: var(--branco);
+      min-height: 44px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .tag-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--bg-creme);
+      color: var(--texto-suave);
+      border: 1px solid rgba(112, 95, 85, 0.15);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+    }
+    .tag-badge button {
+      background: none;
+      border: none;
+      color: var(--rosa-escuro);
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+    }
+    .tag-badge button:hover {
+      color: red;
+    }
+    .tags-input-container input {
+      border: none;
+      outline: none;
+      padding: 4px;
+      flex-grow: 1;
+      font-family: var(--fonte-corpo);
+      font-size: 0.85rem;
+      color: var(--texto-escuro);
+      min-width: 120px;
+    }
+    .tag-append-row {
+      display: flex;
+      gap: 10px;
+    }
+    .btn-secondary {
+      background-color: var(--rosa-escuro);
+      color: var(--branco);
+      border: none;
+      padding: 0 20px;
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    .btn-secondary:hover {
+      background-color: #be7570;
+    }
+
+    /* Botões de Ação do Rodapé do Formulário */
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--branco);
+      padding: 20px 30px;
+      border-radius: 12px;
+      border: 1px solid rgba(212, 138, 133, 0.15);
+      margin-top: 10px;
+    }
+    .left-actions {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-action {
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-save {
+      background-color: var(--rosa-escuro);
+      color: var(--branco);
+      border: none;
+    }
+    .btn-save:hover {
+      background-color: #be7570;
+      box-shadow: 0 4px 12px rgba(212, 138, 133, 0.25);
+    }
+    .btn-cancel {
+      background-color: transparent;
+      border: 1px solid rgba(112, 95, 85, 0.3);
+      color: var(--texto-suave);
+    }
+    .btn-cancel:hover {
+      background-color: var(--bg-creme);
+      color: var(--texto-escuro);
+    }
+    .btn-delete {
+      background-color: transparent;
+      border: 1px solid #e06666;
+      color: #cc0000;
+    }
+    .btn-delete:hover {
+      background-color: #fff3f3;
+    }
+
+    /* LADO DO PREVIEW (DESIGN IGUAL AO CARD DA COMUNIDADE) */
+    .preview-side {
+      position: sticky;
+      top: 100px;
+    }
+    .preview-header {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--texto-escuro);
+      margin-bottom: 5px;
+    }
+    .preview-subtitle {
+      font-size: 0.8rem;
+      color: var(--texto-suave);
+      margin-bottom: 20px;
+    }
+
+    /* Estrutura Exata do Card da Comunidade */
+    .member-card-full {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--branco);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 138, 133, 0.15);
+      box-shadow: 0 8px 25px rgba(212, 138, 133, 0.06);
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .member-photo {
+      background-color: var(--rosa-claro);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 100%;
+      height: 260px; 
+      position: relative;
+      flex-shrink: 0;
+      transition: background-image 0.2s;
+    }
+
+    .edition-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: var(--dourado);
+      color: var(--branco);
+      font-size: 0.7rem;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    .member-details {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+
+    .member-meta h3 {
+      font-family: var(--fonte-titulo);
+      font-size: 1.5rem;
+      color: var(--texto-escuro);
+      margin-bottom: 4px;
+      min-height: 30px;
+    }
+
+    .member-title {
+      color: var(--dourado);
+      font-size: 0.9rem;
+      font-weight: 600;
+      min-height: 20px;
+    }
+
+    .member-bio {
+      font-size: 0.9rem;
+      color: var(--texto-suave);
+      margin: 15px 0;
+      line-height: 1.5;
+      min-height: 60px;
+      word-break: break-word;
+    }
+
+    .member-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+      min-height: 28px;
+    }
+
+    .tag-span {
+      background-color: var(--bg-creme);
+      color: var(--texto-suave);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(112, 95, 85, 0.1);
+    }
+
+    .member-socials {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border-top: 1px solid rgba(112, 95, 85, 0.08);
+      padding-top: 15px;
+    }
+
+    .member-socials i {
+      font-size: 1.1rem;
+      color: var(--texto-suave);
+    }
+
+    /* Comutadores de Visualização de Dispositivo */
+    .view-toggle-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn-view-toggle {
+      background-color: var(--branco);
+      border: 1px solid rgba(112, 95, 85, 0.2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--texto-suave);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-view-toggle.active {
+      background-color: var(--rosa-suave);
+      color: var(--texto-escuro);
+      border-color: var(--rosa-escuro);
+    }
+
+    /* ==========================================
+       FOOTER
+       ========================================== */
+    footer.footer {
+      background-color: #f6ebe6;
+      padding: 30px 20px;
+      text-align: center;
+      border-top: 1px solid rgba(212, 138, 133, 0.15);
+      width: 100%;
+      margin-top: 60px;
+    }
+
+    footer.footer p {
+      font-family: var(--fonte-titulo);
+      color: var(--texto-suave);
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+
+    footer.footer .heart-icon {
+      color: var(--rosa-escuro);
+      font-size: 0.8rem;
+    }
+
+    /* ==========================================
+       RESPONSIVIDADE
+       ========================================== */
+    @media (max-width: 1024px) {
+        .navbar { padding: 20px 4%; }
+        .nav-links a { margin: 0 8px; font-size: 0.85rem; }
+        .manager-layout { grid-template-columns: 1.1fr 1fr; gap: 25px; }
+    }
+
+    @media (max-width: 880px) {
+      .manager-layout { grid-template-columns: 1fr; }
+      .preview-side { position: static; margin-top: 20px; }
+      .member-card-full { max-width: 100%; }
+    }
+
+    @media (max-width: 768px) {
+        .hamburger {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 24px;
+            height: 18px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .hamburger span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background-color: var(--texto-escuro);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 70%;
+            height: 100vh;
+            background-color: var(--branco);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: right 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .nav-links a { 
+            font-size: 1.1rem; 
+            margin: 10px 0;
+        }
+
+        .menu-toggle:checked ~ .nav-links { right: 0; }
+        .menu-toggle:checked ~ .hamburger span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+        .menu-toggle:checked ~ .hamburger span:nth-child(2) { opacity: 0; }
+        .menu-toggle:checked ~ .hamburger span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+        .page-title-area h1 { font-size: 1.9rem; }
+        .action-row { flex-direction: column; gap: 15px; width: 100%; }
+        .left-actions { width: 100%; justify-content: space-between; }
+        .btn-delete { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR RESPONSIVA (Unforme com o da Comunidade) -->
+  <header class="navbar">
+      <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+      
+      <input type="checkbox" id="menu-toggle" class="menu-toggle">
+      <label for="menu-toggle" class="hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+      </label>
+
+      <nav class="nav-links">
+          <a href="index.html">Início</a>
+          <a href="sobre.html">Sobre</a>
+          <a href="comunidade.html">Comunidade</a>
+          <a href="eventos.html">Eventos</a>
+          <a href="contatos.html">Contato</a>
+          <a href="configuracoes.html" class="active">Configurações</a>
+          <div class="nav-buttons-mobile"></div>
+      </nav>
+  </header>
+
+  <!-- Painel de Gerenciamento -->
+  <main>
+    <a href="configuracoes.html" class="back-link">
+      <i class="fa-solid fa-arrow-left"></i> Voltar para o Painel Principal
+    </a>
+
+    <div class="page-title-area">
+      <h1 id="page-main-title">Adicionar Mulher da Comunidade</h1>
+      <p>Preencha os dados abaixo para criar ou editar um perfil completo na vitrine da comunidade.</p>
+    </div>
+
+    <div class="manager-layout">
+      
+      <!-- Formulário de Configuração (Lado Esquerdo) -->
+      <div class="form-side">
+        
+        <!-- Bloco 1: Upload e Ajuste de Imagem -->
+        <div class="setup-card">
+          <h2><span>1.</span> Foto de Perfil</h2>
+          <p class="card-subtitle">Selecione uma imagem de boa qualidade. Recomendado proporção quadrada (800x800px).</p>
+          
+          <div class="upload-container">
+            <div class="upload-btn-wrapper">
+              <button class="btn-upload"><i class="fa-solid fa-cloud-arrow-up"></i> Escolher nova foto</button>
+              <input type="file" id="image-uploader" accept="image/*" onchange="previewImage(event)">
+            </div>
+
+            <div class="crop-box">
+              <img id="crop-preview" class="crop-preview-img" src="" style="display: none;">
+              <div id="crop-box-placeholder" style="color: var(--texto-suave); font-size: 0.85rem; text-align: center; padding: 20px;">
+                <i class="fa-regular fa-image" style="font-size: 2.5rem; color: var(--rosa-claro); margin-bottom: 10px; display: block;"></i>
+                Nenhuma imagem carregada
+              </div>
+              <div id="crop-window" class="crop-overlay" style="display: none;"></div>
+            </div>
+
+            <div class="crop-controls">
+              <button class="btn-circle" onclick="adjustZoom(-0.1)"><i class="fa-solid fa-minus"></i></button>
+              <input type="range" id="zoom-range" class="zoom-slider" min="0.5" max="2" step="0.05" value="1" oninput="updateZoom(this.value)" disabled>
+              <button class="btn-circle" onclick="adjustZoom(0.1)"><i class="fa-solid fa-plus"></i></button>
+              <button class="btn-circle" onclick="resetImage()"><i class="fa-solid fa-rotate-left"></i></button>
+            </div>
+
+            <div class="tip-box">
+              <i class="fa-solid fa-lightbulb"></i>
+              <div><strong>Dica:</strong> Após carregar, use a barra de zoom para enquadrar perfeitamente a imagem dentro da área de recorte pontilhada.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bloco 2: Informações do Perfil -->
+        <div class="setup-card">
+          <h2><span>2.</span> Informações Gerais</h2>
+          <p class="card-subtitle">Preencha os campos textuais que vão construir o corpo do card.</p>
+          
+          <div class="form-group">
+            <label for="input-name">Nome Completo</label>
+            <input type="text" id="input-name" class="input-control" placeholder="Ex: Celiana Werneck" maxlength="60" oninput="syncFields()">
+            <span class="char-count"><span id="count-name">0</span>/60</span>
+          </div>
+
+          <div class="form-group" style="margin-top: 25px;">
+            <label for="input-volume">Volume / Edição</label>
+            <input type="text" id="input-volume" class="input-control" placeholder="Ex: Vol. 1" oninput="syncFields()">
+          </div>
+
+          <div class="form-group" style="margin-top: 25px;">
+            <label for="input-title">Subtítulo / Função</label>
+            <input type="text" id="input-title" class="input-control" placeholder="Ex: Psicóloga & Escritora" maxlength="60" oninput="syncFields()">
+            <span class="char-count"><span id="count-title">0</span>/60</span>
+          </div>
+
+          <div class="form-group" style="margin-top: 25px;">
+            <label for="input-bio">Descrição / Biografia Curta</label>
+            <textarea id="input-bio" class="input-control" placeholder="Conte um resumo inspirador da história, atuação ou conquistas..." maxlength="220" oninput="syncFields()"></textarea>
+            <span class="char-count"><span id="count-bio">0</span>/220</span>
+          </div>
+
+          <div class="form-group" style="margin-top: 25px;">
+            <label for="input-instagram">Link do Instagram (Opcional)</label>
+            <input type="url" id="input-instagram" class="input-control" placeholder="https://instagram.com/usuario" oninput="syncFields()">
+          </div>
+        </div>
+
+        <!-- Bloco 3: Tags / Palavras-chave -->
+        <div class="setup-card">
+          <h2><span>3.</span> Tags de Atuação</h2>
+          <p class="card-subtitle">Adicione tags para categorizar o perfil e facilitar a busca pelos filtros.</p>
+          
+          <div id="tags-container" class="tags-input-container">
+            <!-- As badges de tags vão renderizar aqui -->
+            <input type="text" id="tag-field" placeholder="Escreva e aperte Enter ou Adicionar" onkeypress="handleTagKey(event)">
+          </div>
+          
+          <div class="tag-append-row">
+            <button class="btn-secondary" onclick="addTagFromField()">Adicionar Tag</button>
+          </div>
+          
+          <div class="tip-box" style="margin-top: 15px;">
+            <i class="fa-solid fa-circle-info"></i>
+            <div>Pressione a tecla <strong>Enter</strong> no campo de texto para inserir a tag de forma mais rápida.</div>
+          </div>
+        </div>
+
+        <!-- Barra de Ações Inferior -->
+        <div class="action-row">
+          <button id="btn-delete-action" class="btn-action btn-delete" onclick="handleDelete()" style="display: none;">
+            <i class="fa-regular fa-trash-can"></i> Excluir Perfil
+          </button>
+          <div style="flex-grow: 1;" id="spacer"></div>
+          <div class="left-actions">
+            <button class="btn-action btn-cancel" onclick="handleCancel()">Cancelar</button>
+            <button class="btn-action btn-save" onclick="handleSave()"><i class="fa-regular fa-floppy-disk"></i> Salvar Alterações</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Preview em Tempo Real (Lado Direito) -->
+      <div class="preview-side">
+        <h2 class="preview-header">Visualização Dinâmica do Card</h2>
+        <p class="preview-subtitle">Veja em tempo real exatamente como o card ficará na página da comunidade.</p>
+        
+        <!-- O Card da Comunidade -->
+        <div class="member-card-full" id="live-card">
+          <div class="member-photo" id="preview-card-photo" style="background-image: url('');">
+            <span class="edition-badge" id="preview-card-volume">Vol. 1</span>
+          </div>
+          <div class="member-details">
+            <div class="member-meta">
+              <h3 id="preview-card-name">Nome da Participante</h3>
+              <p class="member-title" id="preview-card-title">Subtítulo / Especialidade</p>
+            </div>
+            <p class="member-bio" id="preview-card-bio">A biografia e descrição detalhada digitada aparecerá dinamicamente nesta área do card, refletindo os textos configurados ao lado.</p>
+            
+            <div class="member-tags" id="preview-card-tags">
+              <span class="tag-span">Exemplo Tag</span>
+            </div>
+            
+            <div class="member-socials">
+              <a href="#" id="preview-card-ig" target="_blank" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" title="LinkedIn" style="opacity: 0.3; pointer-events: none;"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <div class="view-toggle-row">
+          <button class="btn-view-toggle active"><i class="fa-solid fa-mobile-screen-button"></i> Mobile</button>
+          <button class="btn-view-toggle"><i class="fa-solid fa-desktop"></i> Desktop Preview</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Rodapé Uniforme -->
+  <footer class="footer">
+    <p>“Juntas transformamos histórias em propósito.”</p>
+    <i class="fa-solid fa-heart heart-icon"></i>
+  </footer>
+
+  <!-- SCRIPT DE INTERAÇÃO E MAPEAMENTO DO FIREBASE -->
+  <script>
+    // Estado local para gerenciar dados antes de salvar no banco
+    let profileData = {
+      id: null, // se preenchido indica MODO EDIÇÃO
+      name: "",
+      volume: "Vol. 1",
+      title: "",
+      bio: "",
+      instagram: "",
+      photoBase64: "",
+      zoom: 1.0,
+      tags: ["Idealizadora", "Saúde Mental"]
+    };
+
+    // Executa ao inicializar a página para checar parâmetros de edição
+    window.addEventListener('DOMContentLoaded', () => {
+      // Simulando detecção de parâmetro ID na URL (Ex: ?edit=ID_DO_FIREBASE)
+      const urlParams = new URLSearchParams(window.location.search);
+      const editId = urlParams.get('edit');
+      
+      if(editId) {
+        setupEditMode(editId);
+      } else {
+        setupCreateMode();
+      }
+      
+      renderTags();
+      updateLiveCard();
+    });
+
+    // Configura layout para Novo Card do zero
+    function setupCreateMode() {
+      document.title = "Somos Mulheres em Movimento - Adicionar Integrante";
+      document.getElementById('page-main-title').innerText = "Adicionar Mulher na Comunidade";
+      document.getElementById('btn-delete-action').style.display = 'none';
+      
+      // Dados padrão para placeholder visual bonito no início
+      profileData.name = "";
+      profileData.title = "";
+      profileData.bio = "";
+      profileData.volume = "Vol. 1";
+    }
+
+    // Configura layout para Edição de Integrante Existente
+    function setupEditMode(id) {
+      document.title = "Somos Mulheres em Movimento - Editar Integrante";
+      document.getElementById('page-main-title').innerText = "Editar Mulher da Comunidade";
+      document.getElementById('btn-delete-action').style.display = 'inline-flex';
+      
+      // Carrega dados fictícios estruturados idênticos ao Firebase para demonstração estrutural
+      profileData.id = id;
+      profileData.name = "Celiana Werneck";
+      profileData.volume = "Vol. 1";
+      profileData.title = "Psicóloga & Escritora";
+      profileData.bio = "Idealizadora e diretora do movimento, ajuda mulheres a ressignificarem suas dores em força através da escrita terapêutica.";
+      profileData.instagram = "https://www.instagram.com/celiana_werneck";
+      profileData.tags = ["Idealizadora", "Saúde Mental"];
+      
+      // Preenche os Inputs
+      document.getElementById('input-name').value = profileData.name;
+      document.getElementById('input-volume').value = profileData.volume;
+      document.getElementById('input-title').value = profileData.title;
+      document.getElementById('input-bio').value = profileData.bio;
+      document.getElementById('input-instagram').value = profileData.instagram;
+      
+      // Atualiza contadores
+      document.getElementById('count-name').innerText = profileData.name.length;
+      document.getElementById('count-title').innerText = profileData.title.length;
+      document.getElementById('count-bio').innerText = profileData.bio.length;
+    }
+
+    // Sincroniza campos do formulário para o estado local e preview
+    function syncFields() {
+      profileData.name = document.getElementById('input-name').value;
+      profileData.volume = document.getElementById('input-volume').value || "Vol. 1";
+      profileData.title = document.getElementById('input-title').value;
+      profileData.bio = document.getElementById('input-bio').value;
+      profileData.instagram = document.getElementById('input-instagram').value;
+
+      // Atualiza contadores de caracteres
+      document.getElementById('count-name').innerText = profileData.name.length;
+      document.getElementById('count-title').innerText = profileData.title.length;
+      document.getElementById('count-bio').innerText = profileData.bio.length;
+
+      updateLiveCard();
+    }
+
+    // Renderiza e gerencia a lista de Tags
+    function renderTags() {
+      const container = document.getElementById('tags-container');
+      const inputField = document.getElementById('tag-field');
+      
+      // Remove badges antigas
+      const elements = container.getElementsByClassName('tag-badge');
+      while(elements.length > 0) {
+        elements[0].parentNode.removeChild(elements[0]);
+      }
+
+      // Adiciona as badges atualizadas antes do campo de input
+      profileData.tags.forEach((tag, index) => {
+        const badge = document.createElement('span');
+        badge.className = 'tag-badge';
+        badge.innerHTML = `${tag} <button type="button" onclick="removeTag(${index})">&times;</button>`;
+        container.insertBefore(badge, inputField);
+      });
+
+      // Sincroniza também as tags no card de preview
+      const previewTagsContainer = document.getElementById('preview-card-tags');
+      previewTagsContainer.innerHTML = "";
+      
+      if(profileData.tags.length === 0) {
+        previewTagsContainer.innerHTML = '<span class="tag-span" style="opacity:0.5;">Sem tags</span>';
+      } else {
+        profileData.tags.forEach(tag => {
+          const span = document.createElement('span');
+          span.className = 'tag-span';
+          span.innerText = tag;
+          previewTagsContainer.appendChild(span);
+        });
+      }
+    }
+
+    function handleTagKey(e) {
+      if(e.key === 'Enter') {
+        e.preventDefault();
+        addTagFromField();
+      }
+    }
+
+    function addTagFromField() {
+      const inputField = document.getElementById('tag-field');
+      const value = inputField.value.trim();
+      if(value && !profileData.tags.includes(value)) {
+        profileData.tags.push(value);
+        inputField.value = "";
+        renderTags();
+      }
+    }
+
+    function removeTag(index) {
+      profileData.tags.splice(index, 1);
+      renderTags();
+    }
+
+    // Gerenciamento e Manipulação de Imagem (Zoom/Crop)
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const cropPreview = document.getElementById('crop-preview');
+          const placeholder = document.getElementById('crop-box-placeholder');
+          const cropWindow = document.getElementById('crop-window');
+          const zoomRange = document.getElementById('zoom-range');
+
+          cropPreview.src = e.target.result;
+          cropPreview.style.display = 'block';
+          placeholder.style.display = 'none';
+          cropWindow.style.display = 'flex';
+          zoomRange.disabled = false;
+
+          profileData.photoBase64 = e.target.result;
+          profileData.zoom = 1.0;
+          zoomRange.value = 1.0;
+          
+          updateLiveCard();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function updateZoom(value) {
+      profileData.zoom = parseFloat(value);
+      const img = document.getElementById('crop-preview');
+      if(img) {
+        img.style.transform = `scale(${profileData.zoom})`;
+      }
+    }
+
+    function adjustZoom(amount) {
+      const slider = document.getElementById('zoom-range');
+      if(!slider.disabled) {
+        let newVal = parseFloat(slider.value) + amount;
+        if(newVal < 0.5) newVal = 0.5;
+        if(newVal > 2) newVal = 2;
+        slider.value = newVal;
+        updateZoom(newVal);
+      }
+    }
+
+    function resetImage() {
+      const uploader = document.getElementById('image-uploader');
+      const cropPreview = document.getElementById('crop-preview');
+      const placeholder = document.getElementById('crop-box-placeholder');
+      const cropWindow = document.getElementById('crop-window');
+      const zoomRange = document.getElementById('zoom-range');
+
+      uploader.value = "";
+      cropPreview.src = "";
+      cropPreview.style.display = 'none';
+      placeholder.style.display = 'block';
+      cropWindow.style.display = 'none';
+      zoomRange.value = 1.0;
+      zoomRange.disabled = true;
+
+      profileData.photoBase64 = "";
+      updateLiveCard();
+    }
+
+    // Atualiza o card de preview visual do lado direito
+    function updateLiveCard() {
+      document.getElementById('preview-card-name').innerText = profileData.name || "Nome da Participante";
+      document.getElementById('preview-card-title').innerText = profileData.title || "Subtítulo / Especialidade";
+      document.getElementById('preview-card-bio').innerText = profileData.bio || "A biografia e descrição detalhada digitada aparecerá dinamicamente nesta área do card...";
+      document.getElementById('preview-card-volume').innerText = profileData.volume;
+
+      const photoDiv = document.getElementById('preview-card-photo');
+      if(profileData.photoBase64) {
+        photoDiv.style.backgroundImage = `url('${profileData.photoBase64}')`;
+      } else {
+        photoDiv.style.backgroundImage = 'none';
+      }
+
+      const igLink = document.getElementById('preview-card-ig');
+      if(profileData.instagram) {
+        igLink.href = profileData.instagram;
+        igLink.style.opacity = "1";
+        igLink.style.pointerEvents = "auto";
+      } else {
+        igLink.href = "#";
+        igLink.style.opacity = "0.3";
+        igLink.style.pointerEvents = "none";
+      }
+    }
+
+    // Ações Finais Prontas para Acoplamento com Firebase
+    function handleSave() {
+      if(!profileData.name.trim()) {
+        alert("Por favor, preencha pelo menos o Nome Completo da participante.");
+        return;
+      }
+
+      // MAPEAMENTO PRONTO PARA O FIREBASE
+      console.log("=== OBJETO PRONTO PARA SALVAR NO FIREBASE ===");
+      console.log({
+        id: profileData.id, // null se for novo, string se for edit
+        nome: profileData.name,
+        volume: profileData.volume,
+        subtitulo: profileData.title,
+        descricao: profileData.bio,
+        instagram: profileData.instagram,
+        tags: profileData.tags,
+        imagemBase64OrUrl: profileData.photoBase64 ? "[String Base64 da Imagem]" : "placeholder.jpg",
+        configuracoesRecorte: {
+          zoom: profileData.zoom
+        },
+        atualizadoEm: new Date().toISOString()
+      });
+
+      alert(`Dados mapeados com sucesso! Prontos para gravação no Firestore.\n\nModo: ${profileData.id ? 'Edição (Update)' : 'Criação (Add)'}\nNome: ${profileData.name}`);
+      
+      // Redireciona de volta para a lista ou comunidade
+      window.location.href = "comunidade.html";
+    }
+
+    function handleDelete() {
+      if(confirm(`Tem certeza absoluta que deseja remover ${profileData.name} da comunidade? Esta ação não pode ser desfeita.`)) {
+        console.log(`Comando Firebase: db.collection('comunidade').doc('${profileData.id}').delete()`);
+        alert("Comando de exclusão mapeado para o Firebase!");
+        window.location.href = "comunidade.html";
+      }
+    }
+
+    function handleCancel() {
+      if(confirm("Deseja mesmo cancelar? As alterações não salvas serão perdidas.")) {
+        window.location.href = "configuracoes.html";
+      }
+    }
+  </script>
+</body>
+</html>

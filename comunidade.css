@@ -1,0 +1,284 @@
+/* --- COMPLEMENTOS PARA A PÁGINA DA COMUNIDADE --- */
+
+:root {
+    /* Fontes (Baseado no seu HTML) */
+    --fonte-titulo: 'DM Serif Display', serif;
+    --fonte-corpo: 'Manrope', sans-serif;
+
+    /* Paleta de Cores (Ajuste os tons hexadecimais como preferir) */
+    --bg-creme: #FDFBF7;
+    --branco: #FFFFFF;
+    --texto-escuro: #2C2523;
+    --texto-suave: #6E5D5A;
+    --rosa-suave: #FADCD9;
+    --rosa-claro: #F8B1A6;
+    --rosa-escuro: #D48A85;
+    --dourado: #c9934e;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: var(--fonte-corpo);
+    background-color: var(--bg-creme);
+    color: var(--texto-escuro);
+    line-height: 1.6;
+}
+
+/* Estilo para link ativo na Navbar */
+.nav-links a.active {
+    color: var(--rosa-escuro);
+    font-weight: 700;
+}
+
+/* Cabeçalho de Páginas Internas */
+.page-header {
+    margin-top: 80px;
+    padding: 80px 7% 40px 7%;
+    background: linear-gradient(to bottom, var(--rosa-suave), transparent);
+    text-align: center;
+}
+
+.header-container {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.header-container h1 {
+    font-family: var(--fonte-titulo);
+    font-size: 2.8rem;
+    color: var(--texto-escuro);
+    margin-bottom: 15px;
+    line-height: 1.2;
+}
+
+/* Estrutura do Diretório e Filtros */
+.directory-section {
+    padding: 20px 7% 80px 7%;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    background-color: var(--branco);
+    padding: 20px 30px;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 138, 133, 0.15);
+    margin-bottom: 40px;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-group span {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--texto-suave);
+}
+
+.filter-options {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-btn {
+    background: none;
+    border: 1px solid var(--rosa-claro);
+    color: var(--texto-escuro);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: var(--fonte-corpo);
+    transition: all 0.2s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background-color: var(--rosa-escuro);
+    color: var(--branco);
+    border-color: var(--rosa-escuro);
+}
+
+/* Grid de Cards Detalhados */
+.members-large-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Um abaixo do outro para dar espaço às bios */
+    align-items: stretch;
+    gap: 30px;
+}
+
+.member-card-full {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--branco);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(212, 138, 133, 0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+}
+
+.member-card-full:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 138, 133, 0.08);
+}
+
+.member-photo{
+    background-color: var(--rosa-claro);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 100%;
+    min-height: 250px; /* Força a foto a ter no MÍNIMO essa altura */
+    height: 100%; 
+    position: relative;
+    height: 260px; /* Altura fixa ideal para a foto no topo do card */
+    flex-shrink: 0;
+}
+
+.member-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* preenche o espaço e corta as sobras sozinha, sem distorcer o rosto */
+    object-position: center; /* Foca no centro da imagem */
+    display: block;
+}
+
+
+
+.edition-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--dourado);
+    color: var(--branco);
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+.member-details {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+}
+
+.member-meta h3 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.5rem;
+    color: var(--texto-escuro);
+    margin-bottom: 4px;
+}
+
+.member-title {
+    color: var(--dourado);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.member-bio {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    margin: 15px 0;
+    line-height: 1.5;
+}
+
+.member-tags {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.tag-span {
+    background-color: var(--bg-creme);
+    color: var(--texto-suave);
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(112, 95, 85, 0.1);
+}
+
+.member-socials {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-top: 1px solid rgba(112, 95, 85, 0.08);
+    padding-top: 15px;
+}
+
+.member-socials svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--texto-suave);
+    transition: stroke 0.2s;
+}
+
+.member-socials a:hover svg {
+    stroke: var(--rosa-escuro);
+}
+
+.btn-profile-link {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: var(--rosa-escuro);
+    font-weight: 600;
+}
+
+
+footer.footer{
+    grid-column: 1/-1;
+    width: 100%;
+    margin-top: 50px;
+}
+
+
+/* ==========================================================
+   RESPONSIVIDADE DA COMUNIDADE
+   ========================================================== */
+@media (max-width: 768px) {
+    .header-container h1 {
+        font-size: 2.2rem;
+    }
+    .filter-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .filter-options {
+        flex-wrap: wrap;
+    }
+    .member-card-full {
+        grid-template-columns: 1fr; /* Empilha a foto no celular */
+    }
+    .member-photo {
+        height: 200px;
+        min-height: auto;
+    }
+    .member-details {
+        padding: 20px;
+    }
+    .btn-profile-link {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        text-align: right;
+    }
+    .member-socials {
+        flex-wrap: wrap;
+    }
+}

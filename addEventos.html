@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Controle - Somos Mulheres em Movimento</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    :root {
+      --bg-creme: #fdfaf7;
+      --rosa-escuro: #d48a85;
+      --rosa-claro: #e2b2ae;
+      --rosa-suave: #fbeee9;
+      --dourado: #c9934e;
+      --texto-escuro: #4a3b32;
+      --texto-suave: #705f55;
+      --branco: #ffffff;
+      --fonte-titulo: 'DM Serif Display', serif;
+      --fonte-corpo: 'Manrope', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--fonte-corpo);
+      background-color: var(--bg-creme);
+      color: var(--texto-escuro);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .page-header {
+      margin-top: 80px;
+      padding: 60px 7% 30px;
+      text-align: center;
+      background: linear-gradient(to bottom, var(--rosa-suave), transparent);
+    }
+
+    .header-container { max-width: 700px; margin: auto; }
+    .subtitle {
+      display: inline-block;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--rosa-escuro);
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .header-container h1 {
+      font-family: var(--fonte-titulo);
+      font-size: 2.6rem;
+      margin-bottom: 12px;
+    }
+
+    .config-container {
+      max-width: 1200px;
+      margin: 10px auto 60px;
+      padding: 0 7%;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 30px;
+      width: 100%;
+    }
+
+    .panel-box {
+      background: var(--branco);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(212, 138, 133, 0.1);
+      border: 1px solid rgba(212, 138, 133, 0.15);
+      height: fit-content;
+    }
+
+    .panel-box h2 {
+      font-family: var(--fonte-titulo);
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      color: var(--texto-escuro);
+      border-bottom: 2px solid var(--rosa-suave);
+      padding-bottom: 8px;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: var(--texto-suave);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-size: 0.9rem;
+      outline: none;
+      background: var(--bg-creme);
+      transition: 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--rosa-escuro);
+      background: var(--branco);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: var(--rosa-escuro);
+      color: var(--branco);
+      border: none;
+      border-radius: 6px;
+      font-family: var(--fonte-corpo);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-submit:hover { background: #c27d78; }
+
+    .events-board { display: grid; grid-template-columns: 1fr; gap: 20px; }
+
+    .event-card {
+      background: var(--branco);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.03);
+      border-left: 5px solid var(--rosa-escuro);
+      position: relative;
+    }
+
+    .card-editable {
+      outline: none;
+      border-bottom: 1px dashed transparent;
+      transition: 0.2s;
+    }
+
+    .card-editable:focus {
+      border-bottom-color: var(--dourado);
+      background: rgba(212, 138, 133, 0.05);
+    }
+
+    .event-date {
+      display: inline-block;
+      background: var(--dourado);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: .75rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .event-card h3 { font-family: var(--fonte-titulo); margin-bottom: 8px; font-size: 1.3rem; }
+    .event-card p { color: var(--texto-suave); margin-bottom: 15px; font-size: 0.9rem; line-height: 1.4; }
+    .event-info { display: flex; gap: 15px; font-size: .85rem; color: var(--texto-suave); }
+
+    .card-actions {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-action {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      color: var(--texto-suave);
+      transition: 0.2s;
+    }
+
+    .btn-action.delete:hover { color: #c94e4e; }
+    .btn-action.save:hover { color: #4ec970; }
+
+    @media (max-width: 992px) {
+      .config-container { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+    
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </label>
+
+    <nav class="nav-links">
+      <a href="index.html">Início</a>
+      <a href="sobre.html">Sobre</a>
+      <a href="comunidade.html">Comunidade</a>
+      <a href="eventos.html">Eventos</a>
+      <a href="contatos.html">Contato</a>
+      <a href="configuracoes.html" style="color: var(--rosa-escuro);">Configurações</a>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="header-container">
+      <span class="subtitle">Painel Administrativo</span>
+      <h1>Gerenciador de Eventos</h1>
+      <p>Cadastre novos eventos ou altere o conteúdo diretamente nos cards e clique no ícone de salvar.</p>
+    </div>
+  </section>
+
+  <div class="config-container">
+    
+    <div class="panel-box">
+      <h2>Novo Evento</h2>
+      <form id="form-evento">
+        <div class="form-group">
+          <label>Data no Calendário</label>
+          <input type="date" class="form-control" id="form-data-iso" required>
+        </div>
+        <div class="form-group">
+          <label>Texto da Data (Ex: 10 AGO)</label>
+          <input type="text" class="form-control" id="form-data-exibicao" placeholder="10 AGO" required>
+        </div>
+        <div class="form-group">
+          <label>Título do Evento</label>
+          <input type="text" class="form-control" id="form-titulo" placeholder="Palestra Mulheres em Movimento" required>
+        </div>
+        <div class="form-group">
+          <label>Descrição do Card</label>
+          <textarea class="form-control" id="form-desc" rows="3" placeholder="Conversa sobre superação, identidade e propósito..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Local / Plataforma</label>
+          <input type="text" class="form-control" id="form-local" placeholder="📍 Online ou 📍 Paracambi - RJ" required>
+        </div>
+        <div class="form-group">
+          <label>Horário</label>
+          <input type="text" class="form-control" id="form-horario" placeholder="🕒 20h" required>
+        </div>
+        <button type="submit" class="btn-submit">Publicar Evento</button>
+      </form>
+    </div>
+
+    <div class="panel-box">
+      <h2>Eventos Cadastrados</h2>
+      <div class="events-board" id="painel-lista-eventos">
+        <!-- Injetado via JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-copyright">
+      <p>&copy; 2026 Somos Mulheres em Movimento. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_PROJECT_ID.firebaseapp.com",
+      projectId: "SEU_PROJECT_ID",
+      storageBucket: "SEU_PROJECT_ID.appspot.com",
+      messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+      appId: "SEU_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function carregarEventos() {
+      const board = document.getElementById("painel-lista-eventos");
+      board.innerHTML = "<p>Carregando eventos...</p>";
+
+      try {
+        const q = query(collection(db, "eventos"), orderBy("dataIso", "asc"));
+        const snapshot = await getDocs(q);
+        board.innerHTML = "";
+
+        snapshot.forEach(documento => {
+          const evento = { id: documento.id, ...documento.data() };
+          renderizarCard(evento);
+        });
+      } catch (e) {
+        console.warn("Utilizando fallback local:", e);
+        board.innerHTML = "";
+        const locais = JSON.parse(localStorage.getItem('eventos_data') || '[]');
+        locais.forEach(evento => renderizarCard(evento));
+      }
+    }
+
+    function renderizarCard(evento) {
+      const board = document.getElementById("painel-lista-eventos");
+      const card = document.createElement("div");
+      card.className = "event-card";
+      card.setAttribute("data-id", evento.id);
+
+      card.innerHTML = `
+        <div class="card-actions">
+          <button class="btn-action save" title="Salvar"><i class="fa-solid fa-floppy-disk"></i></button>
+          <button class="btn-action delete" title="Excluir"><i class="fa-solid fa-trash-can"></i></button>
+        </div>
+        <span class="event-date card-editable" contenteditable="true" data-campo="dataExibicao">${evento.dataExibicao || evento.data}</span>
+        <h3 class="card-editable" contenteditable="true" data-campo="titulo">${evento.titulo}</h3>
+        <p class="card-editable" contenteditable="true" data-campo="descricao">${evento.descricao}</p>
+        <div class="event-info">
+          <span class="card-editable" contenteditable="true" data-campo="local">${evento.local}</span>
+          <span class="card-editable" contenteditable="true" data-campo="horario">${evento.horario}</span>
+        </div>
+      `;
+
+      card.querySelector(".save").addEventListener("click", () => salvarEdicao(evento.id, card));
+      card.querySelector(".delete").addEventListener("click", () => deletarEvento(evento.id));
+
+      board.appendChild(card);
+    }
+
+    document.getElementById("form-evento").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const novoEvento = {
+        dataIso: document.getElementById("form-data-iso").value,
+        dataExibicao: document.getElementById("form-data-exibicao").value,
+        titulo: document.getElementById("form-titulo").value,
+        descricao: document.getElementById("form-desc").value,
+        local: document.getElementById("form-local").value,
+        horario: document.getElementById("form-horario").value
+      };
+
+      try {
+        await addDoc(collection(db, "eventos"), novoEvento);
+      } catch (err) {
+        let locais = JSON.parse(localStorage.getItem('eventos_data') || '[]');
+        novoEvento.id = Date.now().toString();
+        locais.push(novoEvento);
+        localStorage.setItem('eventos_data', JSON.stringify(locais));
+      }
+
+      document.getElementById("form-evento").reset();
+      carregarEventos();
+    });
+
+    async function salvarEdicao(id, cardDOM) {
+      const atualizacao = {
+        dataExibicao: cardDOM.querySelector('[data-campo="dataExibicao"]').textContent,
+        titulo: cardDOM.querySelector('[data-campo="titulo"]').textContent,
+        descricao: cardDOM.querySelector('[data-campo="descricao"]').textContent,
+        local: cardDOM.querySelector('[data-campo="local"]').textContent,
+        horario: cardDOM.querySelector('[data-campo="horario"]').textContent
+      };
+
+      try {
+        const refDoc = doc(db, "eventos", id);
+        await updateDoc(refDoc, atualizacao);
+        alert("Evento salvo com sucesso no Firebase!");
+      } catch (e) {
+        let locais = JSON.parse(localStorage.getItem('eventos_data') || '[]');
+        const idx = locais.findIndex(item => item.id === id);
+        if (idx !== -1) {
+          locais[idx] = { ...locais[idx], ...atualizacao };
+          localStorage.setItem('eventos_data', JSON.stringify(locais));
+        }
+        alert("Evento atualizado localmente!");
+      }
+    }
+
+    async function deletarEvento(id) {
+      if (confirm("Tem certeza que deseja excluir este evento?")) {
+        try {
+          await deleteDoc(doc(db, "eventos", id));
+        } catch (e) {
+          let locais = JSON.parse(localStorage.getItem('eventos_data') || '[]');
+          locais = locais.filter(item => item.id !== id);
+          localStorage.setItem('eventos_data', JSON.stringify(locais));
+        }
+        carregarEventos();
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", carregarEventos);
+  </script>
+</body>
+</html>
