@@ -62,19 +62,17 @@
 
         <section class="manager-card">
             <div class="card-header-action">
-                <div>
-                    <h2>Livros disponíveis</h2>
-                    <p>Gerencie os livros que aparecem na grade da seção biblioteca.</p>
-                </div>
-                <button class="btn-action-filled btn-add-book-trigger"><i data-lucide="plus"></i> Adicionar novo livro</button>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+    <h2>Livros Disponíveis</h2>
+    <a href="#add-book-form" class="btn-primary gold" style="text-decoration: none;">+ Adicionar Novo Livro</a>
+</div>
+                
             </div>
 
             <div class="books-list-rows" id="books-list-container">
                 </div>
 
-            <button class="btn-dashed-add btn-add-book-trigger">
-                <i data-lucide="plus"></i> Adicionar novo livro
-            </button>
+        
         </section>
 
         <section class="manager-card">
@@ -153,274 +151,289 @@
             </div>
         </div>
     </div>
+    <div></div>
+    
+    
+<script type="module">
+import { db } from "./firebase.js";
+import { 
+    collection, 
+    addDoc, 
+    getDocs, 
+    doc, 
+    getDoc, 
+    updateDoc, 
+    deleteDoc 
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        const defaultBooks = [
-            {
-                id: 1,
-                title: "Mulheres em Movimento – Vol. 1",
-                volume: "VOL. 1",
-                isComingSoon: false,
-                tags: "PROPÓSITO · CORAGEM · TRANSFORMAÇÃO",
-                desc: "Um devocional para mulheres que desejam sair do lugar e viver tudo o que Deus sonhou para elas.",
-                img: "smm.jpg",
-                isFeatured: true
-            },
-            {
-                id: 2,
-                title: "Mulheres em Movimento – Vol. 2",
-                volume: "VOL. 2",
-                isComingSoon: true,
-                tags: "CRESCIMENTO · FÉ · PERSEVERANÇA",
-                desc: "Em breve mais um volume para fortalecer ainda mais sua jornada.",
-                img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300",
-                isFeatured: false
-            }
-        ];
+const livrosRef = collection(db, "livros");
 
-        let targetContext = 'featured'; 
+let imagemTempBase64 = "";
+let livroIdEmEdicao = null;
+const deviceFileInput = document.getElementById('file-input-device');
 
-        if (!localStorage.getItem('biblioteca_db')) {
-            localStorage.setItem('biblioteca_db', JSON.stringify(defaultBooks));
-        }
+// ==========================================
+// 1. PROCESSAR IMAGEM DA GALERIA
+// ==========================================
+function processarFotoGaleria(file, callback) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 600;
+            const scaleSize = MAX_WIDTH / img.width;
+            canvas.width = MAX_WIDTH;
+            canvas.height = img.height * scaleSize;
 
-        function getDB() {
-            return JSON.parse(localStorage.getItem('biblioteca_db')) || [];
-        }
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            callback(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
-        function saveDB(data) {
-            localStorage.setItem('biblioteca_db', JSON.stringify(data));
-            render();
-        }
-
-        const galleryModal = document.getElementById('gallery-modal');
-        const editBookModal = document.getElementById('edit-book-modal');
-
-        function render() {
-            const books = getDB();
-            
-            const featured = books.find(b => b.isFeatured) || books[0];
-            if (featured) {
-                document.getElementById('featured-img').src = featured.img;
-                document.getElementById('btn-edit-featured').onclick = () => openEditModal(featured.id);
-            }
-
-            const listContainer = document.getElementById('books-list-container');
-            listContainer.innerHTML = '';
-
-            books.forEach(book => {
-                const row = document.createElement('div');
-                row.className = 'book-row-item';
-                
-                let badgesHTML = `<span class="badge-brown">${book.volume}</span>`;
-                if (book.isComingSoon) {
-                    badgesHTML += ` <span class="badge-gray">EM BREVE</span>`;
-                }
-
-                row.innerHTML = `
-                    <div class="row-thumbnail">
-                        <img src="${book.img}" alt="Capa">
-                    </div>
-                    <div class="row-info">
-                        <div class="badge-row-container">
-                            ${badgesHTML}
-                        </div>
-                        <h3>${book.title}</h3>
-                        <p>${book.desc}</p>
-                        <div class="row-actions">
-                            <button class="btn-action-outline" onclick="openEditModal(${book.id})"><i data-lucide="pen-tool"></i> Editar</button>
-                            <button class="btn-icon-action" onclick="deleteBook(${book.id})"><i data-lucide="trash-2"></i></button>
-                        </div>
-                    </div>
-                `;
-                listContainer.appendChild(row);
-            });
-
-            const sortContainer = document.getElementById('sortable-list-container');
-            sortContainer.innerHTML = '';
-            books.forEach((book, index) => {
-                const item = document.createElement('div');
-                item.className = 'sortable-item';
-                item.innerHTML = `
-                    <div class="sort-number">${index + 1}</div>
-                    <div class="sort-label">${book.title} ${book.isComingSoon ? '(Em breve)' : ''}</div>
-                    <i data-lucide="grip-vertical" class="grip-icon"></i>
-                `;
-                sortContainer.appendChild(item);
-            });
-
-            lucide.createIcons();
-        }
-
-        function openEditModal(id) {
-            const books = getDB();
-            const book = books.find(b => b.id === id);
-            
-            if (!book) return;
-
-            document.getElementById('modal-form-title').textContent = "Editar Informações";
-            document.getElementById('input-book-id').value = book.id;
-            document.getElementById('input-book-title').value = book.title;
-            document.getElementById('input-book-volume').value = book.volume;
-            document.getElementById('input-book-tags').value = book.tags;
-            document.getElementById('input-book-desc').value = book.desc;
-            document.getElementById('modal-preview-img').src = book.img;
-            
-            editBookModal.classList.add('active');
-        }
-
-        document.querySelectorAll('.btn-add-book-trigger').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.getElementById('modal-form-title').textContent = "Adicionar Novo Livro";
-                document.getElementById('input-book-id').value = 'new';
-                document.getElementById('input-book-title').value = '';
-                document.getElementById('input-book-volume').value = '';
-                document.getElementById('input-book-tags').value = '';
-                document.getElementById('input-book-desc').value = '';
-                document.getElementById('modal-preview-img').src = 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300';
-                editBookModal.classList.add('active');
-            });
-        });
-
-        document.getElementById('btn-change-featured-cover').addEventListener('click', () => {
-            targetContext = 'featured';
-            galleryModal.classList.add('active');
-        });
-
-        document.getElementById('btn-open-gallery-inside-modal').addEventListener('click', (e) => {
-            e.preventDefault();
-            targetContext = 'modal';
-            galleryModal.classList.add('active');
-        });
-
-        document.querySelectorAll('.gallery-option-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const newSrc = card.getAttribute('data-img-src');
-                
-                if (targetContext === 'featured') {
-                    let books = getDB();
-                    books = books.map(b => {
-                        if (b.isFeatured) b.img = newSrc;
-                        return b;
-                    });
-                    saveDB(books);
-                } else if (targetContext === 'modal') {
-                    document.getElementById('modal-preview-img').src = newSrc;
-                }
-                
-                galleryModal.classList.remove('active');
-            });
-        });
-
-        document.getElementById('save-book-data').addEventListener('click', () => {
-            const id = document.getElementById('input-book-id').value;
-            const currentImg = document.getElementById('modal-preview-img').src;
-            let books = getDB();
-
-            if (id === 'new') {
-                const newBook = {
-                    id: Date.now(),
-                    title: document.getElementById('input-book-title').value || 'Novo Livro',
-                    volume: document.getElementById('input-book-volume').value || 'VOL. X',
-                    isComingSoon: document.getElementById('input-book-volume').value.toUpperCase().includes('BREVE'),
-                    tags: document.getElementById('input-book-tags').value || 'TAGS',
-                    desc: document.getElementById('input-book-desc').value || 'Descrição do livro.',
-                    img: currentImg,
-                    isFeatured: false
-                };
-                books.push(newBook);
-            } else {
-                books = books.map(b => {
-                    if (b.id === parseInt(id)) {
-                        return {
-                            ...b,
-                            title: document.getElementById('input-book-title').value,
-                            volume: document.getElementById('input-book-volume').value,
-                            isComingSoon: document.getElementById('input-book-volume').value.toUpperCase().includes('BREVE'),
-                            tags: document.getElementById('input-book-tags').value,
-                            desc: document.getElementById('input-book-desc').value,
-                            img: currentImg
-                        };
-                    }
-                    return b;
-                });
-            }
-
-            saveDB(books);
-            editBookModal.classList.remove('active');
-        });
-
-        function deleteBook(id) {
-            let books = getDB();
-            books = books.filter(b => b.id !== id);
-            if (books.length > 0 && !books.some(b => b.isFeatured)) {
-                books[0].isFeatured = true;
-            }
-            saveDB(books);
-        }
-
-        document.getElementById('close-gallery').addEventListener('click', () => {
-            galleryModal.classList.remove('active');
-        });
-
-        document.getElementById('close-edit').addEventListener('click', () => {
-            editBookModal.classList.remove('active');
-        });
-
-        window.addEventListener('DOMContentLoaded', render);
-        
-        const deviceFileInput = document.getElementById('file-input-device');
-let targetImageElement = null; // Guarda qual imagem será alterada
-
-// 1. Ao clicar em "Alterar capa" (do Livro Atual)
-document.getElementById('btn-change-featured-cover').addEventListener('click', () => {
-    targetImageElement = 'featured';
-    deviceFileInput.click(); // Abre a galeria do celular/computador
-});
-
-// 2. Ao clicar em "Escolher da Galeria" (dentro do Modal de Edição)
-document.getElementById('btn-open-gallery-inside-modal').addEventListener('click', (e) => {
+// Botões de upload da Galeria
+document.getElementById('btn-open-gallery-featured')?.addEventListener('click', (e) => {
     e.preventDefault();
-    targetImageElement = 'modal';
-    deviceFileInput.click(); // Abre a galeria do celular/computador
+    livroIdEmEdicao = 'featured';
+    deviceFileInput?.click();
 });
 
-// 3. Quando o usuário seleciona uma foto do dispositivo
-deviceFileInput.addEventListener('change', function(event) {
-    const file = event.target.files[0];
+document.getElementById('btn-open-gallery-inside-modal')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    deviceFileInput?.click();
+});
+
+deviceFileInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const imageBase64 = e.target.result; // Foto convertida em base64
-
-        if (targetImageElement === 'featured') {
-            // Atualiza a capa do livro em destaque
-            document.getElementById('featured-img').src = imageBase64;
-            
-            // Salva no banco de dados local
-            let books = getDB();
-            books = books.map(b => {
-                if (b.isFeatured) b.img = imageBase64;
-                return b;
-            });
-            saveDB(books);
-        } else if (targetImageElement === 'modal') {
-            // Atualiza o preview dentro do modal de edição
-            document.getElementById('modal-preview-img').src = imageBase64;
+    processarFotoGaleria(file, (base64) => {
+        imagemTempBase64 = base64;
+        if (livroIdEmEdicao === 'featured') {
+            const featuredImg = document.getElementById('featured-img');
+            if (featuredImg) featuredImg.src = base64;
+        } else {
+            const modalImg = document.getElementById('modal-preview-img');
+            if (modalImg) modalImg.src = base64;
         }
-    };
-
-    reader.readAsDataURL(file); // Lê a imagem selecionada
-    
-    // Reseta o valor do input para permitir selecionar a mesma foto novamente se desejar
-    this.value = '';
+    });
+    e.target.value = '';
 });
 
+// ==========================================
+// 2. BOTÃO: ADICIONAR NOVO LIVRO NO FIREBASE
+// ==========================================
+document.getElementById('add-book-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Impede recarregamento da página
+
+    const titulo = document.getElementById('title')?.value;
+    const autor = document.getElementById('author')?.value;
+    const coverUrl = document.getElementById('cover-url')?.value || '';
+    const pdfUrl = document.getElementById('pdf-url')?.value || '';
+    const ordem = Number(document.getElementById('book-order')?.value) || 1;
+
+    const imagemFinal = imagemTempBase64 || coverUrl;
+
+    if (!titulo || !autor) {
+        alert("Por favor, preencha o Título e o Autor!");
+        return;
+    }
+
+    try {
+        await addDoc(livrosRef, {
+            titulo: titulo,
+            subtitulo: document.getElementById('subtitle')?.value || '',
+            autor: autor,
+            descricao: document.getElementById('description')?.value || '',
+            img: imagemFinal,
+            pdfUrl: pdfUrl,
+            ordem: ordem,
+            dataCriacao: new Date().toISOString()
+        });
+
+        alert("Livro cadastrado com sucesso no Firebase!");
         
+        document.getElementById('add-book-form').reset();
+        imagemTempBase64 = "";
+        carregarListaGerenciamento();
+
+    } catch (err) {
+        console.error("Erro ao salvar no Firebase:", err);
+        alert("Erro ao salvar o livro no Firebase.");
+    }
+});
+
+// ==========================================
+// 3. CARREGAR E LISTAR LIVROS
+// ==========================================
+async function carregarListaGerenciamento() {
+    const grid = document.getElementById('books-grid-manage');
+    if (!grid) return;
+
+    grid.innerHTML = '<p>Carregando livros...</p>';
+
+    try {
+        const snap = await getDocs(livrosRef);
+        grid.innerHTML = '';
+
+        let total = 0;
+        snap.forEach((docSnap) => {
+            if (docSnap.id === 'livroPrincipal') return; // Pula os dados da home
+            total++;
+
+            const b = docSnap.data();
+            const id = docSnap.id;
+
+            const card = document.createElement('div');
+            card.className = 'manage-card';
+            card.style.cssText = 'border:1px solid #e2b2ae; padding:15px; border-radius:8px; margin-bottom:15px; display:flex; gap:15px; background:#fff; align-items:center;';
+            card.innerHTML = `
+                <img src="${b.img || 'https://via.placeholder.com/80x110'}" style="width:70px; height:100px; object-fit:cover; border-radius:4px;">
+                <div style="flex:1;">
+                    <h4 style="margin:0 0 5px 0;">${b.titulo}</h4>
+                    <p style="margin:0; font-size:0.9rem; color:#666;">Autor: ${b.autor || 'N/A'}</p>
+                    <p style="margin:0 0 10px 0; font-size:0.85rem; color:#888;">Ordem: ${b.ordem}</p>
+                    <div style="display:flex; gap:8px;">
+                        <button type="button" class="btn-editar" style="background:#c9934e; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">Editar</button>
+                        <button type="button" class="btn-excluir" style="background:#d48a85; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">Excluir</button>
+                    </div>
+                </div>
+            `;
+
+            // Eventos diretos nos botões para evitar o erro do onclick em modulos
+            card.querySelector('.btn-editar').addEventListener('click', () => abrirModalEdicao(id));
+            
+card.querySelector('.btn-excluir').addEventListener('click', () => excluirLivro(id));
+
+            grid.appendChild(card);
+        });
+
+        if (total === 0) {
+            grid.innerHTML = '<p>Nenhum livro cadastrado ainda.</p>';
+        }
+
+    } catch (e) {
+        console.error("Erro ao listar livros:", e);
+    }
+}
+
+// ==========================================
+// 4. EDIÇÃO E EXCLUSÃO
+// ==========================================
+async function abrirModalEdicao(id) {
+    livroIdEmEdicao = id;
+    try {
+        const docSnap = await getDoc(doc(db, "livros", id));
+        if (docSnap.exists()) {
+            const b = docSnap.data();
+            if (document.getElementById('edit-title')) document.getElementById('edit-title').value = b.titulo || '';
+            if (document.getElementById('edit-author')) document.getElementById('edit-author').value = b.autor || '';
+            if (document.getElementById('edit-pdf-url')) document.getElementById('edit-pdf-url').value = b.pdfUrl || '';
+            if (document.getElementById('modal-preview-img')) document.getElementById('modal-preview-img').src = b.img || '';
+            
+            const modal = document.getElementById('edit-modal');
+            if (modal) modal.style.display = 'flex';
+        }
+    } catch (e) {
+        console.error("Erro ao carregar livro para edição:", e);
+    }
+}
+
+document.getElementById('close-modal-btn')?.addEventListener('click', () => {
+    const modal = document.getElementById('edit-modal');
+    if (modal) modal.style.display = 'none';
+});
+
+document.getElementById('edit-book-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!livroIdEmEdicao) return;
+
+    try {
+        const docRef = doc(db, "livros", livroIdEmEdicao);
+        const dadosAtualizados = {
+            titulo: document.getElementById('edit-title').value,
+            autor: document.getElementById('edit-author').value,
+            pdfUrl: document.getElementById('edit-pdf-url').value
+        };
+
+        if (imagemTempBase64) {
+            dadosAtualizados.img = imagemTempBase64;
+        }
+
+        await updateDoc(docRef, dadosAtualizados);
+        alert("Livro atualizado no Firebase com sucesso!");
         
+        const modal = document.getElementById('edit-modal');
+        if (modal) modal.style.display = 'none';
         
-    </script>
+        imagemTempBase64 = "";
+        carregarListaGerenciamento();
+    } catch (e) {
+        console.error("Erro ao atualizar livro:", e);
+    }
+});
+
+async function excluirLivro(id) {
+    if (confirm("Tem certeza que deseja excluir este livro?")) {
+        try {
+            await deleteDoc(doc(db, "livros", id));
+            alert("Livro excluído com sucesso!");
+            carregarListaGerenciamento();
+        } catch (e) {
+            console.error("Erro ao excluir livro:", e);
+        }
+    }
+}
+
+// ==========================================
+// 5. CARREGAR/SALVAR TEXTOS DA HOME
+// ==========================================
+async function carregarTextosHome() {
+    try {
+        const docSnap = await getDoc(doc(db, "livros", "livroPrincipal"));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.hero) {
+                if (document.getElementById('home-hero-title')) document.getElementById('home-hero-title').value = data.hero.titulo || '';
+                if (document.getElementById('home-hero-desc')) document.getElementById('home-hero-desc').value = data.hero.descricao || '';
+            }
+            if (data.sobre) {
+                if (document.getElementById('home-about-title')) document.getElementById('home-about-title').value = data.sobre.titulo || '';
+                if (document.getElementById('home-about-p1')) document.getElementById('home-about-p1').value = data.sobre.p1 || '';
+                if (document.getElementById('home-about-p2')) document.getElementById('home-about-p2').value = data.sobre.p2 || '';
+            }
+        }
+    } catch (e) {
+        console.error("Erro ao carregar textos da home:", e);
+    }
+}
+
+document.getElementById('btn-save-home')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        await updateDoc(doc(db, "livros", "livroPrincipal"), {
+            "hero.titulo": document.getElementById('home-hero-title').value,
+            "hero.descricao": document.getElementById('home-hero-desc').value,
+            "sobre.titulo": document.getElementById('home-about-title').value,
+            "sobre.p1": document.getElementById('home-about-p1').value,
+            "sobre.p2": document.getElementById('home-about-p2').value
+        });
+        alert("Textos da Home salvos com sucesso!");
+    } catch (e) {
+        console.error("Erro ao salvar textos da home:", e);
+    }
+});
+
+// Inicializa quando a página carrega
+document.addEventListener("DOMContentLoaded", () => {
+    carregarListaGerenciamento();
+    carregarTextosHome();
+});
+</script>
+
 </body>
 </html>

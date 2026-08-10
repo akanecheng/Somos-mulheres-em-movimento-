@@ -261,119 +261,253 @@
         </div>
     </footer>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<script type="module">
+import { db } from "./firebase.js";
+import { 
+    collection, 
+    addDoc, 
+    getDocs, 
+    doc, 
+    getDoc, 
+    updateDoc, 
+    deleteDoc 
+} from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSy...",
-  authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
-  projectId: "somos-mulheres-em-movimento",
-  storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
-  messagingSenderId: "427525655209",
-  appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
-};
+const livrosRef = collection(db, "livros");
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const configDocRef = doc(db, "livros", "livroPrincipal");
+let imagemTempBase64 = "";
+let livroIdEmEdicao = null;
+const deviceFileInput = document.getElementById('file-input-device');
 
-        async function carregarDados() {
-            try {
-                const docSnap = await getDoc(configDocRef);
+// ==========================================
+// 1. PROCESSAR IMAGEM DA GALERIA (COMPRESSÃO)
+// ==========================================
+function processarFotoGaleria(file, callback) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 600; // Redimensiona para ser leve no banco
+            const scaleSize = MAX_WIDTH / img.width;
+            canvas.width = MAX_WIDTH;
+            canvas.height = img.height * scaleSize;
 
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    
-                    if(data.hero) {
-                        document.getElementById("hero-title-input").value = data.hero.titulo || "";
-                        document.getElementById("hero-desc-input").value = data.hero.descricao || "";
-                    }
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            callback(canvas.toDataURL('image/jpeg', 0.7));
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
-                    if(data.sobre) {
-                        document.getElementById("about-title-input").value = data.sobre.titulo || "";
-                        document.getElementById("about-p1-input").value = data.sobre.p1 || "";
-                        document.getElementById("about-p2-input").value = data.sobre.p2 || "";
-                    }
-                } else {
-                    const localData = JSON.parse(localStorage.getItem("index_config") || "{}");
-                    if (localData.hero) {
-                        document.getElementById("hero-title-input").value = localData.hero.titulo || "";
-                        document.getElementById("hero-desc-input").value = localData.hero.descricao || "";
-                    }
-                    if (localData.sobre) {
-                        document.getElementById("about-title-input").value = localData.sobre.titulo || "";
-                        document.getElementById("about-p1-input").value = localData.sobre.p1 || "";
-                        document.getElementById("about-p2-input").value = localData.sobre.p2 || "";
-                    }
-                }
-            } catch (error) {
-                console.error("Erro ao carregar do Firebase, usando LocalStorage fallback:", error);
-            }
+// Botões de upload da Galeria
+document.getElementById('btn-open-gallery-featured')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    livroIdEmEdicao = 'featured';
+    deviceFileInput.click();
+});
+
+document.getElementById('btn-open-gallery-inside-modal')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    deviceFileInput.click();
+});
+
+deviceFileInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    processarFotoGaleria(file, (base64) => {
+        imagemTempBase64 = base64;
+        if (livroIdEmEdicao === 'featured') {
+            document.getElementById('featured-img').src = base64;
+        } else {
+            document.getElementById('modal-preview-img').src = base64;
         }
+    });
+    e.target.value = '';
+});
 
-        window.salvarHero = async function () {
+// ==========================================
+// 2. ADICIONAR NOVO LIVRO NO FIREBASE
+// ==========================================
+document.getElementById('add-book-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-    const titulo = document.getElementById("hero-title-input").value;
-    const descricao = document.getElementById("hero-desc-input").value;
+    const novoLivro = {
+        titulo: document.getElementById('title').value,
+        subtitulo: document.getElementById('subtitle')?.value || '',
+        autor: document.getElementById('author').value,
+        descricao: document.getElementById('description')?.value || '',
+        img: imagemTempBase64 || document.getElementById('cover-url')?.value || '',
+        pdfUrl: document.getElementById('pdf-url')?.value || '',
+        ordem: Number(document.getElementById('book-order')?.value) || 1,
+        dataCriacao: new Date().toISOString()
+    };
 
     try {
-
-        await setDoc(configDocRef, {
-            titulo: titulo,
-            descricao: descricao,
-            hero: {
-                titulo: titulo,
-                descricao: descricao
-            }
-        }, { merge: true });
-
-        alert("Seção Hero salva com sucesso!");
-
-    } catch (e) {
-        console.error(e);
-        alert("Erro ao salvar.");
+        await addDoc(livrosRef, novoLivro);
+        alert("Livro cadastrado com sucesso no Firebase!");
+        e.target.reset();
+        imagemTempBase64 = "";
+        carregarListaGerenciamento();
+    } catch (err) {
+        console.error("Erro ao adicionar livro:", err);
+        alert("Erro ao salvar no Firebase.");
     }
+});
 
+// ==========================================
+// 3. CARREGAR E LISTAR LIVROS
+// ==========================================
+async function carregarListaGerenciamento() {
+    const grid = document.getElementById('books-grid-manage');
+    if (!grid) return;
+
+    grid.innerHTML = '<p>A carregar livros...</p>';
+
+    try {
+        const snap = await getDocs(livrosRef);
+        let html = '';
+
+        snap.forEach((docSnap) => {
+            if (docSnap.id === 'livroPrincipal') return; // Ignora os textos da home
+
+            const b = docSnap.data();
+            const id = docSnap.id;
+
+            html += `
+                <div class="manage-card" style="border:1px solid #e2b2ae; padding:15px; border-radius:8px; margin-bottom:15px; display:flex; gap:15px; background:#fff;">
+                    <img src="${b.img || 'https://via.placeholder.com/80x110'}" style="width:70px; height:100px; object-fit:cover; border-radius:4px;">
+                    <div style="flex:1;">
+                        <h4 style="margin:0 0 5px 0;">${b.titulo}</h4>
+                        <p style="margin:0; font-size:0.9rem; color:#666;">Autor: ${b.autor || 'N/A'}</p>
+                        <p style="margin:0 0 10px 0; font-size:0.85rem; color:#888;">Ordem: ${b.ordem}</p>
+                        <div style="display:flex; gap:8px;">
+                            <button onclick="abrirModalEdicao('${id}')" style="background:#c9934e; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">Editar</button>
+                            <button onclick="excluirLivro('${id}')" style="background:#d48a85; color:#fff; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        grid.innerHTML = html || '<p>Nenhum livro cadastrado ainda.</p>';
+    } catch (e) {
+        console.error("Erro ao listar livros:", e);
+    }
+}
+
+// ==========================================
+// 4. MODAL DE EDIÇÃO E EXCLUSÃO
+// ==========================================
+window.abrirModalEdicao = async (id) => {
+    livroIdEmEdicao = id;
+    try {
+        const docSnap = await getDoc(doc(db, "livros", id));
+        if (docSnap.exists()) {
+            const b = docSnap.data();
+            document.getElementById('edit-title').value = b.titulo || '';
+            document.getElementById('edit-author').value = b.autor || '';
+            document.getElementById('edit-pdf-url').value = b.pdfUrl || '';
+            document.getElementById('modal-preview-img').src = b.img || '';
+            
+            const modal = document.getElementById('edit-modal');
+            if (modal) modal.style.display = 'flex';
+        }
+    } catch (e) {
+        console.error("Erro ao carregar dados do livro:", e);
+    }
 };
 
+document.getElementById('close-modal-btn')?.addEventListener('click', () => {
+    document.getElementById('edit-modal').style.display = 'none';
+});
 
+document.getElementById('edit-book-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!livroIdEmEdicao) return;
 
-        window.limparHero = function() {
-            if (confirm("Deseja realmente apagar o conteúdo dos campos do Hero?")) {
-                document.getElementById("hero-title-input").value = "";
-                document.getElementById("hero-desc-input").value = "";
-            }
+    try {
+        const docRef = doc(db, "livros", livroIdEmEdicao);
+        const dadosAtualizados = {
+            titulo: document.getElementById('edit-title').value,
+            autor: document.getElementById('edit-author').value,
+            pdfUrl: document.getElementById('edit-pdf-url').value
         };
 
-        window.salvarSobre = async function() {
-            const sobreData = {
-                titulo: document.getElementById("about-title-input").value,
-                p1: document.getElementById("about-p1-input").value,
-                p2: document.getElementById("about-p2-input").value
-            };
+        if (imagemTempBase64) {
+            dadosAtualizados.img = imagemTempBase64;
+        }
 
-            try {
-                await setDoc(configDocRef, { sobre: sobreData }, { merge: true });
-                let localData = JSON.parse(localStorage.getItem("index_config") || "{}");
-                localData.sobre = sobreData;
-                localStorage.setItem("index_config", JSON.stringify(localData));
-                alert("Seção Sobre Nós salva com sucesso!");
-            } catch (e) {
-                console.error("Erro ao salvar Sobre Nós:", e);
-                alert("Erro ao salvar no Firebase. Verifique suas credenciais.");
+        await updateDoc(docRef, dadosAtualizados);
+        alert("Livro atualizado no Firebase com sucesso!");
+        document.getElementById('edit-modal').style.display = 'none';
+        imagemTempBase64 = "";
+        carregarListaGerenciamento();
+    } catch (e) {
+        console.error("Erro ao atualizar livro:", e);
+    }
+});
+
+window.excluirLivro = async (id) => {
+    if (confirm("Tem certeza de que deseja eliminar este livro?")) {
+        try {
+            await deleteDoc(doc(db, "livros", id));
+            alert("Livro eliminado com sucesso!");
+            carregarListaGerenciamento();
+        } catch (e) {
+            console.error("Erro ao eliminar livro:", e);
+        }
+    }
+};
+
+// ==========================================
+// 5. CARREGAR/SALVAR TEXTOS DA HOME
+// ==========================================
+async function carregarTextosHome() {
+    try {
+        const docSnap = await getDoc(doc(db, "livros", "livroPrincipal"));
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            if (data.hero) {
+                if (document.getElementById('home-hero-title')) document.getElementById('home-hero-title').value = data.hero.titulo || '';
+                if (document.getElementById('home-hero-desc')) document.getElementById('home-hero-desc').value = data.hero.descricao || '';
             }
-        };
-
-        window.limparSobre = function() {
-            if (confirm("Deseja realmente apagar o conteúdo dos campos do Sobre Nós?")) {
-                document.getElementById("about-title-input").value = "";
-                document.getElementById("about-p1-input").value = "";
-                document.getElementById("about-p2-input").value = "";
+            if (data.sobre) {
+                if (document.getElementById('home-about-title')) document.getElementById('home-about-title').value = data.sobre.titulo || '';
+                if (document.getElementById('home-about-p1')) document.getElementById('home-about-p1').value = data.sobre.p1 || '';
+                if (document.getElementById('home-about-p2')) document.getElementById('home-about-p2').value = data.sobre.p2 || '';
             }
-        };
+        }
+    } catch (e) {
+        console.error("Erro ao carregar textos da home:", e);
+    }
+}
 
-        window.onload = carregarDados;
-    </script>
+document.getElementById('btn-save-home')?.addEventListener('click', async () => {
+    try {
+        await updateDoc(doc(db, "livros", "livroPrincipal"), {
+            "hero.titulo": document.getElementById('home-hero-title').value,
+            "hero.descricao": document.getElementById('home-hero-desc').value,
+            "sobre.titulo": document.getElementById('home-about-title').value,
+            "sobre.p1": document.getElementById('home-about-p1').value,
+            "sobre.p2": document.getElementById('home-about-p2').value
+        });
+        alert("Textos da Home salvos com sucesso no Firebase!");
+    } catch (e) {
+        console.error("Erro ao salvar textos da home:", e);
+    }
+});
+
+// Inicialização
+document.addEventListener("DOMContentLoaded", () => {
+    carregarListaGerenciamento();
+    carregarTextosHome();
+});
+</script>
+
+
 </body>
 </html>

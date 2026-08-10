@@ -18,83 +18,93 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// carregar biblioteca 
 
 async function carregarBiblioteca() {
     const edicoesContainer = document.getElementById('edicoes-container');
-    const heroBookContainer = document.getElementById('hero-book-container');
     
-    if (!edicoesContainer || !heroBookContainer) return;
+    console.log("Edições Container:", edicoesContainer);
+    
+const heroBookContainer =
+document.getElementById('hero-book-container');
+console.log("Hero Container:", heroBookContainer);
+    
+    if (!edicoesContainer) return;
 
     try {
-        const q = query(collection(db, "livros"), orderBy("ordem", "asc"));
-        const querySnapshot = await getDocs(q);
-        
+        const querySnapshot = await getDocs(collection(db, "livros"));
         let livros = [];
-        querySnapshot.forEach((doc) => {
-            livros.push({ id: doc.id, ...doc.data() });
+
+        querySnapshot.forEach((docSnap) => {
+console.log("Livro encontrado:", docSnap.data());
+            if (docSnap.id === "livroPrincipal") return;
+
+            livros.push({
+                id: docSnap.id,
+                ...docSnap.data()
+            });
         });
+
+        // Ordena pela ordem definida no painel
+        livros.sort((a, b) => (Number(a.ordem) || 0) - (Number(b.ordem) || 0));
         
-        console.log("LIVROS CARREGADOS:", livros);
+console.log("Livros finais:", livros);
 
         if (livros.length === 0) {
-            livros = obterBibliotecaBackup();
+            edicoesContainer.innerHTML = '<p style="text-align:center; grid-column: 1/-1;">Nenhuma edição disponível no momento.</p>';
+            return;
         }
 
-        edicoesContainer.innerHTML = "";
-        heroBookContainer.innerHTML = "";
+        // Se houver pelo menos 1 livro, atualiza a Capa de Destaque no Hero (topo do index)
+        if (heroBookContainer && livros.length > 0) {
 
-        livros.forEach((livro) => {
-            
-            if (livro.destaque) {
-                heroBookContainer.innerHTML = `
-                    <div class="book-cover-mockup">
-                        <img src="${livro.capa || 'smm.jpg'}" alt="Capa Atual" />
-                        <div class="volume-badge">Vol 1</div>
-                    </div>
-                `;
-                const titleEl = document.getElementById('hero-title');
-                const descEl = document.getElementById('hero-desc');
-                if (titleEl) titleEl.textContent = livro.titulo;
-                if (descEl) descEl.textContent = livro.descricao;
-            }
+    const livro = livros[0];
 
-            
-            const bookCard = document.createElement('div');
-            bookCard.className = `book-card ${livro.emBreve ? 'future' : ''}`;
+    heroBookContainer.innerHTML = `
+    <p>${livro.capa}</p>
+`;
+}
 
-            bookCard.innerHTML = `
-                <div class="book-card-cover">
-                    <img src="${livro.capa || 'smm.jpg'}" alt="${livro.titulo}" />
-                    <span>${livro.volume || ''}</span>
-                </div>
-                <div class="book-card-info">
-                    <h3>${livro.titulo}</h3>
-                    <p>${livro.descricao}</p>
-                    ${livro.emBreve 
-                        ? `<span class="badge-status">Em Breve</span>` 
-                        : `<a href="comunidade.html?id=${livro.id}" class="btn-link">Ver Detalhes e Autoras →</a>`
-                    }
-                </div>
-            `;
-            edicoesContainer.appendChild(bookCard);
-        });
 
-        // 3. Card de chamada para novas autoras
-        const ctaCard = document.createElement('div');
-        ctaCard.className = "book-card call-to-action";
-        ctaCard.innerHTML = `
-            <div class="cta-card-content">
-                <h4>Quer ver sua história aqui?</h4>
-                <p>As inscrições para a seleção de novos volumes estão abertas.</p>
-                <a href="contatos.html" class="btn-primary rose">Quero ser Coautora</a>
-            </div>
-        `;
-        edicoesContainer.appendChild(ctaCard);
+        edicoesContainer.innerHTML = livros.map(livro => `
+    <div class="edicao-card">
 
-    } catch (error) {
-        console.error("Erro ao carregar dados do Firebase:", error);
+        <div class="edicao-thumb">
+            <img
+                src="${livro.capa || 'https://picsum.photos/300/450'}"
+                alt="${livro.titulo}">
+        </div>
+
+        <div class="edicao-info">
+
+            <p class="edicao-volume">
+                ${livro.volume || ''}
+            </p>
+
+            <h3 class="edicao-title">
+                ${livro.titulo || ''}
+            </h3>
+
+            <p class="edicao-descricao">
+                ${livro.descricao || ''}
+            </p>
+
+        </div>
+
+    </div>
+`).join('');
+
+    } catch (erro) {
+        console.error("Erro ao carregar biblioteca no Index:", erro);
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    carregarBiblioteca();
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+});
 
 
 function obterBibliotecaBackup() {
