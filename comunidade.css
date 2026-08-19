@@ -144,7 +144,7 @@ body {
     min-height: 250px; /* Força a foto a ter no MÍNIMO essa altura */
     height: 100%; 
     position: relative;
-    height: 260px; /* Altura fixa ideal para a foto no topo do card */
+    height: 320px; /* Altura fixa ideal para a foto no topo do card */
     flex-shrink: 0;
 }
 
@@ -152,7 +152,7 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover; /* preenche o espaço e corta as sobras sozinha, sem distorcer o rosto */
-    object-position: center; /* Foca no centro da imagem */
+    object-position: center top; /* Foca no centro da imagem */
     display: block;
 }
 

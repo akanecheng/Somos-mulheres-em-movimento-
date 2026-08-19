@@ -1,407 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gerenciador - Biblioteca de Livros</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<!-- Importando os mesmos estilos base do projeto -->
-<link rel="stylesheet" href="style.css">
-
-<style>
-    :root {
-        --bg-creme: #fdfaf7;
-        --rosa-escuro: #d48a85;
-        --rosa-claro: #e2b2ae;
-        --rosa-suave: #fbeee9;
-        --dourado: #c9934e;
-        --texto-escuro: #4a3b32;
-        --texto-suave: #705f55;
-        --branco: #ffffff;
-        --fonte-titulo: 'DM Serif Display', serif;
-        --fonte-corpo: 'Manrope', sans-serif;
-    }
-
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-    }
-
-    body {
-        font-family: var(--fonte-corpo);
-        background-color: var(--bg-creme);
-        color: var(--texto-escuro);
-        padding-bottom: 60px;
-    }
-
-    /* --- REPLICANDO O CABEÇALHO OFICIAL --- */
-    .navbar {
-        position: fixed; 
-        top: 0; left: 0; width: 100%; 
-        display: flex; justify-content: space-between; align-items: center;
-        padding: 15px 7%;
-        background-color: var(--branco);
-        border-bottom: 1px solid rgba(212, 138, 133, 0.1);
-        z-index: 1000; 
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03); 
-    }
-    .logo {
-        font-family: var(--fonte-titulo); font-size: 1.1rem; font-weight: bold;
-        color: var(--dourado); line-height: 1.1; letter-spacing: 1px;
-    }
-    .logo span { font-size: 0.8rem; font-family: var(--fonte-corpo); color: var(--texto-suave); }
-    .nav-links a { color: var(--texto-escuro); margin: 0 15px; font-size: 0.9rem; font-weight: 500; text-decoration: none; transition: 0.3s; }
-    .nav-links a:hover { color: var(--rosa-escuro); }
-    .btn-primary.gold {
-        background-color: var(--dourado); color: white; padding: 10px 20px;
-        border-radius: 5px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: 0.3s;
-    }
-    .btn-primary.gold:hover { background-color: #b07e3e; }
-    .menu-toggle, .hamburger { display: none; }
-
-    /* --- INTERFACE DO GERENCIADOR (CONFORME O PRINT) --- */
-    .admin-container {
-        max-width: 800px;
-        margin: 110px auto 40px;
-        padding: 0 20px;
-    }
-
-    .page-title-section {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 30px;
-    }
-    .title-icon {
-        background: var(--rosa-suave);
-        color: var(--rosa-escuro);
-        width: 55px;
-        height: 55px;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 1.5rem;
-        border: 1px solid rgba(212, 138, 133, 0.2);
-    }
-    .page-title-section h1 { font-family: var(--fonte-titulo); font-size: 2rem; color: var(--texto-escuro); }
-    .page-title-section p { color: var(--texto-suave); font-size: 0.95rem; margin-top: 2px; }
-
-    /* Blocos de Gerenciamento */
-    .manager-section {
-        background: var(--branco);
-        border-radius: 12px;
-        padding: 25px;
-        border: 1px solid rgba(212, 138, 133, 0.15);
-        box-shadow: 0 4px 20px rgba(74, 59, 50, 0.03);
-        margin-bottom: 25px;
-    }
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    .section-header h2 { font-size: 1.2rem; font-weight: 700; color: var(--texto-escuro); }
-    .section-header p { font-size: 0.85rem; color: var(--texto-suave); margin-top: 2px; }
-
-    /* Botões do Painel */
-    .btn-panel {
-        background: var(--branco);
-        border: 1px solid var(--rosa-claro);
-        color: var(--rosa-escuro);
-        padding: 8px 14px;
-        border-radius: 6px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: 0.2s;
-    }
-    .btn-panel:hover { background: var(--rosa-suave); }
-    .btn-panel.filled { background: var(--rosa-escuro); color: white; border: none; }
-    .btn-panel.filled:hover { background: #be7a75; }
-
-    /* Bloco do Livro em Evidência */
-    .featured-book-layout {
-        display: flex;
-        gap: 25px;
-        background: linear-gradient(135deg, rgba(251, 238, 233, 0.4), transparent);
-        padding: 20px;
-        border-radius: 8px;
-        border: 1px dashed rgba(212, 138, 133, 0.25);
-    }
-    .book-cover-frame {
-        width: 130px;
-        height: 185px;
-        background: #fdfdfd;
-        border-radius: 6px;
-        box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-        overflow: hidden;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .book-cover-frame img { width: 100%; height: 100%; object-fit: cover; }
-    
-    .book-details { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-    .badge-status {
-        align-self: flex-start;
-        font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-        background: #fff4d4; color: #b27a29; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px;
-    }
-    .book-details h3 { font-family: var(--fonte-titulo); font-size: 1.5rem; margin-bottom: 4px; }
-    .book-tags { font-size: 0.75rem; font-weight: 700; color: var(--rosa-escuro); letter-spacing: 1px; margin-bottom: 12px; }
-    .book-desc { color: var(--texto-suave); font-size: 0.9rem; line-height: 1.5; margin-bottom: 20px; }
-    
-    .actions-row { display: flex; gap: 10px; }
-    .btn-action-outline {
-        background: white; border: 1px solid rgba(0,0,0,0.15); color: var(--texto-escuro);
-        padding: 8px 20px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer;
-        display: flex; align-items: center; gap: 6px; transition: 0.2s;
-    }
-    .btn-action-outline:hover { background: #f8f5f2; }
-
-    /* Lista de Livros Disponíveis */
-    .book-row-item {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        padding: 15px 0;
-        border-bottom: 1px solid rgba(0,0,0,0.04);
-    }
-    .book-row-item:last-of-type { border-bottom: none; }
-    .mini-cover { width: 60px; height: 85px; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.06); object-fit: cover; }
-    .row-info { flex: 1; }
-    .vol-badge {
-        display: inline-block; font-size: 0.65rem; font-weight: 700; background: var(--dourado);
-        color: white; padding: 2px 6px; border-radius: 3px; margin-bottom: 4px;
-    }
-    .vol-badge.soon { background: #a0a0a0; margin-left: 5px; }
-    .row-info h4 { font-size: 1.05rem; margin-bottom: 2px; }
-    .row-info p { font-size: 0.85rem; color: var(--texto-suave); }
-    
-    .item-controls { display: flex; align-items: center; gap: 8px; }
-    .btn-icon {
-        width: 34px; height: 34px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1);
-        background: white; color: var(--texto-suave); cursor: pointer; display: flex;
-        justify-content: center; align-items: center; font-size: 0.85rem; transition: 0.2s;
-    }
-    .btn-icon:hover { background: #fff1f0; color: #c94e4e; border-color: rgba(201, 78, 78, 0.2); }
-    .drag-handle { color: #cccccc; cursor: grab; font-size: 1.1rem; padding: 0 10px; }
-
-    /* Bloco Pontilhado de Adicionar */
-    .dotted-add-block {
-        display: flex; justify-content: center; align-items: center; gap: 10px;
-        border: 1px dashed var(--rosa-claro); background: rgba(251, 238, 233, 0.2);
-        padding: 20px; border-radius: 8px; cursor: pointer; margin-top: 15px;
-        color: var(--rosa-escuro); font-weight: 600; font-size: 0.9rem; transition: 0.2s;
-    }
-    .dotted-add-block:hover { background: var(--rosa-suave); }
-    .dotted-add-icon {
-        width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--rosa-claro);
-        display: flex; justify-content: center; align-items: center; font-size: 1rem; background: white;
-    }
-
-    /* Ordenação Simples */
-    .order-list-box { display: flex; flex-direction: column; gap: 10px; }
-    .order-item {
-        display: flex; justify-content: space-between; align-items: center;
-        background: #fdfdfd; padding: 12px 15px; border-radius: 8px;
-        border: 1px solid rgba(0,0,0,0.05);
-    }
-    .order-item-left { display: flex; align-items: center; gap: 15px; }
-    .order-num {
-        background: var(--rosa-suave); color: var(--rosa-escuro); font-weight: bold;
-        width: 26px; height: 26px; border-radius: 4px; display: flex; justify-content: center; align-items: center;
-        font-size: 0.85rem;
-    }
-    .order-name { font-size: 0.95rem; font-weight: 500; }
-
-    /* Info Alerta Box */
-    .info-alert-box {
-        display: flex; gap: 12px; background: rgba(212, 138, 133, 0.06);
-        padding: 15px; border-radius: 8px; border: 1px solid rgba(212, 138, 133, 0.15);
-        font-size: 0.85rem; color: var(--texto-suave); align-items: center; margin-top: 15px;
-    }
-    .info-alert-box i { color: var(--rosa-escuro); font-size: 1.1rem; }
-
-    /* RESPONSIVIDADE DO MOBILE */
-    @media (max-width: 768px) {
-        .hamburger { display: flex; flex-direction: column; gap: 5px; cursor: pointer; }
-        .hamburger span { width: 25px; height: 3px; background: var(--texto-escuro); transition: 0.3s; }
-        .menu-toggle:checked ~ .hamburger span:nth-child(1) { transform: rotate(45deg) translate(6px, 6px); }
-        .menu-toggle:checked ~ .hamburger span:nth-child(2) { opacity: 0; }
-        .menu-toggle:checked ~ .hamburger span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-        .nav-links {
-            position: fixed; top: 75px; left: -100%; width: 100%; height: calc(100vh - 75px);
-            background: var(--branco); flex-direction: column; align-items: center; padding-top: 40px; transition: 0.3s;
-        }
-        .menu-toggle:checked ~ .nav-links { left: 0; }
-        .nav-buttons { display: none; }
-        
-        .featured-book-layout { flex-direction: column; align-items: center; text-align: center; }
-        .badge-status { align-self: center; }
-        .actions-row { justify-content: center; }
-        .book-row-item { flex-wrap: wrap; justify-content: center; text-align: center; gap: 10px; }
-        .item-controls { margin-top: 10px; width: 100%; justify-content: center; }
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Biblioteca - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="biblioteca.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <header class="navbar">
+        <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+        <nav class="nav-links">
+            <a href="index.html">Início</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="comunidade.html">Comunidade</a>
+            <a href="eventos.html">Eventos</a>
+            <a href="edicoes.html">Edições</a>
+            <a href="contatos.html">Contato</a>
+            <a href="configuracoes.html" class="active">Configurações</a>
+        </nav>
+    </header>
 
-<header class="navbar">
-    <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
-    <input type="checkbox" id="menu-toggle" class="menu-toggle">
-    <label for="menu-toggle" class="hamburger">
-        <span></span><span></span><span></span>
-    </label>
-    <nav class="nav-links">
-        <a href="index.html">Início</a>
-        <a href="sobre.html">Sobre</a>
-        <a href="comunidade.html">Comunidade</a>
-        <a href="eventos.html">Eventos</a>
-        <a href="contatos.html">Contato</a>
-    </nav>
-    <div class="nav-buttons">
-        <a href="#" class="btn-primary gold">Participe</a>
-    </div>
-</header>
-
-<main class="admin-container">
-    
-    <!-- Título Principal -->
-    <section class="page-title-section">
-        <div class="title-icon"><i class="fa-solid fa-book-open"></i></div>
-        <div>
-            <h1>Biblioteca de Livros</h1>
-            <p>Gerencie os livros que aparecem no site.</p>
-        </div>
-    </section>
-
-    <!-- Livro em Evidência -->
-    <section class="manager-section">
-        <div class="section-header">
-            <div>
-                <h2>Livro atual <span style="font-weight:normal; color:var(--texto-suave); font-size:0.9rem;"></span></h2>
-                <p>Este é o livro que aparece em destaque na página inicial.</p>
-            </div>
-            <button class="btn-panel" onclick="alert('Escolher outro livro da lista para destaque')">
-                <i class="fa-solid fa-arrows-rotate"></i> Alterar livro
-            </button>
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1>Gerenciar Livros</h1>
+            <p>Painel de controle do catálogo da biblioteca.</p>
         </div>
 
-        <div class="featured-book-layout" id="featured-display">
-            <div class="book-cover-frame">
-                <!-- Imagem padrão simulada igual ao seu volume 1 -->
-                <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400" alt="Capa">
-            </div>
-            <div class="book-details">
-                <span class="badge-status">Livro atual</span>
-                <h3 id="feat-title">Mulheres em Movimento – Vol. 1</h3>
-                <div class="book-tags" id="feat-tags">PROPÓSITO · CORAGEM · TRANSFORMAÇÃO</div>
-                <p class="book-desc" id="feat-desc">Um devocional para mulheres que desejam sair do lugar e viver tudo o que Deus sonhou para elas.</p>
+        <section class="admin-card">
+            <h2 id="form-title">Adicionar Novo Livro</h2>
+            <form id="book-form">
+                <input type="hidden" id="book-id">
+                <input type="hidden" id="book-cover-url">
                 
-                <div class="actions-row">
-                    <button class="btn-action-outline" onclick="abrirModalEdicao('feat')"><i class="fa-solid fa-pen"></i> Editar</button>
-                    <a href="index.html" class="btn-action-outline" style="text-decoration:none;"><i class="fa-solid fa-eye"></i> Ver no site</a>
+                <div class="form-group">
+                    <label for="book-title">Título</label>
+                    <input type="text" id="book-title" class="form-control" placeholder="Ex: Mulheres em movimento" required>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Livros Disponíveis -->
-    <section class="manager-section">
-        <div class="section-header">
-            <div>
-                <h2>Livros disponíveis</h2>
-                <p>Gerencie os livros que aparecem na grade da seção biblioteca.</p>
-            </div>
-            <button class="btn-panel filled" onclick="adicionarNovoLivro()"><i class="fa-solid fa-plus"></i> Adicionar novo livro</button>
-        </div>
-
-        <div id="list-display">
-            <!-- Os registros do banco entrarão mapeados estruturalmente aqui -->
-            <div class="book-row-item">
-                <img class="mini-cover" src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400" alt="Capa">
-                <div class="row-info">
-                    <span class="vol-badge">VOL. 1</span>
-                    <h4>Mulheres em Movimento – Vol. 1</h4>
-                    <p>Devocional para mulheres que desejam viver o propósito de Deus.</p>
+                <div class="form-group">
+                    <label for="book-volume">Volume</label>
+                    <input type="text" id="book-volume" class="form-control" placeholder="Ex: Vol. 1 ou Edição Especial" required>
                 </div>
-                <div class="item-controls">
-                    <button class="btn-action-outline" style="padding: 6px 12px;"><i class="fa-solid fa-pen"></i> Editar</button>
-                    <button class="btn-icon"><i class="fa-solid fa-trash-can"></i></button>
-                    <div class="drag-handle"><i class="fa-solid fa-bars"></i></div>
+
+                <div class="form-group">
+                    <label for="book-desc">Descrição</label>
+                    <textarea id="book-desc" class="form-control" placeholder="Resumo do livro..." rows="4" required></textarea>
                 </div>
-            </div>
 
-            <div class="book-row-item">
-                <img class="mini-cover" src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400" alt="Capa">
-                <div class="row-info">
-                    <span class="vol-badge" style="background:#b3b3b3;">VOL. 2</span><span class="vol-badge soon">EM BREVE</span>
-                    <h4>Mulheres em Movimento – Vol. 2</h4>
-                    <p>Em breve mais um volume para fortalecer ainda mais sua jornada.</p>
+                <div class="form-group">
+                    <label for="book-cover-file">Capa do Livro (Selecione da Galeria)</label>
+                    <input type="file" id="book-cover-file" class="form-control" accept="image/*">
+                    <div id="cover-preview-container" style="margin-top: 10px; display: none;">
+                        <img id="cover-preview" src="" alt="Pré-visualização" style="height: 100px; border-radius: 4px; object-fit: cover;">
+                    </div>
                 </div>
-                <div class="item-controls">
-                    <button class="btn-action-outline" style="padding: 6px 12px;"><i class="fa-solid fa-pen"></i> Editar</button>
-                    <button class="btn-icon"><i class="fa-solid fa-trash-can"></i></button>
-                    <div class="drag-handle"><i class="fa-solid fa-bars"></i></div>
+
+                <div class="form-actions">
+                    <button type="submit" id="btn-save" class="btn-save">Salvar Livro</button>
+                    <button type="button" id="btn-cancel" class="btn-cancel" style="display: none;">Cancelar</button>
                 </div>
-            </div>
-        </div>
+            </form>
+        </section>
 
-        <div class="dotted-add-block" onclick="adicionarNovoLivro()">
-            <div class="dotted-add-icon"><i class="fa-solid fa-plus"></i></div>
-            Adicionar novo livro
-        </div>
-    </section>
+        <section class="admin-card">
+            <h2>Livros Cadastrados</h2>
+            <div id="admin-books-list" class="books-list"></div>
+        </section>
+    </main>
 
-    <!-- Ordem de Exibição -->
-    <section class="manager-section">
-        <div class="section-header">
-            <div>
-                <h2>Ordem dos livros</h2>
-                <p>Arraste os itens para definir a ordem de exibição.</p>
-            </div>
-        </div>
-
-        <div class="order-list-box" id="order-display">
-            <div class="order-item">
-                <div class="order-item-left">
-                    <div class="order-num">1</div>
-                    <div class="order-name">Mulheres em Movimento – Vol. 1</div>
-                </div>
-                <div class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></div>
-            </div>
-            <div class="order-item">
-                <div class="order-item-left">
-                    <div class="order-num">2</div>
-                    <div class="order-name">Mulheres em Movimento – Vol. 2 (Em breve)</div>
-                </div>
-                <div class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></div>
-            </div>
-        </div>
-
-        <div class="info-alert-box">
-            <i class="fa-solid fa-circle-info"></i>
-            <span>A ordem definida aqui será refletida automaticamente no site.</span>
-        </div>
-    </section>
-
-</main>
-
-<script type="module" src="biblioteca.js"></script>
+    <script type="module" src="biblioteca.js"></script>
 </body>
-</html>
-
-
 </html>

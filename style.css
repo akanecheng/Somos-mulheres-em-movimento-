@@ -459,9 +459,7 @@ a {
 .cta-card-content h4 { font-family: var(--fonte-titulo); font-size: 1.4rem; margin-bottom: 10px; }
 .cta-card-content p { font-size: 0.9rem; margin-bottom: 20px; color: var(--texto-suave); }
 
-/* ==========================================================
-   8. SEÇÃO FAÇA PARTE (CTA GRID)
-   ========================================================== */
+
 .cta-section {
     background: linear-gradient(to bottom, var(--rosa-suave), transparent);
     padding: 100px 7%;
@@ -741,4 +739,74 @@ blockquote {
     .footer-container { flex-direction: column; gap: 40px; text-align: center; }
     .footer-brand { max-width: 100%; }
     .footer-links { flex-direction: column; gap: 30px; }
+}
+
+
+.edicao-destaque-card{
+display:grid;
+grid-template-columns:300px 1fr;
+gap:30px;
+align-items:center;
+background:#fff;
+padding:25px;
+border-radius:24px;
+margin-bottom:30px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.edicao-destaque-card img{
+width:100%;
+border-radius:18px;
+}
+
+.edicoes-sec-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
+}
+
+.edicao-card{
+background:#fff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 10px 25px rgba(0,0,0,.06);
+}
+
+.edicao-card img{
+width:100%;
+height:350px;
+object-fit:cover;
+}
+
+.edicao-info{
+padding:18px;
+}
+
+.edicao-volume{
+font-size:.85rem;
+font-weight:700;
+color:#c79a63;
+}
+
+.edicao-title{
+font-family:'DM Serif Display',serif;
+font-size:1.5rem;
+margin:10px 0;
+}
+
+.edicoes-footer{
+text-align:center;
+margin-top:35px;
+}
+
+@media(max-width:768px){
+
+.edicao-destaque-card{
+grid-template-columns:1fr;
+}
+
+.edicao-card img{
+height:280px;
+}
+
 }

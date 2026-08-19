@@ -5,9 +5,22 @@ async function carregarTextosHome() {
     try {
         const docRef = doc(db, "livros", "livroPrincipal");
         const docSnap = await getDoc(docRef);
+        
+        console.log("HOME.JS EXECUTOU");
+        console.log("VERSAO HOME 16-08-TESTE");
+
+console.log("Documento existe?", docSnap.exists());
+
 
         if (docSnap.exists()) {
-            const data = docSnap.data();
+    const data = docSnap.data();
+
+    console.log("Dados recebidos:", data);
+    console.log("Hero:", data.hero);
+    console.log("Sobre:", data.sobre);
+
+
+
 
             // 1. Atualiza o Hero (Título e Subtítulo)
             if (data.hero) {
@@ -34,8 +47,11 @@ async function carregarTextosHome() {
             }
         }
     } catch (erro) {
-        console.error("Erro ao carregar textos da home:", erro);
-    }
+    console.log("ERRO DETALHADO");
+    console.log(erro);
+    console.log(erro.message);
+    console.log(erro.stack);
+}
 }
 
 // Executa assim que a página carregar

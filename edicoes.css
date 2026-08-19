@@ -1,0 +1,111 @@
+/* --- LAYOUT ESTILO CARROSSEL HORIZONTAL E GRID PC --- */
+.edicoes-main {
+    padding: 100px 0 60px 0;
+    background-color: var(--bg-creme);
+}
+
+.book-row-section {
+    margin-bottom: 40px;
+    padding: 0 5%;
+}
+
+.row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.row-header h2 {
+    font-family: var(--fonte-corpo);
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--texto-escuro);
+}
+
+/* Container Mobile (Scroll Horizontal) */
+.horizontal-scroll {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 15px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    height: 6px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(212, 138, 133, 0.4);
+    border-radius: 3px;
+}
+
+/* Card do Livro */
+.amazon-card {
+    flex: 0 0 160px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+}
+
+.amazon-card-img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    border-radius: 6px;
+    background-color: #f0f0f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    margin-bottom: 10px;
+}
+
+.amazon-card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--texto-escuro);
+    line-height: 1.25;
+    margin-bottom: 4px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.amazon-card-type {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #888888;
+    margin-bottom: 6px;
+}
+
+.amazon-card-desc {
+    font-size: 0.82rem;
+    color: var(--texto-suave);
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Responsividade Desktop (PC) - Organiza em Grid Horizontal que desce automaticamente */
+@media (min-width: 768px) {
+    .horizontal-scroll {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 30px 20px;
+        overflow-x: visible;
+        padding-bottom: 0;
+    }
+
+    .amazon-card {
+        flex: initial;
+        width: 100%;
+    }
+
+    .amazon-card-img {
+        height: 260px;
+    }
+}

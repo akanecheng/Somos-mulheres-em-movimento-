@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Configurações - Home</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.admin-page{
+    max-width:700px;
+    margin:90px auto;
+    padding:20px;
+}
+
+.admin-header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.admin-header h1{
+    font-family:'DM Serif Display',serif;
+    color:#5f463d;
+    font-size:2rem;
+    margin-bottom:10px;
+}
+
+.admin-header p{
+    color:#777;
+}
+
+.admin-card{
+    background:#fff;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+}
+
+.admin-card h2{
+    font-family:'DM Serif Display',serif;
+    color:#5f463d;
+    margin-bottom:20px;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.form-control{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    font-family:'Manrope',sans-serif;
+    box-sizing:border-box;
+}
+
+textarea{
+    resize:vertical;
+    min-height:110px;
+}
+
+.btn-save{
+    width:100%;
+    border:none;
+    padding:15px;
+    border-radius:14px;
+    background:#c89a5c;
+    color:white;
+    font-size:1rem;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.btn-save:hover{
+    opacity:.9;
+}
+
+@media(max-width:768px){
+
+.admin-page{
+    padding:15px;
+}
+
+.admin-header h1{
+    font-size:1.6rem;
+}
+
+.admin-card{
+    padding:18px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+<div class="logo">
+SOMOS MULHERES<br>
+<span>EM MOVIMENTO</span>
+</div>
+
+<input type="checkbox" id="menu-toggle" class="menu-toggle">
+
+<label for="menu-toggle" class="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</label>
+
+<nav class="nav-links">
+<a href="index.html">Início</a>
+<a href="sobre.html">Sobre</a>
+<a href="comunidade.html">Comunidade</a>
+<a href="eventos.html">Eventos</a>
+<a href="edicoes.html">Edições</a>
+<a href="contatos.html">Contato</a>
+<a href="configuracoes.html">Configurações</a>
+
+</nav>
+
+</header>
+
+<div class="admin-page">
+
+<div class="admin-header">
+<h1>Textos da Página Inicial</h1>
+<p>Edite os textos exibidos na Home.</p>
+</div>
+
+<div class="admin-card">
+
+<h2>Edite o Início</h2>
+
+<div class="form-group">
+<label>Título Principal</label>
+<input id="hero-title-input" class="form-control">
+</div>
+
+<div class="form-group">
+<label>Descrição</label>
+<textarea id="hero-desc-input" class="form-control"></textarea>
+</div>
+
+</div>
+
+<div class="admin-card">
+
+<h2>Edite o Sobre Nós</h2>
+
+<div class="form-group">
+<label>Título</label>
+<input id="about-title-input" class="form-control">
+</div>
+
+<div class="form-group">
+<label>Parágrafo 1</label>
+<textarea id="about-p1-input" class="form-control"></textarea>
+</div>
+
+<div class="form-group">
+<label>Parágrafo 2</label>
+<textarea id="about-p2-input" class="form-control"></textarea>
+</div>
+
+</div>
+
+<button id="btn-salvar" class="btn-save">
+Salvar Alterações
+</button>
+
+</div>
+
+<script type="module" src="textos.js"></script>
+
+</body>
+</html>
