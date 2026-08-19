@@ -1,236 +1,471 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Somos mulheres em Movimento - Inspiração</title>
+    <title>Mariana Jamilly - Autora & Coautora</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FDF1F0;
+            color: #4A4A4A;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+
+        .btn {
+            display: inline-block;
+            background-color: #D67F79;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn:hover { background-color: #B75B56; transform: translateY(-2px); }
+
+        /* HEADER */
+        header {
+            background-color: #FDDFDD;
+            padding: 15px 0;
+            width: 100%;
+            z-index: 1000;
+            position: sticky;
+            top: 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #7B141E;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .logo span { 
+            display: block; 
+            font-size: 11px; font-family: 'Poppins'; font-weight: 300; 
+        }
+
+        .nav-menu { 
+            display: flex; 
+            gap: 25px; 
+            list-style: none; 
+        }
+        
+        .nav-menu a { 
+            text-decoration: none; color: #7B141E; font-weight: 500; 
+            font-size: 15px;
+        }
+        
+        .menu-toggle{
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+        
+        .menu-toggle span{
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #7B141E;
+            border-radius: 2px;
+        }
+        
+        /* HERO SECTION */
+        .hero {
+            background: #FDF1F0;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        .hero-content { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 20px;
+        }
+        
+        .hero-text { 
+            flex: 1; 
+            z-index: 2; 
+        }
+        
+        .subtitulo{
+            display: block;
+            color: #7B141E;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-text h1 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 50px; 
+            color: #7B141E; 
+            margin-bottom: 10px; 
+        }
+
+        .hero-text h2 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 20px; 
+            color: #D67F79; 
+            margin-bottom: 5px; 
+        }
+
+        .hero-img { 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            position: relative;
+            max-width: 100%;
+        }
+            
+        .hero-img::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 140px;
+            background: linear-gradient(to bottom, transparent, #FDF1F0);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hero-img img { 
+            width: 100%; 
+            max-width: 480px; 
+            height: 480px ;
+            object-fit: cover;
+            object-position: center top;
+            height: auto; 
+            display: block; 
+        }
+
+        /* SEÇÃO FOTO E TEXTO (PERFIL SECUNDÁRIO) */
+        .secaoFotoTexto{
+            padding:60px 0;
+            background-color:#fff ;
+        }
+        
+        .secaoFotoTexto .FlexContainer {
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .secaoFotoTexto h2{
+            font-family:'Playfair Display', serif;
+            color: #7B141E;
+        }
+        
+        .fotoPerfilSecundaria{
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .fotoPerfilSecundaria img {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .textoPerfilSecundario p{
+            line-height: 1.8;
+            color: #555;
+            text-align: center;
+            margin: 10px 0;
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* BIOGRAFIA */
+        .bio-section { 
+            padding: 40px 0; 
+            text-align: center; 
+        }
+        
+        .bio-content { 
+            max-width: 800px; 
+            margin: 0 auto; 
+        }
+        
+        .bio-content h2 { 
+            font-family: 'Playfair Display', serif; 
+            font-size: 32px; 
+            color: #7B141E; 
+            margin-bottom: 20px; 
+        }
+        
+        .bio-content p { 
+            font-size: 16px; 
+            line-height: 1.8; 
+            margin-bottom: 25px; 
+            color: #555; 
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* SEÇÃO LIVRO */
+        .sobre-livro { 
+            padding: 60px 0;
+            background: #fff;
+        }
+            
+        .card-livro { display: flex; gap: 50px; align-items: center; }
+        .book-img { flex: 0 0 250px; }
+        
+        .book-img img { width: 100%; border-radius: 8px; box-shadow: 10px 10px 20px rgba(0,0,0,0.1); }
+        
+        .book-text { flex: 1; }
+        
+        .book-text h3 { font-family: 'Playfair Display'; font-size: 30px; color: #7B141E; margin-bottom: 20px; }
+        .book-text p { line-height: 1.6; color: #555; margin-bottom: 20px; }
+
+        /* DEVOCIONAL */
+        .grupoDevocional{
+            padding: 80px 20px;
+            background-color: #FDF1F0;
+            text-align: center;
+            border-top: 1px solid #FDDFDD;
+        }
+        
+        .containerDevocional{
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .containerDevocional h2{
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            color:#7B141E;
+            margin: 20px;
+        }
+        
+        .containerDevocional p{
+            margin: 10px 0;
+            line-height: 1.6;
+            color: #4A4A4A;
+        }
+
+        /* GRUPO VIP WHATSAPP */
+        .grupo-vip {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #F3C7BD 0%, #FDDFDD 100%);
+            text-align: center;
+        }
+        .vip-container { max-width: 700px; margin: 0 auto; }
+        .vip-container h2 { font-family: 'Playfair Display'; font-size: 32px; color: #7B141E; margin-bottom: 15px; }
+        .vip-container p { margin-bottom: 30px; line-height: 1.6; }
+        .whatsapp-btn { background-color: #25D366; }
+        .whatsapp-btn:hover { background-color: #128C7E; }
+
+        /* FOOTER */
+        footer {
+            padding: 60px 0;
+            background-color: #FDF1F0;
+            border-top: 1px solid #FDDFDD;
+            text-align: center;
+        }
+        .social-links { display: flex; justify-content: center; gap: 30px; margin-top: 20px; }
+        .social-item { text-align: center; color: #7B141E; transition: 0.3s; text-decoration: none; }
+        .social-item:hover { color: #D67F79; }
+        .social-item b { display: block; font-size: 14px; margin-top: 5px; }
+
+        /* RESPONSIVIDADE */
+        @media (max-width: 768px) {
+         .hero-content { 
+        flex-direction: column; 
+        text-align: center; 
+    }
+    .hero-img { 
+        order: 1; 
+        width: 100%; 
+        justify-content: center; 
+    }
+    .hero-text { 
+        order: 2; 
+        padding: 20px 10px; 
+    }
+    .hero-img img {
+        height: 380px;
+        max-width: 100%;
+    }
+    
+            .hero-text h1 { font-size: clamp(2rem, 6vh, 32px); }
+            .card-livro { flex-direction: column; text-align: center; }
+            .book-img { width: 180px; }
+            .social-links { flex-direction: column; gap: 20px; }
+            .menu-toggle { display: flex; }
+            .nav-menu {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background-color: #FDDFDD;
+                padding: 20px;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+            }
+            .nav-menu.active { display: flex; }
+            .secaoFotoTexto .FlexContainer { flex-direction: column; text-align: center; }
+            .fotoPerfilSecundaria img { box-shadow: none; }
+        }
+    </style>
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
-        
-
-        <input type="checkbox" id="menu-toggle" class="menu-toggle">
-        <label for="menu-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-
-        <nav class="nav-links">
-            <a href="index.html">Início</a>
-            <a href="sobre.html">Sobre</a>
-            <a href="comunidade.html">Comunidade</a>
-            <a href="eventos.html">Eventos</a>
-            <a href="contatos.html">Contato</a>
-                        <a href="configuracoes.html">Configurações</a>
-            
-            <div class="nav-buttons-mobile">
-
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                Mariana Jamilly
+                <span id="siteLogoSub">Autora</span>
             </div>
-        </nav>
-
-
+            
+            <button class="menu-toggle" id="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            
+            <ul class="nav-menu" id="nav-list">
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="poemas.html">Poemas</a></li>
+                <li><a href="#contato">Contato</a></li>
+                  <li><a href="configuracoes.html">Configurações</a></li>
+            </ul>
+        </div>
     </header>
-    
 
-
-<section class="hero">
- <div class="hero-content">
-    <span class="subtitle"></span>
-    <h1 id="hero-title">Histórias que transformam e conectam.</h1>
-    <p id="hero-desc">Somos uma comunidade literária que dá voz a mulheres reais...</p>
-</div>
-
-
-    <div class="hero-book-featured" id="hero-book-container">
-
-    </div>
-</section>
-
-
-    <section class="features-bar">
-        <div class="feature-item">
-          <i data-lucide="users"></i>
-            <div>
-                <h3>Conexão</h3>
-                <p>com mulheres reais</p>
+    <!-- HERO SECTION -->
+    <section class="hero" id="inicio">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h2 id="viewHeroSubtitulo">Bem vinda, amada!</h2>
+                <h1 id="viewHeroTitulo">Mariana Jamilly</h1>
+                <p class="subtitulo" id="viewHeroAutora">Autora</p>
             </div>
-        </div>
-        
-        <div class="feature-item">
-          <i data-lucide="heart-handshake"></i>
-            <div>
-                <h3>Apoio</h3>
-                <p>em todas as fases</p>
-            </div>
-        </div>
-        <div class="feature-item">
-         <i data-lucide="sparkles"></i>
-            <div>
-                <h3>Inspiração</h3>
-                <p>que gera ação</p>
-            </div>
-        </div>
-        <div class="feature-item">
-           <i data-lucide="sprout"></i>
-            <div>
-                <h3>Propósito</h3>
-                <p>que transforma</p>
+            <div class="hero-img">
+                <img id="viewHeroImg" src="mari.jpg" alt="Mariana Jamilly">
             </div>
         </div>
     </section>
-
-   <section class="about-community">
-      <div class="about-text">
-        <span class="subtitle">Sobre Nós</span>
-        <h2 id="about-title">Histórias que viram pontes para o futuro</h2>
-        <p id="about-p1">Somos Mulheres em Movimento nasceu do desejo de criar um espaço seguro...</p>
-        <p id="about-p2">Acreditamos que nenhuma mulher precisa caminhar sozinha...</p>
-        <a href="sobre.html" class="btn-primary rose">Saiba Mais Sobre Nós</a>
-    </div>
     
-    
-        <div class="community-preview">
-            <h3>Conheça Nossa Comunidade</h3>
-            <div class="cards-grid">
-                <div class="profile-card">
-                    <div class="profile-img-placeholder"></div>
-                    <h4>Celiana Werneck Canto</h4>
-                    <p class="role">Psicóloga - CRP 05/79065</p>
-                    <p class="tag">Escritora</p>
-                                        <p class="tag">Idealizadora</p>
-                    
-                </div>
-                <div class="profile-card">
-                    <div class="profile-img-placeholder"></div>
-                    <h4>Mariana Jamilly</h4>
-                    <p class="role">Escritora</p>
-                    <p class="tag">Mentora</p>
-                </div>
-                
-                <div class="profile-card">
-                    <div class="profile-img-placeholder"></div>
-                    <h4> Ana Paula Xavier</h4>
-                    <p class="role">Esteticista facial, micropigmentadora</p>
-                    <p class="tag">Artista Digital</p>
-                </div>
+    <!-- PERFIL SECUNDÁRIO -->
+    <section class="secaoFotoTexto">
+        <div class="FlexContainer">
+            <div class="fotoPerfilSecundaria">
+                <img id="viewPerfilSecundarioImg" src="conexaoFoto.jpg" alt="foto">
             </div>
-            <a href="comunidade.html" class="view-all">Ver todas as mulheres →</a>
+            <div class="textoPerfilSecundario">
+                <h2 id="viewPerfilSecundarioTitulo">Sua identidade não está no que você faz, mas em quem te criou.</h2>
+                <div id="viewPerfilSecundarioParagrafos"></div>
+            </div>
         </div>
     </section>
-<section id="edicoes" class="edicoes-section">
-    <div class="section-title-center">
-        <span class="subtitle">Nossa Biblioteca</span>
-        <h2>Conheça Nossas Edições</h2>
-        <p>Cada livro, um novo grupo de coautoras. Cada capítulo, uma nova chance de se inspirar.</p>
-    </div>
-
-
-    <div class="edicoes-grid" id="edicoes-container"></div>
-</section>
-
-
-
-    <section class="cta-section">
-        <div class="cta-header">
-            <span class="subtitle">Faça Parte</span>
-            <h2>Um espaço para crescer, contribuir e transformar</h2>
-            <p>Tenha acesso a conteúdos exclusivos, eventos, grupos de apoio, conexões e oportunidades de colaboração.</p>
-
+    
+    <!-- BIO (HISTÓRIA) -->
+    <section class="bio-section" id="sobre">
+        <div class="container bio-content">
+            <h2 id="viewBioTitulo">Conheça um pouco da minha história</h2>
+            <br>
+            <div id="viewBioParagrafos"></div>
+            <hr style="border: 0; height: 1px; background: #D67F79; width: 50px; margin: 20px auto 0;">
         </div>
-        
-        <div class="cta-grid">
-            <div class="cta-item">
-             <i data-lucide="users"></i>
-                <h4>Grupos e Conexões</h4>
-                <p>Conecte-se com mulheres que te impulsionam.</p>
+    </section>
+
+    <!-- SOBRE O LIVRO -->
+    <section class="sobre-livro" id="livro">
+        <div class="container">
+            <div class="card-livro">
+                <div class="book-img">
+                    <img id="viewLivroImg" src="capLvr.jpg" alt="Livro Mulheres em Movimento">
+                </div>
+                <div class="book-text">
+                    <h3 id="viewLivroTitulo">Mulheres em Movimento</h3>
+                    <p id="viewLivroDescricao"></p>
+                    <a id="viewLivroBtn" href="#" class="btn" target="_blank">Garantir meu exemplar</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- GRUPO DEVOCIONAL -->
+    <section class="grupoDevocional">
+        <div class="containerDevocional">
+            <h2 id="viewDevocionalTitulo">🍀Jardim das virtuosas🍀</h2>
+            <div id="viewDevocionalParagrafos"></div>
+            <a id="viewDevocionalBtn" href="#" target="_blank" class="btn whatsapp-btn">Quero Fazer Parte</a>
+        </div>
+    </section>
+
+    <!-- GRUPO VIP -->
+    <section class="grupo-vip">
+        <div class="container vip-container">
+            <h2>Comunidade VIP no WhatsApp</h2>
+            <p>Grande Destaque: Pré-Lançamento (Mulheres em Movimento)<br><br>🔗 ENTRAR NO GRUPO VIP (ACESSO EXCLUSIVO)</p>
+            <a href="https://chat.whatsapp.com/COgzoQQzvGF0dTVQZWko67?mode=gi_t" target="_blank" class="btn whatsapp-btn">Quero entrar no Grupo VIP</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contato">
+        <div class="container">
+            <h2 style="font-family: 'Playfair Display'; color: #7B141E; margin-bottom: 10px;">Entre em contato</h2>
+            <p>Acompanhe minha rotina e novos projetos nas redes sociais:</p>
+            
+            <div class="social-links">
+                <a href="https://www.instagram.com/marianajamilly.oficial?igsh=MTk4dnRyM21mb2xocg==" target="_blank" class="social-item">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png" width="30" alt="Instagram">
+                    <b>@Instagram</b>
+                </a>
+                <a href="https://www.youtube.com/@Marianajamilly.oficial" target="_blank" class="social-item">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="30" alt="YouTube">
+                    <b>YouTube</b>
+                </a>
+                <a href="mailto:marianajamillynevesdeoliveira@gmail.com" class="social-item">
+                    <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="30" alt="Email">
+                    <b>E-mail</b>
+                </a>
             </div>
             
-            <div class="cta-item">
-             <i data-lucide="calendar-days"></i>
-                <h4>Eventos e Encontros</h4>
-                <p>Participe de eventos online e presenciais transformadores.</p>
-            </div>
-            <div class="cta-item">
-<i data-lucide="sprout"></i>
-                <h4>Recursos e Conteúdos</h4>
-                <p>Acesse materiais exclusivos para seu desenvolvimento.</p>
-            </div>
-            <div class="cta-item">
-            <i data-lucide="hand-heart"></i>
-                <h4>Apoio e Colaboração</h4>
-                <p>Compartilhe, apoie e cresça com outras.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="quote-section">
-        <div class="quote-container">
-            <blockquote>
-                <span class="quote-mark">“</span>
-                Quando uma mulher se cura, ela abre caminho para que outras também se curem.
-            </blockquote>
-        </div>
-    </section>
-
-    <section class="newsletter-bar">
-        <h3>Receba inspiração e novidades em primeira mão!</h3>
-        
-        <form class="newsletter-form">
-            <input type="text" placeholder="Seu nome" required>
-            <input type="email" placeholder="Seu e-mail" required>
-            <button type="submit" class="btn-submit">Quero Receber</button>
-        </form>
-    </section>
-
-   <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-brand">
-                <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
-                <p>Uma comunidade que inspira, conecta e transforma histórias em movimento.</p>
-            </div>
-            
-            <div class="footer-links">
-                <div>
-                    <h4>Navegação</h4>
-                    <a href="index.html">Início</a>
-                    <a href="sobre.html">Sobre</a>
-                    
-                </div>
-                <div>
-                    <h4>Eventos</h4>
-                    <a href="eventos.html">Próximos Eventos</a>
-                    
-                </div>
-                <div>
-                    <h4>Recursos</h4>
-                
-                    <a href="newsletter-bar">Materiais Gratuitos</a>
-                </div>
-                <div>
-                    <h4>Suporte</h4>
-                
-                    <a href="contatos.html">Contato</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer-copyright">
-            <p>&copy; 2026 Somos Mulheres em Movimento. Todos os direitos reservados.</p>
+            <p style="font-size: 12px; margin-top: 50px; opacity: 0.6;">&copy; 2026 Mariana Jamilly. Todos os direitos reservados.</p>
         </div>
     </footer>
-    
-    <script src="https://unpkg.com/lucide@latest"></script>
 
-<script type="module" src="script.js"></script>
-<script type="module" src="home.js"></script>
+<!-- Mude de firebase-database-compat.js para firebase-firestore-compat.js -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-</body> 
+    <!-- Seu script principal da index -->
+    <script src="script.js"></script>
+</body>
 </html>
