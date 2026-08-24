@@ -151,33 +151,34 @@
         const tagsHtml = (item.tags || [])
   .map(t => `<span class="tag-span">${t}</span>`)
   .join('');
-        // Card HTML idêntico ao seu design
-  const cardHtml = `
+
+
+const cardHtml = `
   <div class="member-card-full">
-            <div class="card-actions" style="position: absolute; top: 10px; right: 10px; display: flex; gap: 8px;">
-              <a href="addEdt.html?id=${id}" title="Editar" style="color: var(--rosa-escuro);"><i data-lucide="edit-2"></i></a>
-            </div>
-         <div class="member-photo">
-  <img src="${item.imagemUrl || 'placeholder.jpg'}" alt="${item.nome}">
-  <span class="edition-badge">${item.volume || 'Vol. 1'}</span>
-</div>
+      <div class="card-actions" style="position: absolute; top: 10px; right: 10px; display: flex; gap: 8px;">
+        <a href="addEdt.html?id=${id}" title="Editar" style="color: var(--rosa-escuro);"><i data-lucide="edit-2"></i></a>
+      </div>
+      
+      <div class="member-photo">
+        <img src="${item.imagemUrl || 'placeholder.jpg'}" alt="${item.nome}">
+      </div>
 
-           <div class="member-details">
-              <span class="member-volume">${item.volume || ''}</span>
-              <h3>${item.nome}</h3>
-              <p class="member-title">${item.subtitulo || ''}</p>
-              <p class="member-bio">${item.descricao || ''}</p>
-              
-              <div class="member-tags">
-                ${tagsHtml}
-              </div>
+      <div class="member-details">
+        <span class="member-volume">${item.volume || ''}</span>
+        <h3>${item.nome}</h3>
+        <p class="member-title">${item.subtitulo || ''}</p>
+        <p class="member-bio">${item.descricao || ''}</p>
+        
+        <div class="member-tags">
+          ${tagsHtml}
+        </div>
 
-              <div class="member-socials">
-                ${item.instagram ? `<a href="https://instagram.com/${item.instagram.replace('@','')}" target="_blank" title="Instagram"><i data-lucide="instagram"></i></a>` : ''}
-              </div>
-            </div>
-          </div>
-        `;
+        <div class="member-socials">
+          ${item.instagram ? `<a href="https://instagram.com/${item.instagram.replace('@','')}" target="_blank" title="Instagram"><i data-lucide="instagram"></i></a>` : ''}
+        </div>
+      </div>
+  </div>
+`;
 
         gridContainer.insertAdjacentHTML('beforeend', cardHtml);
       });

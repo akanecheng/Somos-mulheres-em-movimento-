@@ -3,26 +3,21 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase
 
 async function carregarTextosHome() {
     try {
-        const docRef = doc(db, "livros", "livroPrincipal");
+        // Agora busca no novo documento da coleção "conteudo_site"
+        const docRef = doc(db, "conteudo_site", "secao_sobre");
         const docSnap = await getDoc(docRef);
         
         console.log("HOME.JS EXECUTOU");
-        console.log("VERSAO HOME 16-08-TESTE");
+        console.log("NOVO BANCO - CONTEUDO_SITE / SECAO_SOBRE");
 
-console.log("Documento existe?", docSnap.exists());
-
+        console.log("Documento existe?", docSnap.exists());
 
         if (docSnap.exists()) {
-    const data = docSnap.data();
+            const data = docSnap.data();
 
-    console.log("Dados recebidos:", data);
-    console.log("Hero:", data.hero);
-    console.log("Sobre:", data.sobre);
+            console.log("Dados recebidos:", data);
 
-
-
-
-            // 1. Atualiza o Hero (Título e Subtítulo)
+            // 1. Atualiza o Hero (caso você também salve o Hero neste novo documento)
             if (data.hero) {
                 const heroTitleEl = document.getElementById("hero-title");
                 const heroDescEl = document.getElementById("hero-desc");
@@ -35,23 +30,33 @@ console.log("Documento existe?", docSnap.exists());
                 }
             }
 
-            // 2. Atualiza o Sobre Nós
-            if (data.sobre) {
-                const aboutTitleEl = document.getElementById("about-title");
-                const aboutP1El = document.getElementById("about-p1");
-                const aboutP2El = document.getElementById("about-p2");
+            // 2. Atualiza a seção "Sobre Nós" a partir dos novos campos
+            const aboutTitleEl = document.getElementById("about-title");
+            const aboutP1El = document.getElementById("about-p1");
+            const aboutP2El = document.getElementById("about-p2");
 
-                if (aboutTitleEl && data.sobre.titulo) aboutTitleEl.textContent = data.sobre.titulo;
-                if (aboutP1El && data.sobre.p1) aboutP1El.textContent = data.sobre.p1;
-                if (aboutP2El && data.sobre.p2) aboutP2El.textContent = data.sobre.p2;
+            // Atualiza o subtítulo caso exista no HTML/banco
+            const aboutSubtitleEl = document.querySelector(".about-text .subtitle");
+            if (aboutSubtitleEl && data.subtitulo) {
+                aboutSubtitleEl.textContent = data.subtitulo;
             }
+
+            if (aboutTitleEl && data.titulo) {
+                aboutTitleEl.textContent = data.titulo;
+            }
+            if (aboutP1El && (data.paragrafo1 || data.p1)) {
+                aboutP1El.textContent = data.paragrafo1 || data.p1;
+            }
+            if (aboutP2El && (data.paragrafo2 || data.p2)) {
+                aboutP2El.textContent = data.paragrafo2 || data.p2;
+            }
+        } else {
+            console.warn("Documento 'secao_sobre' não encontrado na coleção 'conteudo_site'.");
         }
     } catch (erro) {
-    console.log("ERRO DETALHADO");
-    console.log(erro);
-    console.log(erro.message);
-    console.log(erro.stack);
-}
+        console.log("ERRO DETALHADO:");
+        console.error(erro);
+    }
 }
 
 // Executa assim que a página carregar

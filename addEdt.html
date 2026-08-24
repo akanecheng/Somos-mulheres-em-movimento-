@@ -498,6 +498,41 @@
       color: var(--texto-suave);
       margin-bottom: 20px;
     }
+    
+    .preview-side .member-card-full {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 100%;
+    padding: 14px;
+    gap: 14px;
+    background-color: var(--branco);
+    border-radius: 16px;
+    border: 1px solid rgba(212, 138, 133, 0.15);
+    box-sizing: border-box;
+}
+
+.preview-side .member-photo {
+    width: 140px;
+    min-width: 140px;
+    height: 160px;
+    border-radius: 12px;
+    border: 3px solid #2C2523;
+    position: relative;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.preview-side .member-details {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0;
+}
 
     /* Estrutura Exata do Card da Comunidade */
     .member-card-full {
@@ -523,10 +558,12 @@
       height: 260px; 
       position: relative;
       flex-shrink: 0;
+      border: 3px solid var(--dourado) !important;
       transition: background-image 0.2s;
     }
 
     .edition-badge {
+      display: none !important;
       position: absolute;
       top: 15px;
       left: 15px;
@@ -748,14 +785,29 @@
     </a>
 
     <div class="page-title-area">
-      <h1 id="page-main-title">Adicionar Mulher da Comunidade</h1>
-      <p>Preencha os dados abaixo para criar ou editar um perfil completo na vitrine da comunidade.</p>
+      <h1 id="page-main-title">Adicionar </h1>
+      <p>Preencha os dados abaixo para criar ou editar um perfil.</p>
     </div>
 
     <div class="manager-layout">
       
       <!-- Formulário de Configuração (Lado Esquerdo) -->
       <div class="form-side">
+        <!-- Bloco de Seleção de Integrantes Já Cadastrados -->
+<div class="setup-card">
+  <h2><span>0.</span> Editar ou Excluir</h2>
+  <p class="card-subtitle">Excluir participante</p>
+  
+  <div class="form-group">
+    <label for="select-member">Selecione uma participante</label>
+    <select id="select-member" class="input-control">
+      <option value="">-- Carregando integrantes... --</option>
+    </select>
+  </div>
+</div>
+        
+        
+        
         
         <!-- Bloco 1: Upload e Ajuste de Imagem -->
         <div class="setup-card">
@@ -794,10 +846,10 @@
         <!-- Bloco 2: Informações do Perfil -->
         <div class="setup-card">
           <h2><span>2.</span> Informações Gerais</h2>
-          <p class="card-subtitle">Preencha os campos textuais que vão construir o corpo do card.</p>
+          <p class="card-subtitle">Preencha os campos textuais.</p>
           
           <div class="form-group">
-            <label for="input-name">Nome Completo</label>
+            <label for="input-name">Digite o nome </label>
             <input type="text" id="input-name" class="input-control" placeholder="Ex: Celiana Werneck" maxlength="60" oninput="syncFields()">
             <span class="char-count"><span id="count-name">0</span>/60</span>
           </div>
@@ -808,13 +860,13 @@
           </div>
 
           <div class="form-group" style="margin-top: 25px;">
-            <label for="input-title">Subtítulo / Função</label>
+            <label for="input-title"> Função/profissão</label>
             <input type="text" id="input-title" class="input-control" placeholder="Ex: Psicóloga & Escritora" maxlength="60" oninput="syncFields()">
             <span class="char-count"><span id="count-title">0</span>/60</span>
           </div>
 
           <div class="form-group" style="margin-top: 25px;">
-            <label for="input-bio">Descrição / Biografia Curta</label>
+            <label for="input-bio">Descrição / Biografia</label>
             <textarea id="input-bio" class="input-control" placeholder="Conte um resumo inspirador da história, atuação ou conquistas..." maxlength="220" oninput="syncFields()"></textarea>
             <span class="char-count"><span id="count-bio">0</span>/220</span>
           </div>
@@ -832,7 +884,7 @@
           
           <div id="tags-container" class="tags-input-container">
             <!-- As badges de tags vão renderizar aqui -->
-            <input type="text" id="tag-field" placeholder="Escreva e aperte Enter ou Adicionar" onkeypress="handleTagKey(event)">
+            <input type="text" id="tag-field" placeholder="Escreva e aperte" onkeypress="handleTagKey(event)">
           </div>
           
           <div class="tag-append-row">
@@ -845,24 +897,25 @@
           </div>
         </div>
 
-        <!-- Barra de Ações Inferior -->
-        <div class="action-row">
-          <button id="btn-delete-action" class="btn-action btn-delete" onclick="handleDelete()" style="display: none;">
-            <i class="fa-regular fa-trash-can"></i> Excluir Perfil
-          </button>
-          <div style="flex-grow: 1;" id="spacer"></div>
-          <div class="left-actions">
-            <button class="btn-action btn-cancel" onclick="handleCancel()">Cancelar</button>
-            <button class="btn-action btn-save" onclick="handleSave()"><i class="fa-regular fa-floppy-disk"></i> Salvar Alterações</button>
-          </div>
-        </div>
+
+<!-- Barra de Ações Inferior -->
+<div class="action-row">
+  <button id="btn-delete-action" class="btn-action btn-delete" style="display: none;">
+    <i class="fa-regular fa-trash-can"></i> Excluir Perfil
+  </button>
+  <div style="flex-grow: 1;" id="spacer"></div>
+  <div class="left-actions">
+    <button id="btn-cancel-action" class="btn-action btn-cancel" onclick="handleCancel()">Cancelar</button>
+    <button id="btn-save-action" class="btn-action btn-save btn-save"><i class="fa-regular fa-floppy-disk"></i> Salvar Alterações</button>
+  </div>
+</div>
 
       </div>
 
       <!-- Preview em Tempo Real (Lado Direito) -->
       <div class="preview-side">
-        <h2 class="preview-header">Visualização Dinâmica do Card</h2>
-        <p class="preview-subtitle">Veja em tempo real exatamente como o card ficará na página da comunidade.</p>
+        <h2 class="preview-header">Preview</h2>
+        <p class="preview-subtitle">Veja exatamente como o card ficará na página da comunidade.</p>
         
         <!-- O Card da Comunidade -->
         <div class="member-card-full" id="live-card">

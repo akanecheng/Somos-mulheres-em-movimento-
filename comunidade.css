@@ -30,6 +30,12 @@ body {
     color: var(--texto-escuro);
     line-height: 1.6;
 }
+body, main, .directory-section {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+
 
 /* Estilo para link ativo na Navbar */
 .nav-links a.active {
@@ -73,6 +79,9 @@ body {
     border: 1px solid rgba(212, 138, 133, 0.15);
     margin-bottom: 40px;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: auto;
 }
 
 .filter-group {
@@ -90,6 +99,7 @@ body {
 .filter-options {
     display: flex;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .filter-btn {
@@ -111,54 +121,199 @@ body {
 }
 
 /* Grid de Cards Detalhados */
+/* --- GRID PRINCIPAL --- */
 .members-large-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Um abaixo do outro para dar espaço às bios */
-    align-items: stretch;
-    gap: 30px;
+    display: flex;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
+    box-sizing: border-box;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
 }
 
+/* --- CARD HORIZONTAL (LANDSCAPE) --- */
 .member-card-full {
-    display: flex;
-    flex-direction: column;
+    display: flex !important;
+    flex-direction: row !important; /* Força ficar lado a lado */
+    align-items: stretch;
     background-color: var(--branco);
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
     border: 1px solid rgba(212, 138, 133, 0.15);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     transition: transform 0.3s, box-shadow 0.3s;
+    width: 100%;
+    position: relative;
+    padding: 14px;
+    gap: 12px;
+    box-sizing: border-box;
     height: 100%;
 }
 
 .member-card-full:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(212, 138, 133, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 138, 133, 0.12);
 }
 
-.member-photo{
-    background-color: var(--rosa-claro);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    min-height: 250px; /* Força a foto a ter no MÍNIMO essa altura */
-    height: 100%; 
+/* CONTAINER DA FOTO COM BORDA DOURADA */
+.member-photo {
+    width: 110px;
+    min-width: 110px;
+    height: 140px;
+    border-radius: 12px;
+    overflow: hidden;
     position: relative;
-    height: 320px; /* Altura fixa ideal para a foto no topo do card */
     flex-shrink: 0;
+    border: 3px solid var(--dourado) !important; /* Borda Dourada */
+    background-color: var(--rosa-claro);
+    box-sizing: border-box;
 }
 
 .member-photo img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* preenche o espaço e corta as sobras sozinha, sem distorcer o rosto */
-    object-position: center top; /* Foca no centro da imagem */
+    object-fit: cover;
+    object-position: center top;
     display: block;
 }
 
+/* DETALHES DO CONTEÚDO */
+.member-details {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 0; /* Impede estouro do texto */
+    height: 100%;
+}
 
+
+.member-volume {
+    font-size: 0.75rem;
+    color: var(--texto-suave);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.member-details h3 {
+    font-family: var(--fonte-titulo);
+    font-size: 1.3rem;
+    color: var(--texto-escuro);
+    margin-bottom: 2px;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.member-title {
+    color: var(--dourado);
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.member-bio {
+    font-size: 0.78rem;
+    color: var(--texto-suave);
+    margin: 6px 0;
+    line-height: 1.35;
+    word-break: break-word;
+    /* Limita o texto da bio a 3 linhas para manter os cards alinhados no PC */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.member-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.tag-span {
+    background-color: var(--bg-creme);
+    color: var(--texto-suave);
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(112, 95, 85, 0.1);
+}
+
+.member-socials {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid rgba(112, 95, 85, 0.08);
+    padding-top: 8px;
+}
+
+.member-socials svg, .member-socials i {
+    width: 18px;
+    height: 18px;
+    font-size: 1.1rem;
+    color: var(--texto-suave);
+    stroke: var(--texto-suave);
+}
+
+/* RESPONSIVIDADE PARA CELULAR (MANTÉM LADO A LADO) */
+@media (max-width: 768px) {
+    .member-card-full {
+        flex-direction: row !important; /* Garante lado a lado no celular */
+        padding: 10px;
+        gap: 12px;
+    }
+
+    .member-photo {
+        width: 110px !important;
+        min-width: 110px !important;
+        height: 140px !important;
+    }
+
+    .member-details h3 {
+        font-size: 1.1rem;
+    }
+
+    .member-title {
+        font-size: 0.8rem;
+    }
+
+    .member-bio {
+        font-size: 0.78rem;
+        margin: 4px 0;
+    }
+}
+    
+
+@media (min-width: 1200px) {
+    .members-large-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+
+@media (max-width: 1199px) and (min-width: 768px) {
+    .members-large-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .members-large-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .member-photo {
+        width: 100px !important;
+        min-width: 100px !important;
+        height: 130px !important;
+    }
+}
 
 .edition-badge {
+    display: none !important;
     position: absolute;
     top: 15px;
     left: 15px;
@@ -170,67 +325,10 @@ body {
     border-radius: 4px;
 }
 
-.member-details {
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    justify-content: space-between;
+.preview-side .edition-badge {
+    display: none !important;
 }
 
-.member-meta h3 {
-    font-family: var(--fonte-titulo);
-    font-size: 1.5rem;
-    color: var(--texto-escuro);
-    margin-bottom: 4px;
-}
-
-.member-title {
-    color: var(--dourado);
-    font-size: 0.9rem;
-    font-weight: 600;
-}
-
-.member-bio {
-    font-size: 0.9rem;
-    color: var(--texto-suave);
-    margin: 15px 0;
-    line-height: 1.5;
-}
-
-.member-tags {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.tag-span {
-    background-color: var(--bg-creme);
-    color: var(--texto-suave);
-    font-size: 0.75rem;
-    padding: 4px 10px;
-    border-radius: 4px;
-    border: 1px solid rgba(112, 95, 85, 0.1);
-}
-
-.member-socials {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    border-top: 1px solid rgba(112, 95, 85, 0.08);
-    padding-top: 15px;
-}
-
-.member-socials svg {
-    width: 20px;
-    height: 20px;
-    stroke: var(--texto-suave);
-    transition: stroke 0.2s;
-}
-
-.member-socials a:hover svg {
-    stroke: var(--rosa-escuro);
-}
 
 .btn-profile-link {
     margin-left: auto;
@@ -247,38 +345,3 @@ footer.footer{
 }
 
 
-/* ==========================================================
-   RESPONSIVIDADE DA COMUNIDADE
-   ========================================================== */
-@media (max-width: 768px) {
-    .header-container h1 {
-        font-size: 2.2rem;
-    }
-    .filter-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    .filter-options {
-        flex-wrap: wrap;
-    }
-    .member-card-full {
-        grid-template-columns: 1fr; /* Empilha a foto no celular */
-    }
-    .member-photo {
-        height: 200px;
-        min-height: auto;
-    }
-    .member-details {
-        padding: 20px;
-    }
-    .btn-profile-link {
-        margin-left: 0;
-        margin-top: 10px;
-        width: 100%;
-        text-align: right;
-    }
-    .member-socials {
-        flex-wrap: wrap;
-    }
-}

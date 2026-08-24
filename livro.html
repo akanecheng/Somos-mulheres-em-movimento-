@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Livro Destaque - Somos Mulheres em Movimento</title>
+
+    <!-- Fontes do Index -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS Base do Projeto -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- CSS Específico da Página no Design do Index -->
+    <style>
+        .admin-section {
+            margin-top: 100px;
+            padding: 40px 7% 80px 7%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 180px);
+        }
+
+        .admin-card {
+            background-color: var(--branco);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(74, 59, 50, 0.08);
+            border: 1px solid rgba(212, 138, 133, 0.2);
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .admin-header h2 {
+            font-family: var(--fonte-titulo);
+            font-size: 2.2rem;
+            color: var(--texto-escuro);
+            margin-top: 5px;
+            margin-bottom: 8px;
+            font-weight: normal;
+        }
+
+        .admin-header p {
+            color: var(--texto-suave);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--texto-escuro);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-upload-box {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            border: 2px dashed var(--rosa-claro);
+            border-radius: 12px;
+            background-color: var(--bg-creme);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .file-upload-box:hover {
+            border-color: var(--rosa-escuro);
+            background-color: var(--rosa-suave);
+        }
+
+        .file-upload-box input[type="file"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+            stroke: var(--rosa-escuro);
+        }
+
+        .upload-text {
+            font-size: 0.95rem;
+            color: var(--texto-escuro);
+            font-weight: 500;
+        }
+
+        .upload-hint {
+            font-size: 0.8rem;
+            color: var(--texto-suave);
+            margin-top: 4px;
+        }
+
+        .preview-box {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: var(--bg-creme);
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(212, 138, 133, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+        }
+
+        .preview-title {
+            font-weight: 600;
+            color: var(--texto-suave);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .preview-box img {
+            max-width: 200px;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            object-fit: cover;
+        }
+
+        .btn-salvar {
+            width: 100%;
+            padding: 14px;
+            margin-top: 25px;
+            background-color: var(--rosa-escuro);
+            color: var(--branco);
+            border: none;
+            border-radius: 8px;
+            font-family: var(--fonte-corpo);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn-salvar:hover {
+            background-color: #be7570;
+        }
+
+        .btn-salvar:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Adjusts for Mobile */
+        @media (max-width: 768px) {
+            .admin-section {
+                padding: 20px 5% 60px 5%;
+            }
+
+            .admin-card {
+                padding: 25px 20px;
+            }
+
+            .admin-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .preview-box img {
+                max-width: 160px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Padrão do Index -->
+    <header class="navbar">
+        <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+
+        <input type="checkbox" id="menu-toggle" class="menu-toggle">
+        <label for="menu-toggle" class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
+
+        <nav class="nav-links">
+            <a href="index.html">Início</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="comunidade.html">Comunidade</a>
+            <a href="eventos.html">Eventos</a>
+            <a href="edicoes.html">Edições</a>
+            <a href="contatos.html">Contato</a>
+            <a href="configuracoes.html" class="active">Configurações</a>
+            
+            <div class="nav-buttons-mobile"></div>
+        </nav>
+    </header>
+
+    <!-- Formulário do Painel -->
+    <section class="admin-section">
+        <div class="admin-card">
+            <div class="admin-header">
+                <span class="subtitle">Painel Administrativo</span>
+                <h2>Gerenciar Capa do Livro</h2>
+                <p>Selecione uma imagem da galeria para alterar o livro em destaque no topo do site.</p>
+            </div>
+
+            <form id="form-livro">
+                <div class="form-group">
+                    <label>Selecione a nova capa</label>
+                    <div class="file-upload-box">
+                        <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                        <span class="upload-text">Toque para escolher da galeria</span>
+                        <span class="upload-hint">PNG, JPG ou WEBP (Será comprimido automaticamente)</span>
+                        <input type="file" id="file-imagem" accept="image/*" required>
+                    </div>
+                </div>
+
+                <div class="preview-box">
+                    <span class="preview-title">Prévia da Capa</span>
+                    <div id="container-preview">
+                        <p style="color: var(--texto-suave); font-size: 0.85rem;">Carregando capa atual...</p>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit" class="btn-salvar">Salvar Nova Capa</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Ícones Lucide (caso queira manter padrão) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
+
+    <!-- Script JS separado -->
+    <script type="module" src="livro.js"></script>
+</body>
+</html>

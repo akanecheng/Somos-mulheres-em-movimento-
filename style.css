@@ -153,26 +153,38 @@ a {
 /* ==========================================================
    4. HERO SECTION & MOCKUP DO LIVRO
    ========================================================== */
+
 .hero {
     margin-top: 80px;
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr; 
-    gap: 50px;
-    padding: 80px 7%;
+    display: flex;
+    flex-direction: column; /* Coloca os textos e a capa um embaixo do outro */
     align-items: center;
-    background: radial-gradient(circle at 80% 20%, var(--rosa-suave) 0%, transparent 60%);
+    justify-content: space-between;
+    text-align: center;
+    gap: 60px;
+    padding: 60px 7% 80px 7%;
+    background: radial-gradient(circle at 50% 30%, var(--rosa-suave) 0%, transparent 70%);
+}
+
+.hero-content {
+    max-width: 750px; /* Evita que o texto fique largo demais na tela */
+    margin: 0 auto;
+    flex: 1;
 }
 
 .hero-content h1 {
     font-family: var(--fonte-titulo);
-    font-weight: normal; /* A fonte DM Serif Display já possui peso marcante natural */
+    font-weight: normal;
+    font-size: 2.8rem;
+    margin-bottom: 15px;
 }
 
-
 .hero-book-featured {
+    flex: 0 0 320px;
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
 }
 
 /* Customização do mockup para simular o livro */
@@ -679,8 +691,25 @@ blockquote {
     .menu-toggle:checked ~ .hamburger span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
     .menu-toggle:checked ~ .hamburger span:nth-child(2) { opacity: 0; }
     .menu-toggle:checked ~ .hamburger span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+      .hero {
+        flex-direction: column;
+        text-align: center;
+    }
 
-    .hero-content h1 { font-size: 2.3rem; }
+
+    .hero-content h1 { 
+        font-size: 2.3rem; 
+        
+    }
+    
+    .hero-content {
+        width: 100%;
+    }
+
+    .hero-book-featured {
+        width: 100%;
+        flex: none;
+    }
     
     .hero-actions {
         flex-direction: column;
@@ -809,4 +838,23 @@ grid-template-columns:1fr;
 height:280px;
 }
 
+}
+
+/* Container que limita a altura e esconde o excesso da imagem */
+.profile-img-container {
+    height: 160px;
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    background-color: var(--rosa-claro);
+}
+
+/* Garante que a imagem preencha o espaço sem distorcer as proporções do rosto */
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
 }

@@ -51,8 +51,7 @@
 </div>
 
 
-    <div class="hero-book-featured" id="hero-book-container">
-
+<div class="hero-book-featured" id="hero-book-container"></div>
     </div>
 </section>
 
@@ -99,34 +98,48 @@
     </div>
     
     
-        <div class="community-preview">
-            <h3>Conheça Nossa Comunidade</h3>
-            <div class="cards-grid">
-                <div class="profile-card">
-                    <div class="profile-img-placeholder"></div>
-                    <h4>Celiana Werneck Canto</h4>
-                    <p class="role">Psicóloga - CRP 05/79065</p>
-                    <p class="tag">Escritora</p>
-                                        <p class="tag">Idealizadora</p>
-                    
-                </div>
-                <div class="profile-card">
-                    <div class="profile-img-placeholder"></div>
-                    <h4>Mariana Jamilly</h4>
-                    <p class="role">Escritora</p>
-                    <p class="tag">Mentora</p>
-                </div>
-                
-                <div class="profile-card">
-                    <div class="profile-img-placeholder"></div>
-                    <h4> Ana Paula Xavier</h4>
-                    <p class="role">Esteticista facial, micropigmentadora</p>
-                    <p class="tag">Artista Digital</p>
-                </div>
+<div class="community-preview">
+    <h3>Conheça Nossa Comunidade</h3>
+    <div class="cards-grid">
+        
+        <!-- Perfil 1 -->
+        <div class="profile-card">
+            <div class="profile-img-container">
+                <img src="clw.jpg" alt="Celiana Werneck Canto" class="profile-img">
             </div>
-            <a href="comunidade.html" class="view-all">Ver todas as mulheres →</a>
+            <h4>Celiana Werneck Canto</h4>
+            <p class="role">Psicóloga - CRP 05/79065</p>
+            <p class="tag">Escritora</p>
+            <p class="tag">Idealizadora</p>
         </div>
+
+        <!-- Perfil 2 -->
+        <div class="profile-card">
+            <div class="profile-img-container">
+                <img src="mj.jpg" alt="Mariana Jamilly" class="profile-img">
+            </div>
+            <h4>Mariana Jamilly</h4>
+            <p class="role">Escritora</p>
+            <p class="tag">Autora</p>
+        </div>
+        
+        <!-- Perfil 3 -->
+        <div class="profile-card">
+            <div class="profile-img-container">
+                <img src="anp.jpg" alt="Ana Paula Xavier" class="profile-img">
+            </div>
+            <h4>Ana Paula Xavier</h4>
+            <p class="role">Criadora de conteúdo digital, designer digital, especialista em criação de conteúdo digital com avatar!
+</p>
+            <p class="tag">Artista Digital</p>
+        </div>
+
+    </div>
+    <a href="comunidade.html" class="view-all">Ver todas as mulheres →</a>
+</div>
     </section>
+    
+    
 <section id="edicoes" class="edicoes-section">
 
 <div class="section-title-center">
@@ -244,10 +257,38 @@ Ver Todas as Edições
         </div>
     </footer>
     
-    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    
+    <!-- Final do index.html -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+  // Garante que o Lucide converta as tags <i data-lucide="..."> em SVGs
+  window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+          lucide.createIcons();
+      }
+  });
+</script>
+    
+    
+
+<!-- Final do index.html -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+          lucide.createIcons();
+      }
+  });
+</script>
 
 <script type="module" src="script.js"></script>
 <script type="module" src="home.js"></script>
+
+<script type="module" src="livroHome.js"></script>
+</body> 
+</html>
 
 
 </body> 

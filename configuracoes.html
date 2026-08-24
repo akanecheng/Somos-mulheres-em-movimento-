@@ -64,6 +64,8 @@
       flex-grow: 1;
       width: 100%;
     }
+    
+
 
     .panel-header {
       margin-bottom: 50px;
@@ -118,7 +120,12 @@
       text-align: center;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       border: 1px solid rgba(212, 138, 133, 0.15);
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
     }
+    
+
 
     .card:hover {
       transform: translateY(-5px);
@@ -191,7 +198,25 @@
        ========================================== */
     @media (max-width: 992px) {
       .row-top { grid-template-columns: repeat(2, 1fr); }
-      .row-bottom { grid-template-columns: repeat(2, 1fr); }
+      .row-bottom { grid-template-columns: repeat(2, 1fr);
+      }
+      
+        .hero {
+        gap: 80px;
+    }
+
+    .hero-content {
+        width: 45%;
+    }
+
+    .hero-book-featured {
+        width: 45%;
+    }
+    
+     .cards-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+      
     }
 
     @media (max-width: 768px) {
@@ -199,10 +224,35 @@
         margin-top: 110px;
         padding: 0 16px;
       }
+      
+      .hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 50px;
+    }
+
+    .hero-content {
+        width: 50%;
+        flex: 1;
+    }
+
+    .hero-book-featured {
+        width: 50%;
+        flex: 1;
+    }
 
       .panel-header h1 { font-size: 2.1rem; }
+      
       .row-top, .row-bottom { grid-template-columns: 1fr; }
-
+      
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+      
+    .cards-container {
+        grid-template-columns: repeat(2, 1fr)
+}
       .card p {
         min-height: auto;
       }
@@ -279,19 +329,42 @@
         </div>
       </div>
 
-      <div class="row-bottom">
-        <div class="card">
-          <div class="card-icon-container">
+<div class="row-bottom">
+
+    <div class="card">
+        <div class="card-icon-container">
             <i class="fa-regular fa-calendar-check"></i>
-          </div>
-          <h3>Eventos</h3>
-          <p>Crie, edite e organize a agenda de encontros e eventos.</p>
-          <a href="addEventos.html" class="btn-access">
-            Acessar <i class="fa-solid fa-arrow-right"></i>
-          </a>
         </div>
-      </div>
+
+        <h3>Eventos</h3>
+
+        <p>
+            Crie, edite e organize a agenda de encontros e eventos.
+        </p>
+
+        <a href="addEventos.html" class="btn-access">
+            Acessar <i class="fa-solid fa-arrow-right"></i>
+        </a>
     </div>
+
+
+    <div class="card">
+        <div class="card-icon-container">
+            <i class="fa-solid fa-book"></i>
+        </div>
+
+        <h3>Livro em destaque</h3>
+
+        <p>
+            Adicione ou edite o livro sempre que houver uma nova edição.
+        </p>
+
+        <a href="livro.html" class="btn-access">
+            Acessar <i class="fa-solid fa-arrow-right"></i>
+        </a>
+    </div>
+
+</div>
   </main>
 
   <!-- FOOTER OFICIAL PADRONIZADO -->
