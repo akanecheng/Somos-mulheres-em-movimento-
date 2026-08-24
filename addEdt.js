@@ -11,6 +11,7 @@ import {
     collection,
     doc,
     getDoc,
+    getDocs, // <-- DEVE ESTAR AQUI
     addDoc,
     updateDoc,
     deleteDoc,
@@ -74,6 +75,10 @@ let profileData = {
 // 4. INICIALIZAÇÃO
 // ============================================================
 
+// ============================================================
+// 4. INICIALIZAÇÃO
+// ============================================================
+
 document.addEventListener("DOMContentLoaded", async () => {
 
     setupEvents();
@@ -84,12 +89,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         setupCreateMode();
     }
 
+    await populateMemberList();
+
     renderTags();
     updateLiveCard();
 
-});
-
-
+}); // <-- Removido o "import" que estava escrito aqui
 // ============================================================
 // 5. EVENTOS
 // ============================================================
@@ -103,56 +108,51 @@ function setupEvents() {
     const instagram = document.getElementById("input-instagram");
 
     [name, volume, title, bio, instagram].forEach(input => {
-
         if (input) {
             input.addEventListener("input", syncFields);
         }
-
     });
 
+    // --- REGISTRO DOS BOTÕES DE AÇÃO ---
+    const btnDelete = document.getElementById("btn-delete-action");
+    if (btnDelete) {
+        btnDelete.addEventListener("click", handleDelete);
+    }
+
+    const btnSave = document.querySelector(".btn-save");
+    if (btnSave) {
+        btnSave.addEventListener("click", handleSave);
+    }
+
+    const btnCancel = document.querySelector(".btn-cancel");
+    if (btnCancel) {
+        btnCancel.addEventListener("click", handleCancel);
+    }
 
     const uploader = document.getElementById("image-uploader");
-
     if (uploader) {
-
         uploader.addEventListener("change", event => {
             previewImage(event);
         });
-
     }
 
-
     const zoomRange = document.getElementById("zoom-range");
-
     if (zoomRange) {
-
         zoomRange.addEventListener("input", event => {
             updateZoom(event.target.value);
         });
-
     }
-
 
     const tagField = document.getElementById("tag-field");
-
     if (tagField) {
-
         tagField.addEventListener("keydown", event => {
-
             if (event.key === "Enter") {
-
                 event.preventDefault();
-
                 addTagFromField();
-
             }
-
         });
-
     }
-
 }
-
 
 // ============================================================
 // 6. MODO CRIAÇÃO
@@ -1001,26 +1001,14 @@ function updateLiveCard() {
 
 
     if (photo) {
-
-        if (profileData.photoBase64) {
-
-            photo.style.backgroundImage =
-                `url("${profileData.photoBase64}")`;
-
-            photo.style.backgroundSize =
-                `${profileData.zoom * 100}%`;
-
-        } else {
-
-            photo.style.backgroundImage =
-                "none";
-
-            photo.style.backgroundSize =
-                "cover";
-
-        }
-
+    if (profileData.photoBase64) {
+        photo.style.backgroundImage = `url("${profileData.photoBase64}")`;
+        photo.style.backgroundSize = "cover";
+        photo.style.backgroundPosition = "center";
+    } else {
+        photo.style.backgroundImage = "none";
     }
+}
 
 
     if (instagram) {
@@ -1332,25 +1320,26 @@ async function handleSave() {
 }
 
 async function handleDelete() {
-
     if (!profileData.id) {
+        alert("Nenhum perfil selecionado para exclusão.");
         return;
     }
 
-
-    const confirmed =
-        confirm(
-            `Tem certeza que deseja excluir "${profileData.name}"?\n\nEssa ação não pode ser desfeita.`
-        );
-
+    const confirmed = confirm(
+        `Tem certeza que deseja excluir "${profileData.name || 'esta participante'}" da comunidade?\n\nEsta ação não poderá ser desfeita.`
+    );
 
     if (!confirmed) {
         return;
     }
 
+    const deleteButton = document.getElementById("btn-delete-action");
+    if (deleteButton) {
+        deleteButton.disabled = true;
+        deleteButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Excluindo...';
+    }
 
     try {
-
         await deleteDoc(
             doc(
                 db,
@@ -1359,31 +1348,22 @@ async function handleDelete() {
             )
         );
 
+        alert("Perfil excluído com sucesso!");
 
-        alert(
-            "Perfil excluído com sucesso!"
-        );
-
-
-        window.location.href =
-            "comunidade.html";
-
+        // Redireciona de volta para a lista da comunidade
+        window.location.href = "comunidade.html";
 
     } catch (error) {
-
-        console.error(
-            "Erro ao excluir:",
-            error
-        );
-
-
-        alert(
-            "Não foi possível excluir o perfil."
-        );
-
+        console.error("Erro ao excluir perfil:", error);
+        alert("Não foi possível excluir o perfil. Verifique as permissões no console.");
+        
+        if (deleteButton) {
+            deleteButton.disabled = false;
+            deleteButton.innerHTML = '<i class="fa-regular fa-trash-can"></i> Excluir Perfil';
+        }
     }
-
 }
+
 function handleCancel() {
 
     const confirmed =
@@ -1438,3 +1418,42 @@ window.handleDelete =
 
 window.handleCancel =
     handleCancel;
+
+
+
+async function populateMemberList() {
+    const select = document.getElementById("select-member");
+    if (!select) return;
+
+    try {
+        const querySnapshot = await getDocs(collection(db, COLLECTION_NAME));
+        
+        select.innerHTML = '<option value="">-- Selecione uma participante --</option>';
+
+        querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const option = document.createElement("option");
+            option.value = docSnap.id;
+            
+            if (docSnap.id === profileData.id) {
+                option.selected = true;
+            }
+
+            option.textContent = `${data.nome || 'Sem Nome'} (${data.volume || 'Vol. 1'})`;
+            select.appendChild(option);
+        });
+
+        select.addEventListener("change", (e) => {
+            const selectedId = e.target.value;
+            if (selectedId) {
+                window.location.href = `addEdt.html?id=${selectedId}`;
+            } else {
+                window.location.href = "addEdt.html";
+            }
+        });
+
+    } catch (err) {
+        console.error("Erro ao carregar lista de integrantes:", err);
+        select.innerHTML = '<option value="">Erro ao carregar lista</option>';
+    }
+}
