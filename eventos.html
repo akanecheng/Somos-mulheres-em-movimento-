@@ -106,20 +106,22 @@
 </footer>
 
 <script type="module">
+
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
   import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
-    authDomain: "SEU_PROJECT_ID.firebaseapp.com",
-    projectId: "SEU_PROJECT_ID",
-    storageBucket: "SEU_PROJECT_ID.appspot.com",
-    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-    appId: "SEU_APP_ID"
+    apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
+    authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
+    projectId: "somos-mulheres-em-movimento",
+    storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
+    messagingSenderId: "427525655209",
+    appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+
 
   let dataAtual = new Date();
   let eventosGerais = [];
