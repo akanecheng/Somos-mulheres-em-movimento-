@@ -43,6 +43,67 @@ body, main, .directory-section {
     font-weight: 700;
 }
 
+.nav-search-icon {
+    display: flex;
+    align-items: center;
+    color: var(--texto-escuro);
+    margin-left: 10px;
+    transition: color 0.2s ease;
+}
+
+.nav-search-icon:hover {
+    color: var(--rosa-escuro);
+}
+
+.nav-search-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Container e Input da Barra de Busca */
+.search-bar-container {
+    max-width: 600px;
+    margin: 0 auto 40px auto;
+    width: 100%;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper .search-icon {
+    position: absolute;
+    left: 16px;
+    width: 20px;
+    height: 20px;
+    color: var(--texto-suave);
+    pointer-events: none;
+}
+
+.search-input-wrapper input {
+    width: 100%;
+    padding: 14px 16px 14px 48px;
+    font-size: 0.95rem;
+    font-family: var(--fonte-corpo);
+    border: 1px solid rgba(212, 138, 133, 0.3);
+    border-radius: 30px;
+    background-color: var(--branco);
+    color: var(--texto-escuro);
+    outline: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+}
+
+.search-input-wrapper input:focus {
+    border-color: var(--rosa-escuro);
+    box-shadow: 0 4px 15px rgba(212, 138, 133, 0.15);
+}
+
+
+
+
 /* Cabeçalho de Páginas Internas */
 .page-header {
     margin-top: 80px;
@@ -120,15 +181,14 @@ body, main, .directory-section {
     border-color: var(--rosa-escuro);
 }
 
-/* Grid de Cards Detalhados */
+
 /* --- GRID PRINCIPAL --- */
 .members-large-grid {
-    display: flex;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)) !important;
-    box-sizing: border-box;
-    flex-direction: column;
+    display: grid !important; /* Altera de flex para grid */
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important; /* Cria colunas dinâmicas */
     gap: 20px;
     width: 100%;
+    box-sizing: border-box;
 }
 
 /* --- CARD HORIZONTAL (LANDSCAPE) --- */

@@ -24,9 +24,9 @@
             <a href="sobre.html">Sobre</a>
             <a href="comunidade.html">Comunidade</a>
             <a href="eventos.html">Eventos</a>
-            <a href="edicoes.html" class="active">Edições</a>
+<a href="edicoes.html" class="active">Edições</a>
             <a href="contatos.html">Contato</a>
-            <a href="configuracoes.html">Configurações</a>
+<a href="configuracoes.html" class="admin-only">Configurações</a>
             <div class="nav-buttons-mobile"></div>
         </nav>
     </header>
@@ -77,5 +77,14 @@
     </footer>
 
     <script type="module" src="edicoes.js"></script>
+    
+   <!-- SDKs do Firebase Compatíveis -->
+<!-- SDKs Base do Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+<!-- Script do Auth Check -->
+<script src="auth-check.js"></script>
+
 </body>
 </html>

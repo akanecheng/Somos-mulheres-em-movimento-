@@ -858,3 +858,9 @@ height:280px;
     object-position: center;
     display: block;
 }
+
+
+/* Por padrão, esconde os botões e links de edição/configuração */
+.admin-only {
+    display: none !important;
+}

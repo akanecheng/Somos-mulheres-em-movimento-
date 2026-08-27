@@ -13,34 +13,26 @@
 <body>
     
 
-    <header class="navbar">
-        <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+ <header class="navbar">
+    <div class="logo">SOMOS MULHERES<br><span>EM MOVIMENTO</span></div>
+    <input type="checkbox" id="menu-toggle" class="menu-toggle">
+    <label for="menu-toggle" class="hamburger">
+        <span></span><span></span><span></span>
+    </label>
+
+    <!-- É AQUI QUE ENTRA O NAV: -->
+    <nav class="nav-links">
+   <a href="index.html" class="active">Início</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="comunidade.html">Comunidade</a>
+        <a href="eventos.html">Eventos</a>
+        <a href="edicoes.html">Edições</a>
+        <a href="contatos.html">Contato</a>
         
-
-        <input type="checkbox" id="menu-toggle" class="menu-toggle">
-        <label for="menu-toggle" class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-        </label>
-
-        <nav class="nav-links">
-            <a href="index.html">Início</a>
-            <a href="sobre.html">Sobre</a>
-            <a href="comunidade.html">Comunidade</a>
-            <a href="eventos.html">Eventos</a>
-            <a href="edicoes.html" class="active">Edições</a>
-            <a href="contatos.html">Contato</a>
-                        <a href="configuracoes.html">Configurações</a>
-            
-            <div class="nav-buttons-mobile">
-
-            </div>
-        </nav>
-
-
-    </header>
-    
+        <!-- Link visível APENAS para você quando estiver logada -->
+        <a href="configuracoes.html" class="admin-only">Configurações</a>
+    </nav>
+</header>
 
 
 <section class="hero">
@@ -287,6 +279,15 @@ Ver Todas as Edições
 <script type="module" src="home.js"></script>
 
 <script type="module" src="livroHome.js"></script>
+
+
+
+<!-- SDKs Base do Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+<!-- Script do Auth Check -->
+<script src="auth-check.js"></script>
 </body> 
 </html>
 

@@ -3,6 +3,7 @@
     max-width: 800px;
     margin: 100px auto 50px auto;
     padding: 0 20px;
+    width: 90%; /* Garante margens em telas menores que 800px */
 }
 
 .admin-header {

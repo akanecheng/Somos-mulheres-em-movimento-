@@ -33,8 +33,8 @@
           <a href="comunidade.html">Comunidade</a>
           <a href="eventos.html">Eventos</a>
           <a href="edicoes.html" class="active">Edições</a>
-          <a href="contatos.html">Contato</a>
-          <a href="configuracoes.html">Configurações</a>
+<a href="contatos.html" class="active">Contato</a>
+<a href="configuracoes.html" class="admin-only">Configurações</a>
           
           <div class="nav-buttons-mobile"></div>
       </nav>
@@ -151,6 +151,29 @@
         }
     });
   </script>
+  
+<!-- SDKs do Firebase Compatíveis -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+<script>
+  // Inicialização do Firebase necessária em todas as páginas
+  const firebaseConfig = {
+    apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
+    authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
+    projectId: "somos-mulheres-em-movimento",
+    storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
+    messagingSenderId: "427525655209",
+    appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
+  };
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+</script>
+
+<!-- Script que verifica o login e exibe "Configurações" se estiver logada -->
+<script src="auth-check.js"></script>
 
 </body>
 </html>

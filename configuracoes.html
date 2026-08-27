@@ -14,250 +14,215 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css">
 
-  <style>
-    /* ==========================================
-       1. VARIÁVEIS E REGRA GERAL
-       ========================================== */
-    :root {
-      --bg-creme: #fdfaf7;
-      --rosa-escuro: #d48a85;
-      --rosa-claro: #e2b2ae;
-      --rosa-suave: #f4eae6;
-      --dourado: #c9934e;
-      --texto-escuro: #4a3b32;
-      --texto-suave: #705f55;
-      --branco: #ffffff;
-      --fonte-titulo: 'DM Serif Display', serif;
-      --fonte-corpo: 'Manrope', sans-serif;
-      --shadow-soft: 0 10px 30px rgba(212, 138, 133, 0.12);
-    }
+ <style>
+  /* ==========================================
+     1. VARIÁVEIS E REGRA GERAL
+     ========================================== */
+  :root {
+    --bg-creme: #fdfaf7;
+    --rosa-escuro: #d48a85;
+    --rosa-claro: #e2b2ae;
+    --rosa-suave: #f4eae6;
+    --dourado: #c9934e;
+    --texto-escuro: #4a3b32;
+    --texto-suave: #705f55;
+    --branco: #ffffff;
+    --fonte-titulo: 'DM Serif Display', serif;
+    --fonte-corpo: 'Manrope', sans-serif;
+    --shadow-soft: 0 10px 30px rgba(212, 138, 133, 0.12);
+  }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-    html, body {
-      width: 100%;
-      overflow-x: hidden; 
-    }
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-creme);
+    color: var(--texto-escuro);
+    font-family: var(--fonte-corpo);
+  }
 
-    body {
-      font-family: var(--fonte-corpo);
-      background-color: var(--bg-creme);
-      color: var(--texto-escuro);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+  body {
+    display: flex;
+    flex-direction: column;
+  }
 
-    /* ==========================================
-       2. CONTEÚDO PRINCIPAL (PAINEL)
-       ========================================== */
+  /* ==========================================
+     2. CONTEÚDO PRINCIPAL (PAINEL)
+     ========================================== */
+  main {
+    width: 100%;
+    max-width: 1200px;
+    margin: 140px auto 60px auto; /* Compensa a navbar fixa */
+    padding: 0 24px;
+    text-align: center;
+    flex: 1 0 auto;
+  }
+
+  .panel-header {
+    margin-bottom: 50px;
+  }
+
+  .panel-header h1 {
+    font-family: var(--fonte-titulo);
+    font-size: 2.8rem;
+    font-weight: 400;
+    color: var(--texto-escuro);
+    margin-bottom: 12px;
+  }
+
+  .panel-header p {
+    font-size: 1rem;
+    color: var(--texto-suave);
+    font-weight: 400;
+  }
+
+  /* GRIDS E CARDS */
+  .grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    width: 100%;
+  }
+
+  .row-top {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+  }
+
+  .row-bottom {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    width: 100%;
+    max-width: 780px; 
+  }
+
+  .card {
+    background-color: var(--branco);
+    border-radius: 12px;
+    padding: 35px 25px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(212, 138, 133, 0.15);
+    width: 100%;
+    height: 100%;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(212, 138, 133, 0.2);
+  }
+
+  .card-icon-container {
+    background-color: var(--rosa-suave);
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .card-icon-container i {
+    font-size: 1.6rem;
+    color: var(--rosa-escuro);
+  }
+
+  .card h3 {
+    font-family: var(--fonte-corpo);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--texto-escuro);
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--texto-suave);
+    line-height: 1.5;
+    margin-bottom: 25px;
+    min-height: 45px;
+  }
+
+  .btn-access {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border: 1px solid var(--rosa-escuro);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--rosa-escuro);
+    font-size: 0.88rem;
+    font-weight: 600;
+    background-color: transparent;
+    transition: all 0.3s ease;
+  }
+
+  .btn-access:hover {
+    background-color: var(--rosa-escuro);
+    color: var(--branco);
+  }
+
+  .btn-access i {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+  }
+
+  .btn-access:hover i {
+    transform: translateX(4px);
+  }
+
+  /* ==========================================
+     3. FIX DO FOOTER (100% DE LARGURA)
+     ========================================== */
+  footer.footer {
+    width: 100% !important;
+    background-color: inherit; /* Mantém a cor nativa definida no style.css */
+    margin-top: auto;
+  }
+
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    width: 100%;
+  }
+
+  /* ==========================================
+     4. MEDIA QUERIES (RESPONSIVIDADE)
+     ========================================== */
+  @media (max-width: 992px) {
+    .row-top { grid-template-columns: repeat(2, 1fr); }
+    .row-bottom { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
     main {
-      max-width: 1200px;
-      margin: 140px auto 60px auto; /* Compensa a navbar fixa */
-      padding: 0 24px;
-      text-align: center;
-      flex-grow: 1;
-      width: 100%;
-    }
-    
-
-
-    .panel-header {
-      margin-bottom: 50px;
+      margin-top: 110px;
+      padding: 0 16px;
     }
 
-    .panel-header h1 {
-      font-family: var(--fonte-titulo);
-      font-size: 2.8rem;
-      font-weight: 400;
-      color: var(--texto-escuro);
-      margin-bottom: 12px;
-    }
-
-    .panel-header p {
-      font-size: 1rem;
-      color: var(--texto-suave);
-      font-weight: 400;
-    }
-
-    /* GRIDS E CARDS */
-    .grid-container {
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      align-items: center;
-      width: 100%;
-    }
-
-    .row-top {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      width: 100%;
-    }
-
-    .row-bottom {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 30px;
-      width: 100%;
-      max-width: 780px; 
-    }
-
-    .card {
-      background-color: var(--branco);
-      border-radius: 12px;
-      padding: 35px 25px;
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border: 1px solid rgba(212, 138, 133, 0.15);
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-    }
-    
+    .panel-header h1 { font-size: 2.1rem; }
+    .row-top, .row-bottom { grid-template-columns: 1fr; }
+    .card p { min-height: auto; }
+  }
+</style>
 
 
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(212, 138, 133, 0.2);
-    }
-
-    .card-icon-container {
-      background-color: var(--rosa-suave);
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .card-icon-container i {
-      font-size: 1.6rem;
-      color: var(--rosa-escuro);
-    }
-
-    .card h3 {
-      font-family: var(--fonte-corpo);
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--texto-escuro);
-      margin-bottom: 10px;
-    }
-
-    .card p {
-      font-size: 0.9rem;
-      color: var(--texto-suave);
-      line-height: 1.5;
-      margin-bottom: 25px;
-      min-height: 45px;
-    }
-
-    .btn-access {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 24px;
-      border: 1px solid var(--rosa-escuro);
-      border-radius: 6px;
-      text-decoration: none;
-      color: var(--rosa-escuro);
-      font-size: 0.88rem;
-      font-weight: 600;
-      background-color: transparent;
-      transition: all 0.3s ease;
-    }
-
-    .btn-access:hover {
-      background-color: var(--rosa-escuro);
-      color: var(--branco);
-    }
-
-    .btn-access i {
-      font-size: 0.8rem;
-      transition: transform 0.3s ease;
-    }
-
-    .btn-access:hover i {
-      transform: translateX(4px);
-    }
-
-    /* ==========================================
-       3. MEDIA QUERIES (RESPONSIVIDADE)
-       ========================================== */
-    @media (max-width: 992px) {
-      .row-top { grid-template-columns: repeat(2, 1fr); }
-      .row-bottom { grid-template-columns: repeat(2, 1fr);
-      }
-      
-        .hero {
-        gap: 80px;
-    }
-
-    .hero-content {
-        width: 45%;
-    }
-
-    .hero-book-featured {
-        width: 45%;
-    }
-    
-     .cards-container {
-        grid-template-columns: repeat(3, 1fr);
-    }
-      
-    }
-
-    @media (max-width: 768px) {
-      main {
-        margin-top: 110px;
-        padding: 0 16px;
-      }
-      
-      .hero {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 50px;
-    }
-
-    .hero-content {
-        width: 50%;
-        flex: 1;
-    }
-
-    .hero-book-featured {
-        width: 50%;
-        flex: 1;
-    }
-
-      .panel-header h1 { font-size: 2.1rem; }
-      
-      .row-top, .row-bottom { grid-template-columns: 1fr; }
-      
-    .cards-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-      
-    .cards-container {
-        grid-template-columns: repeat(2, 1fr)
-}
-      .card p {
-        min-height: auto;
-      }
-    }
-  </style>
 </head>
 <body>
 

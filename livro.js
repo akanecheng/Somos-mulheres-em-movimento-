@@ -45,12 +45,12 @@ async function carregarCapa() {
             heroBookContainer.innerHTML = `
                 <div class="book-cover-mockup">
                     <span class="volume-badge">
-                        Livro em Destaque
+                        Volume atual
                     </span>
 
                     <img
                         src="${dados.capa}"
-                        alt="Livro em destaque">
+                        alt="Volume atual">
                 </div>
             `;
         }
