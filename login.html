@@ -82,51 +82,52 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
-        authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
-        projectId: "somos-mulheres-em-movimento",
-        storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
-        messagingSenderId: "427525655209",
-        appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
-      };
+ <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
+    authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
+    projectId: "somos-mulheres-em-movimento",
+    storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
+    messagingSenderId: "427525655209",
+    appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
+  };
 
-      firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 
-      const EMAILS_AUTORIZADOS = [
-        "polyanadesn02@gmail.com",
-        "celianaw@hotmail.com", 
-        "polyanadesouzaneves2@gmail.com",
-        "polyanadesouza02@gmail.com"
-      ];
+  const EMAILS_AUTORIZADOS = [
+    "polyanadesn02@gmail.com",
+    "celianaw@hotmail.com", 
+    "polyanadesouzaneves2@gmail.com",
+    "polyanadesouza02@gmail.com"
+  ];
 
-      const btnGoogle = document.getElementById('btn-google-login');
-      const errorMsg = document.getElementById('error-msg');
+  const btnGoogle = document.getElementById('btn-google-login');
+  const errorMsg = document.getElementById('error-msg');
 
-      // Verifica o resultado assim que a página carrega após o redirecionamento
-      firebase.auth().getRedirectResult().then(async (result) => {
-        if (result.user) {
-          const emailUsuario = result.user.email;
-          if (EMAILS_AUTORIZADOS.includes(emailUsuario)) {
-            window.location.href = "configuracoes.html";
-          } else {
-            await firebase.auth().signOut();
-            errorMsg.textContent = "Acesso negado. Este e-mail não possui permissão para editar o site.";
-            errorMsg.style.display = 'block';
-          }
-        }
-      }).catch((error) => {
-        console.error("Erro no login:", error);
-        errorMsg.textContent = "Erro ao tentar realizar o login com o Google.";
+  btnGoogle.addEventListener('click', async () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    
+    try {
+      // Abre a janela de login por POPUP
+      const result = await firebase.auth().signInWithPopup(provider);
+      const emailUsuario = result.user.email;
+
+      if (EMAILS_AUTORIZADOS.includes(emailUsuario)) {
+        // Redireciona para o painel
+        window.location.href = "configuracoes.html";
+      } else {
+        await firebase.auth().signOut();
+        errorMsg.textContent = "Acesso negado. Este e-mail não possui permissão.";
         errorMsg.style.display = 'block';
-      });
-
-      // Ao clicar, redireciona em vez de abrir janela pop-up
-      btnGoogle.addEventListener('click', () => {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithRedirect(provider);
-      });
-    </script>
+      }
+    } catch (error) {
+      console.error("Erro no login:", error);
+      errorMsg.textContent = "Erro ao tentar realizar o login com o Google.";
+      errorMsg.style.display = 'block';
+    }
+  });
+</script>
 </body>
 </html>
