@@ -864,3 +864,10 @@ height:280px;
 .admin-only {
     display: none !important;
 }
+
+/* Força os links gerados ou padrão a herdarem a cor do elemento pai */
+a[href^="tel:"], 
+a[href^="data:"] {
+    color: inherit;
+    text-decoration: none;
+}
