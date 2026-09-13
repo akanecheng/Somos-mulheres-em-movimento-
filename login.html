@@ -2,9 +2,14 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Área Restrita - Somos Mulheres em Movimento</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- SDKs do Firebase carregados prioritariamente no Head -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
     <style>
         .login-container {
             max-width: 400px;
@@ -51,11 +56,23 @@
             border-color: #D48A85;
         }
 
+        .btn-google:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .login-error {
             color: #d9534f;
             font-size: 0.85rem;
             margin-top: 15px;
             display: none;
+        }
+
+        .loading-text {
+            display: none;
+            color: #D48A85;
+            font-size: 0.85rem;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -75,60 +92,94 @@
             Entrar com o Google
         </button>
 
+        <p id="loading-msg" class="loading-text">Conectando, aguarde...</p>
         <p id="error-msg" class="login-error"></p>
     </div>
 
-    <!-- Firebase SDK Compat Core e Auth -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
+        authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
+        projectId: "somos-mulheres-em-movimento",
+        storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
+        messagingSenderId: "427525655209",
+        appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
+      };
 
- <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
-    authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
-    projectId: "somos-mulheres-em-movimento",
-    storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
-    messagingSenderId: "427525655209",
-    appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
-  };
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
 
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
+      const EMAILS_AUTORIZADOS = [
+        "polyanadesn02@gmail.com",
+        "celianaw@hotmail.com", 
+        "polyanadesouzaneves2@gmail.com",
+        "polyanadesouza02@gmail.com",
+        "celianadavirian@hotmail.com"
+      ];
 
-  const EMAILS_AUTORIZADOS = [
-    "polyanadesn02@gmail.com",
-    "celianaw@hotmail.com", 
-    "polyanadesouzaneves2@gmail.com",
-    "polyanadesouza02@gmail.com"
-    "celianadavirian@hotmail.com"
-  ];
+      const btnGoogle = document.getElementById('btn-google-login');
+      const errorMsg = document.getElementById('error-msg');
+      const loadingMsg = document.getElementById('loading-msg');
 
-  const btnGoogle = document.getElementById('btn-google-login');
-  const errorMsg = document.getElementById('error-msg');
+      // Força a persistência no armazenamento Local para contornar o bloqueio de SessionStorage no iOS/Safari
+      firebase.auth().getRedirectResult()
+.then(async (result) => {
 
-  btnGoogle.addEventListener('click', async () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    
-    try {
-      // Abre a janela de login por POPUP
-      const result = await firebase.auth().signInWithPopup(provider);
-      const emailUsuario = result.user.email;
+    if (result && result.user) {
+        validarUsuario(result.user);
+    }
 
-      if (EMAILS_AUTORIZADOS.includes(emailUsuario)) {
-        // Redireciona para o painel
-        window.location.href = "configuracoes.html";
-      } else {
-        await firebase.auth().signOut();
-        errorMsg.textContent = "Acesso negado. Este e-mail não possui permissão.";
+})
+.catch((error) => {
+
+    exibirErro(error.message);
+
+});
+
+      // Monitor de estado global
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          validarUsuario(user);
+        }
+      });
+
+      async function validarUsuario(user) {
+        if (EMAILS_AUTORIZADOS.includes(user.email)) {
+          window.location.href = "configuracoes.html";
+        } else {
+          await firebase.auth().signOut();
+          exibirErro("Acesso negado. Este e-mail não possui permissão.");
+        }
+      }
+
+      function exibirErro(mensagem) {
+        loadingMsg.style.display = 'none';
+        btnGoogle.disabled = false;
+        errorMsg.textContent = mensagem;
         errorMsg.style.display = 'block';
       }
-    } catch (error) {
-      console.error("Erro no login:", error);
-      errorMsg.textContent = "Erro ao tentar realizar o login com o Google.";
-      errorMsg.style.display = 'block';
-    }
-  });
-</script>
+
+      btnGoogle.addEventListener('click', async () => {
+        btnGoogle.disabled = true;
+        errorMsg.style.display = 'none';
+        loadingMsg.style.display = 'block';
+
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
+
+        try {
+          // Tenta via Popup primeiro
+          await firebase.auth().signInWithRedirect(provider);
+        } catch (error) {
+          // Se o iPhone/Safari bloquear o Popup, cai no fallback automático via Redirect
+          if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
+            firebase.auth().signInWithRedirect(provider);
+          } else {
+            exibirErro("Erro no login: " + error.message);
+          }
+        }
+      });
+    </script>
 </body>
 </html>
