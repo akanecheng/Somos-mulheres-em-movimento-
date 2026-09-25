@@ -96,90 +96,97 @@
         <p id="error-msg" class="login-error"></p>
     </div>
 
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
-        authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
-        projectId: "somos-mulheres-em-movimento",
-        storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
-        messagingSenderId: "427525655209",
-        appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
-      };
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCEggZoP5vk1JENjO8701pAFdBIBPB8gPQ",
+    authDomain: "somos-mulheres-em-movimento.firebaseapp.com",
+    projectId: "somos-mulheres-em-movimento",
+    storageBucket: "somos-mulheres-em-movimento.firebasestorage.app",
+    messagingSenderId: "427525655209",
+    appId: "1:427525655209:web:cc00a592936dbd3df9f7b8"
+  };
 
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
 
-      const EMAILS_AUTORIZADOS = [
-        "polyanadesn02@gmail.com",
-        "celianaw@hotmail.com", 
-        "polyanadesouzaneves2@gmail.com",
-        "polyanadesouza02@gmail.com",
-        "celianadavirian@hotmail.com"
-      ];
+  const EMAILS_AUTORIZADOS = [
+    "polyanadesn02@gmail.com",
+    "celianaw@hotmail.com", 
+    "polyanadesouzaneves2@gmail.com",
+    "polyanadesouza02@gmail.com",
+    "celianadavirian@hotmail.com"
+  ];
 
-      const btnGoogle = document.getElementById('btn-google-login');
-      const errorMsg = document.getElementById('error-msg');
-      const loadingMsg = document.getElementById('loading-msg');
+  const btnGoogle = document.getElementById('btn-google-login');
+  const errorMsg = document.getElementById('error-msg');
+  const loadingMsg = document.getElementById('loading-msg');
 
-      // Força a persistência no armazenamento Local para contornar o bloqueio de SessionStorage no iOS/Safari
-      firebase.auth().getRedirectResult()
-.then(async (result) => {
-
-    if (result && result.user) {
+  // Trata o resultado de redirecionamentos (útil para navegadores que não suportam popup)
+  firebase.auth().getRedirectResult()
+    .then((result) => {
+      if (result && result.user) {
         validarUsuario(result.user);
+      }
+    })
+    .catch((error) => {
+      exibirErro("Erro ao autenticar: " + error.message);
+    });
+
+  // Monitor do estado da sessão
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      validarUsuario(user);
     }
+  });
 
-})
-.catch((error) => {
+  async function validarUsuario(user) {
+    const emailUsuario = user.email ? user.email.toLowerCase() : "";
+    const autorizadosFormatados = EMAILS_AUTORIZADOS.map(e => e.toLowerCase());
 
-    exibirErro(error.message);
+    if (autorizadosFormatados.includes(emailUsuario)) {
+      window.location.href = "configuracoes.html";
+    } else {
+      await firebase.auth().signOut();
+      exibirErro(`Acesso negado para o e-mail (${user.email}). Este e-mail não possui permissão.`);
+    }
+  }
 
-});
+  function exibirErro(mensagem) {
+    loadingMsg.style.display = 'none';
+    btnGoogle.disabled = false;
+    errorMsg.textContent = mensagem;
+    errorMsg.style.display = 'block';
+  }
 
-      // Monitor de estado global
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          validarUsuario(user);
-        }
-      });
+  btnGoogle.addEventListener('click', async () => {
+    btnGoogle.disabled = true;
+    errorMsg.style.display = 'none';
+    loadingMsg.style.display = 'block';
 
-      async function validarUsuario(user) {
-        if (EMAILS_AUTORIZADOS.includes(user.email)) {
-          window.location.href = "configuracoes.html";
-        } else {
-          await firebase.auth().signOut();
-          exibirErro("Acesso negado. Este e-mail não possui permissão.");
-        }
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: 'select_account' });
+
+    try {
+      // Tenta abrir a janela popup primeiro
+      const result = await firebase.auth().signInWithPopup(provider);
+      if (result.user) {
+        validarUsuario(result.user);
       }
-
-      function exibirErro(mensagem) {
-        loadingMsg.style.display = 'none';
-        btnGoogle.disabled = false;
-        errorMsg.textContent = mensagem;
-        errorMsg.style.display = 'block';
+    } catch (error) {
+      // Se popup for bloqueado no celular, recorre ao redirecionamento
+      if (
+        error.code === 'auth/popup-blocked' || 
+        error.code === 'auth/popup-closed-by-user' || 
+        error.code === 'auth/cancelled-popup-request'
+      ) {
+        firebase.auth().signInWithRedirect(provider);
+      } else {
+        exibirErro("Erro no login: " + error.message);
       }
+    }
+  });
+</script>
 
-      btnGoogle.addEventListener('click', async () => {
-        btnGoogle.disabled = true;
-        errorMsg.style.display = 'none';
-        loadingMsg.style.display = 'block';
-
-        const provider = new firebase.auth.GoogleAuthProvider();
-        provider.setCustomParameters({ prompt: 'select_account' });
-
-        try {
-          // Tenta via Popup primeiro
-          await firebase.auth().signInWithRedirect(provider);
-        } catch (error) {
-          // Se o iPhone/Safari bloquear o Popup, cai no fallback automático via Redirect
-          if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user' || error.code === 'auth/cancelled-popup-request') {
-            firebase.auth().signInWithRedirect(provider);
-          } else {
-            exibirErro("Erro no login: " + error.message);
-          }
-        }
-      });
-    </script>
 </body>
 </html>
